@@ -1,11 +1,13 @@
 package com.hcmus.softdes.aivideocreator.domain.user;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
+@Getter
 public class User extends Entity {
     private String username;
     private String email;
