@@ -36,7 +36,7 @@ This is the backend service for the AI Video Creator application. Follow the ste
 3. **Install Dependencies**:
    Ensure Maven is installed, then run:
    ```bash
-   mvn clean install
+   ./mvnw clean install
    ```
 
 4. **Database Setup**:
@@ -48,7 +48,7 @@ This is the backend service for the AI Video Creator application. Follow the ste
 1. **Start the Backend**:
    Run the following command to start the application:
    ```bash
-   mvn spring-boot:run
+   ./mvnw spring-boot:run
    ```
 
 2. **Access the Application**:
