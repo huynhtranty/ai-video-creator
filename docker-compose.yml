@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: aivideocreator-mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: dev
+    container_name: aivideocreator-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    volumes:
+      - ./backend:/app
+      - /app/target
+      - ./backend/.env:/app/.env
+    working_dir: /app
+    command: mvn spring-boot:run -Dspring-boot.run.profiles=dev
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: dev
+      args:
+        - NEXT_PUBLIC_API_URL=http://backend:8080
+    container_name: aivideocreator-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - ./frontend/.env.local:/app/.env.local
+    working_dir: /app
+    command: npm run dev
+    depends_on:
+      - backend
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:

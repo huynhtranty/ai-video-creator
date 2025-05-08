@@ -1,0 +1,108 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+.github/
+
+# Node.js and frontend (for NextJS)
+**/node_modules
+**/npm-debug.log
+**/yarn-debug.log
+**/yarn-error.log
+**/.pnp
+**/.pnp.js
+**/coverage
+**/.next/
+**/out/
+**/.swc/
+**/.turbo
+**/dist
+**/.cache
+**/.env.development.local
+**/.env.test.local
+**/.vercel
+**/storybook-static
+**/.eslintcache
+
+# Java and Spring Boot
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
+**/*.class
+**/*.log
+**/.gradle
+**/build/
+**/bin/
+**/.settings/
+**/.classpath
+**/.project
+**/.factorypath
+**/.apt_generated/
+**/.idea/
+**/*.iml
+**/*.iws
+**/*.ipr
+**/out/
+**/HELP.md
+**/.springBeans
+
+# Environment variables and secrets (keep these out of Docker images)
+**/.env
+**/.env.local
+**/.env.development
+**/.env.test
+**/.env.production
+**/.env.example
+**/.env.local.example
+**/*.pem
+**/*.key
+**/*.p12
+**/secrets/
+
+# Database
+**/backup.sql
+**/data/
+**/mysql/
+**/*.dump
+
+# Docker
+**/docker-compose*.yml
+**/docker-compose.override.yml
+**/.dockerignore
+**/Dockerfile*
+**/docker-compose-*
+
+# OS specific
+**/.DS_Store
+**/Thumbs.db
+**/*.swp
+**/*.swo
+**/*~
+
+# Development tools
+**/.vscode/
+**/.idea/
+**/*.sublime-*
+**/.ipynb_checkpoints
+**/.devcontainer/
+
+# Documentation
+**/docs/
+**/README.md
+**/LICENSE
+**/CHANGELOG.md
+**/CONTRIBUTING.md
+
+# Testing
+**/test/
+**/tests/
+**/__tests__/
+**/__mocks__/
+**/cypress/
+**/e2e/
+**/*.spec.*
+**/*.test.*
+
+# Temporary files
+**/tmp/
+**/temp/
+**/logs/
