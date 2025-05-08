@@ -22,7 +22,7 @@ import java.util.List;
 @Configuration
 public class ApplicationConfiguration {
 
-    @Value("http://localhost:3000")
+    @Value("${client-url}")
     private String clientUrl;
 
     @Bean
