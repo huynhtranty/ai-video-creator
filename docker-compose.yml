@@ -28,7 +28,6 @@ services:
       - app-network
     volumes:
       - ./backend:/app
-      - /app/target
       - ./backend/.env:/app/.env
     working_dir: /app
     command: mvn spring-boot:run -Dspring-boot.run.profiles=dev
@@ -52,7 +51,6 @@ services:
       - app-network
     volumes:
       - ./frontend:/app
-      - /app/node_modules
       - ./frontend/.env.local:/app/.env.local
     working_dir: /app
     command: npm run dev

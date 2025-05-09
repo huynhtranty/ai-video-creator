@@ -10,7 +10,6 @@ RUN mvn package -DskipTests
 FROM maven:3.9-amazoncorretto-23 AS dev
 WORKDIR /app
 COPY pom.xml .
-COPY src ./src
 EXPOSE 8080
 CMD [".mvn", "spring-boot:run", "-Dspring-boot.run.profiles=dev"]
 
