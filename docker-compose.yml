@@ -51,6 +51,7 @@ services:
       - app-network
     volumes:
       - ./frontend:/app
+      - /app/node_modules
       - ./frontend/.env.local:/app/.env.local
     working_dir: /app
     command: npm run dev
