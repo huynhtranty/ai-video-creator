@@ -31,12 +31,6 @@ public class InMemoryUserRepository implements UserRepository {
             encoder.encode("123"),
             new Date(2004, 1, 1)
         ));
-        users.add(User.create(
-                "ty",
-                "user@mail.com",
-                encoder.encode("123"),
-                new Date(2004, 1, 1)
-        ));
     }
 
     @Override
