@@ -1,0 +1,71 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: aivideocreator-mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    command: '--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password'
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASS:-securepassword123}
+      - MYSQL_DATABASE=${MYSQL_DB:-aivideocreator}
+      - MYSQL_USER=${MYSQL_USER:-root}
+      - MYSQL_PASSWORD=${MYSQL_PASS:-root}
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: dev
+    container_name: aivideocreator-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    volumes:
+      - ./backend:/app
+      - ./backend/.env:/app/.env
+    working_dir: /app
+    command: mvn spring-boot:run -Dspring-boot.run.profiles=dev
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_URL=jdbc:mysql://localhost:3307/${MYSQL_DB:-aivideocreator}?useSSL=false&serverTimezone=UTC
+      - DB_USERNAME=${MYSQL_USER:-root}
+      - DB_PASSWORD=${MYSQL_PASS:-root}
+      - CLIENT_URL=http://localhost:3000
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: dev
+    container_name: aivideocreator-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - ./frontend/.env.local:/app/.env.local
+    working_dir: /app
+    command: npm run dev
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
