@@ -20,7 +20,7 @@ export const useLogin = () => {
     mutationFn: (data: LoginCredentials) => authApi.login(data),
     onSuccess: (data) => {
       localStorage.setItem("token", data.access_token);
-      router.push("/dashboard");
+      router.push("/");
     },
   });
 };
@@ -35,3 +35,11 @@ export const useRegister = () => {
     },
   });
 };
+
+export const useDashboard = () => {
+  const router = useRouter();
+
+  return useMutation({
+
+  });
+}
