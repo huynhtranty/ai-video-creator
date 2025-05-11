@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.application.dto;
+package com.hcmus.softdes.aivideocreator.application.user;
 
 import lombok.Builder;
 import lombok.Value;

@@ -1,6 +1,6 @@
 package com.hcmus.softdes.aivideocreator.api.services;
 
-import com.hcmus.softdes.aivideocreator.application.services.UserService;
+import com.hcmus.softdes.aivideocreator.application.user.UserService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
