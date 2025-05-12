@@ -172,6 +172,133 @@ export default function DashboardPage() {
           </div>
         </section>
 
+
+
+
+
+        <section style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+          <div className="list-project-section" style={{ marginTop: "1rem", width: "90%" }}>
+            <h2 className="list-project-title" style={{
+              fontSize: "30px",
+              marginTop: "5px",
+              fontWeight: "bold",
+              fontFamily: "'Segoe UI', sans-serif",
+            }}>
+              Dự án gần đây:
+            </h2>
+           
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "1rem",
+            }}>
+              <div>
+                {/* Chủ đề 1 */}
+                <div style={{
+                                padding: "1rem",
+                                background: "white",
+                                borderRadius: "16px",
+                                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                                textAlign: "center",
+                                width: "100%",
+                                height: "180px",
+                                backgroundColor:"#EEEEEE",
+                              }}>
+                  <img src="/videoTemp.svg" alt="Video 1" style={{ width: "100%",
+                  height: "100%", objectFit:"cover" }} />
+                </div>
+                <div style={{
+                  padding: "3px 15px",
+                  background: "white",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+                }}>
+                  <p style={{ fontSize: "14px", color: "#FFFFF" }}>#VideoEditing</p>
+                </div>
+              </div>
+              
+            
+              <div>
+                {/* Chủ đề 2 */}
+                <div style={{
+                  padding: "1rem",
+                  background: "white",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  textAlign: "center",
+                  width: "100%",
+                  height: "180px",
+                  backgroundColor:"#EEEEEE",
+                }}>
+                  <img src="/videoTemp.svg" alt="Video 2" style={{ width: "100%",
+                  height: "100%", objectFit:"cover" }} />
+                  
+                </div>
+                <div style={{
+                  padding: "3px 15px",
+                  background: "white",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+                }}>
+                  <p style={{ fontSize: "14px", color: "#FFFFF" }}>#VideoEditing</p>
+                </div>
+              </div>
+              
+              <div>
+                {/* Chủ đề 3 */}
+                <div style={{
+                  padding: "1rem",
+                  background: "white",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  textAlign: "center",
+                  width: "100%",
+                  height: "180px",
+                  backgroundColor:"#EEEEEE",
+                }}>
+                  <img src="/videoTemp.svg" alt="Video 3" style={{ width: "100%",
+                  height: "100%", objectFit:"cover" }} />
+                </div>
+                <div style={{
+                  padding: "3px 15px",
+                  background: "white",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+                }}>
+                  <p style={{ fontSize: "14px", color: "#FFFFF" }}>#VideoEditing</p>
+                </div>
+              </div>
+
+
+              <div>
+                {/* Chủ đề 4 */}
+
+                <div style={{
+                  padding: "1rem",
+                  background: "white",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  textAlign: "center",
+                  width: "100%",
+                  height: "180px",
+                  backgroundColor:"#EEEEEE",
+                }}>
+                  <img src="/videoTemp.svg" alt="Video 4" style={{ width: "100%",
+                  height: "100%", objectFit:"cover" }} />
+                </div>
+                <div style={{
+                  padding: "3px 15px",
+                  background: "white",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+                }}>
+                  <p style={{ fontSize: "14px", color: "#FFFFF" }}>#VideoEditing</p>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );
