@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.application.interfaces.repositories;
+package com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories;
 
 import com.hcmus.softdes.aivideocreator.domain.user.User;
 

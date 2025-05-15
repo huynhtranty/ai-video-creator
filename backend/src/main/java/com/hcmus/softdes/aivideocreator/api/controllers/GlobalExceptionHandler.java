@@ -1,5 +1,6 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
+import com.hcmus.softdes.aivideocreator.application.common.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,10 +11,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     // Custom exception for handling specific cases
-//    @ExceptionHandler(NotFoundException.class)
-//    public ProblemDetail handleNotFoundException(NotFoundException e) {
-//        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
-//    }
+    @ExceptionHandler(NotFoundException.class)
+    public ProblemDetail handleNotFoundException(NotFoundException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
 
 
     @ExceptionHandler(Exception.class)

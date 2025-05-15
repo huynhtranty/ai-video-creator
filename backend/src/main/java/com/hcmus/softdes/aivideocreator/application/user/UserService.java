@@ -1,7 +1,6 @@
-package com.hcmus.softdes.aivideocreator.application.services;
+package com.hcmus.softdes.aivideocreator.application.user;
 
-import com.hcmus.softdes.aivideocreator.application.dto.UserDto;
-import com.hcmus.softdes.aivideocreator.application.interfaces.repositories.UserRepository;
+import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.UserRepository;
 import com.hcmus.softdes.aivideocreator.domain.user.User;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ public class UserService {
     public User findUserByUsername(String username) {
         var user = userRepository.findUserByUsername(username);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new UserNotFoundException();
         }
         return user;
     }
@@ -33,7 +32,7 @@ public class UserService {
             user.getPassword(),
             user.getDateOfBirth()
         );
-
+        userRepository.saveUser(newUser);
         return newUser;
     }
 }
