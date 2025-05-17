@@ -109,23 +109,17 @@ export default function DashboardPage() {
         </div>
 
         <section style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-          <div className="trending-section" style={{ marginTop: "1rem", width: "60%" }}>
+          <div className="trending-section" style={{ margin: "1rem 0 3rem 0", width: "60%",display: "flex", gap: "10px"  }}>
             <h2 className="trending-title" style={{
               fontSize: "20px",
               marginBottom: "5px",
               fontWeight: "bold",
-              fontFamily: "'Dancing Script', cursive"
+              fontFamily: "'Dancing Script', cursive",
+              
             }}>
               Trending:
             </h2>
 
-            <div style={{
-              display: "flex",
-              flexWrap: "wrap", // Để các phần tử tự động xuống dòng khi không đủ không gian
-              gap: "10px", // Khoảng cách giữa các ô
-              justifyContent: "center", // Căn các ô về bên trái
-            }}>
-              {/* Chủ đề 1 */}
               <div style={{
                 padding: "0.5rem 1rem",
                 background: "white",
@@ -172,6 +166,14 @@ export default function DashboardPage() {
               }}>
                 <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#ShortsEditing</p>
               </div>
+            <div style={{
+              display: "flex",
+              flexWrap: "wrap", // Để các phần tử tự động xuống dòng khi không đủ không gian
+              gap: "10px", // Khoảng cách giữa các ô
+              justifyContent: "center", // Căn các ô về bên trái
+            }}>
+              {/* Chủ đề 1 */}
+              
             </div>
 
 
