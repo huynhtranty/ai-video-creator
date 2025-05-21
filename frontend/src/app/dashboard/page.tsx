@@ -7,24 +7,20 @@ import Head from "next/head";
 
 export default function DashboardPage() {
   return (
-    
     <div style={{ display: "flex", height: "100vh" }}>
       {/* Sidebar */}
-      <aside style={{ width: "50px", background: "#f4f4f4"}}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem"
-
-        }}>
-          {/* Button 0*/}
-          <div className="pt-4 flex flex-col items-center justify-center"> 
+      <aside style={{ width: "50px", background: "#f4f4f4" }}>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: "1rem" }}>
+          {/* Button 0 */}
+          <div className="pt-4 flex flex-col items-center justify-center">
             <button className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
               <Image className="MenuType" src="/detailBtn.svg" alt="Menu Button" width={20} height={20} />
             </button>
             <span className="HomeSpan">Menu</span>
           </div>
 
-          
           {/* Button 1 */}
-          <div className="pt-4 flex flex-col items-center justify-center"> 
+          <div className="pt-4 flex flex-col items-center justify-center">
             <button className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
               <Image className="homeImageType" src="/HomeBtn.svg" alt="Home Button" width={20} height={20} />
             </button>
@@ -32,7 +28,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Button 2 */}
-          <div className="pt-1 flex flex-col items-center justify-center"> 
+          <div className="pt-1 flex flex-col items-center justify-center">
             <button className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
               <Image className="CreateType" src="/NewBtn.svg" alt="Create Button" width={30} height={30} />
             </button>
@@ -40,21 +36,25 @@ export default function DashboardPage() {
           </div>
 
           {/* Button 3 */}
-          <div className="pt-1 flex flex-col items-center justify-center"> 
+          <div className="pt-1 flex flex-col items-center justify-center">
             <button className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
               <Image className="ProjectType" src="/ProjectBtn.svg" alt="Project Button" width={20} height={20} />
             </button>
             <span className="HomeSpan">Dự án</span>
           </div>
 
+          {/* Spacer to push buttons to the bottom */}
+          <div style={{ flexGrow: 1 }}></div>
+
           {/* Button 4 */}
-          <div className="pt-64 flex flex-col items-center justify-center"> 
+          <div className="flex flex-col items-center justify-center">
             <button className="w-10 h-10 flex items-center justify-center rounded-4xl p-1 hover:bg-pink-300 transition-colors">
               <Image className="NotificationType" src="/Notification.svg" alt="Notification Button" width={20} height={20} />
             </button>
           </div>
+
           {/* Button 5 */}
-          <div className="pt-0 flex flex-col items-center justify-center"> 
+          <div className="flex flex-col items-center justify-center" style={{ marginBottom: "10px" }}>
             <button className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
               <Image className="AvatarType" src="/Avatar.svg" alt="Avatar" width={30} height={30} />
             </button>
@@ -67,8 +67,8 @@ export default function DashboardPage() {
         style={{
           flex: 1,
           padding: "5rem 0 0 0",
-          background: "url('/Bg.svg') no-repeat center top", // Replace with your image path
-          backgroundSize: "cover", // Ensures the image covers the entire area
+          background: "url('/Bg.svg') no-repeat center top",
+          backgroundSize: "cover",
         }}
       >
         <header
@@ -77,17 +77,14 @@ export default function DashboardPage() {
             textAlign: "center",
             fontSize: "50px",
             fontFamily: "'Island Moments', cursive",
-            fontStyle: "italic", // <-- Sử dụng fontStyle thay vì fontWeight nếu muốn nghiêng
+            fontStyle: "italic",
           }}
         >
           <h1>Welcome to VideoCut</h1>
-
         </header>
 
-        {/* Khung tìm kiếm */}
-        <div style={{
-          textAlign: "center",
-        }}>
+        {/* Search Bar */}
+        <div style={{ textAlign: "center" }}>
           <input
             type="text"
             placeholder="Tìm kiếm hoặc nhập chủ đề..."
@@ -108,6 +105,7 @@ export default function DashboardPage() {
           />
         </div>
 
+        {/* Trending Section */}
         <section style={{ display: "flex", justifyContent: "center", width: "100%" }}>
           <div
             className="trending-section"
@@ -116,8 +114,8 @@ export default function DashboardPage() {
               width: "60%",
               display: "flex",
               gap: "10px",
-              justifyContent: "center", // Center all content horizontally
-              alignItems: "center", // Align items vertically in the row
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <h2
@@ -132,7 +130,6 @@ export default function DashboardPage() {
               Trending:
             </h2>
 
-            {/* Chủ đề 1 */}
             <div
               style={{
                 padding: "0.5rem 1rem",
@@ -146,7 +143,6 @@ export default function DashboardPage() {
               <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#VideoEditing</p>
             </div>
 
-            {/* Chủ đề 2 */}
             <div
               style={{
                 padding: "0.5rem 1rem",
@@ -160,7 +156,6 @@ export default function DashboardPage() {
               <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#VlogTips</p>
             </div>
 
-            {/* Chủ đề 3 */}
             <div
               style={{
                 padding: "0.5rem 1rem",
@@ -174,7 +169,6 @@ export default function DashboardPage() {
               <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#AIinVideo</p>
             </div>
 
-            {/* Chủ đề 4 */}
             <div
               style={{
                 padding: "0.5rem 1rem",
@@ -190,123 +184,107 @@ export default function DashboardPage() {
           </div>
         </section>
 
-
-
-
-
+        {/* Recent Projects Section */}
         <section style={{ display: "flex", justifyContent: "center", width: "100%" }}>
           <div className="list-project-section" style={{ marginTop: "5px", width: "90%" }}>
-            <h2 className="trending-title" style={{
-              fontSize: "20px",
-              marginBottom: "5px",
-              fontWeight: "bold",
-              fontFamily: "'Dancing Script', cursive"
-            }}>
+            <h2
+              className="trending-title"
+              style={{
+                fontSize: "20px",
+                marginBottom: "5px",
+                fontWeight: "bold",
+                fontFamily: "'Dancing Script', cursive",
+              }}
+            >
               Dự án gần đây:
             </h2>
-           
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "1rem",
-            }}>
-              <div>
-                {/* Chủ đề 1 */}
-                <div style={{
-                                padding: "1rem",
-                                background: "white",
-                                borderRadius: "16px",
-                                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                                textAlign: "center",
-                                width: "100%",
-                                height: "180px",
-                                backgroundColor:"#EEEEEE",
 
-                              }}>
-                  <img src="/videoTemp.svg" alt="Video 1" style={{ width: "100%",
-                  height: "100%", objectFit:"cover" }} />
-                </div>
-                <div style={{
-                  padding: "5px 15px",
-                  background: "white",
-                }}>
-                  <p style={{ fontSize: "14px", color: "#00000", fontFamily: "'Inter', cursive" }}>#VideoEditing</p>
-                </div>
-              </div>
-              
-            
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                gap: "1rem",
+              }}
+            >
               <div>
-                {/* Chủ đề 2 */}
-                <div style={{
-                  padding: "1rem",
-                  background: "white",
-                  borderRadius: "16px",
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  textAlign: "center",
-                  width: "100%",
-                  height: "180px",
-                  backgroundColor:"#EEEEEE",
-                }}>
-                  <img src="/videoTemp.svg" alt="Video 2" style={{ width: "100%",
-                  height: "100%", objectFit:"cover" }} />
-                  
+                <div
+                  style={{
+                    padding: "1rem",
+                    background: "white",
+                    borderRadius: "16px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    textAlign: "center",
+                    width: "100%",
+                    height: "180px",
+                    backgroundColor: "#EEEEEE",
+                  }}
+                >
+                  <img src="/videoTemp.svg" alt="Video 1" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
-                <div style={{
-                  padding: "5px 15px",
-                  background: "white",
-                }}>
-                  <p style={{ fontSize: "14px", color: "#00000", fontFamily: "'Inter', cursive" }}>#VideoEditing</p>
-                </div>
-              </div>
-              
-              <div>
-                {/* Chủ đề 3 */}
-                <div style={{
-                  padding: "1rem",
-                  background: "white",
-                  borderRadius: "16px",
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  textAlign: "center",
-                  width: "100%",
-                  height: "180px",
-                  backgroundColor:"#EEEEEE",
-                }}>
-                  <img src="/videoTemp.svg" alt="Video 3" style={{ width: "100%",
-                  height: "100%", objectFit:"cover" }} />
-                </div>
-                <div style={{
-                  padding: "5px 15px",
-                  background: "white",
-                }}>
+                <div style={{ padding: "5px 15px", background: "white" }}>
                   <p style={{ fontSize: "14px", color: "#00000", fontFamily: "'Inter', cursive" }}>#VideoEditing</p>
                 </div>
               </div>
 
-
               <div>
-                {/* Chủ đề 4 */}
-
-                <div style={{
-                  padding: "1rem",
-                  background: "white",
-                  borderRadius: "16px",
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  textAlign: "center",
-                  width: "100%",
-                  height: "180px",
-                  backgroundColor:"#EEEEEE",
-                }}>
-                  <img src="/videoTemp.svg" alt="Video 4" style={{ width: "100%",
-                  height: "100%", objectFit:"cover" }} />
+                <div
+                  style={{
+                    padding: "1rem",
+                    background: "white",
+                    borderRadius: "16px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    textAlign: "center",
+                    width: "100%",
+                    height: "180px",
+                    backgroundColor: "#EEEEEE",
+                  }}
+                >
+                  <img src="/videoTemp.svg" alt="Video 2" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
-                <div style={{
-                  padding: "5px 15px",
-                  background: "white",
-                }}>
+                <div style={{ padding: "5px 15px", background: "white" }}>
                   <p style={{ fontSize: "14px", color: "#00000", fontFamily: "'Inter', cursive" }}>#VideoEditing</p>
                 </div>
               </div>
-              
+
+              <div>
+                <div
+                  style={{
+                    padding: "1rem",
+                    background: "white",
+                    borderRadius: "16px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    textAlign: "center",
+                    width: "100%",
+                    height: "180px",
+                    backgroundColor: "#EEEEEE",
+                  }}
+                >
+                  <img src="/videoTemp.svg" alt="Video 3" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+                <div style={{ padding: "5px 15px", background: "white" }}>
+                  <p style={{ fontSize: "14px", color: "#00000", fontFamily: "'Inter', cursive" }}>#VideoEditing</p>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    padding: "1rem",
+                    background: "white",
+                    borderRadius: "16px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    textAlign: "center",
+                    width: "100%",
+                    height: "180px",
+                    backgroundColor: "#EEEEEE",
+                  }}
+                >
+                  <img src="/videoTemp.svg" alt="Video 4" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+                <div style={{ padding: "5px 15px", background: "white" }}>
+                  <p style={{ fontSize: "14px", color: "#00000", fontFamily: "'Inter', cursive" }}>#VideoEditing</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
