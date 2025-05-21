@@ -35,11 +35,3 @@ export const useRegister = () => {
     },
   });
 };
-
-export const useDashboard = () => {
-  const router = useRouter();
-
-  return useMutation({
-
-  });
-}

@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import Sidebar from "@/features/auth/components/dashboard/Sidebar";
-import Header from "@/features/auth/components/dashboard/Header";
-import SearchBar from "@/features/auth/components/dashboard/SearchBar";
-import TrendingSection from "@/features/auth/components/dashboard/TrendingSection";
-import RecentProjectsSection from "@/features/auth/components/dashboard/RecentProjectsSection";
+import Sidebar from "@/features/dashboard/components/Sidebar";
+import Header from "@/features/dashboard/components/Header";
+import SearchBar from "@/features/dashboard/components/SearchBar";
+import TrendingSection from "@/features/dashboard/components/TrendingSection";
+import RecentProjectsSection from "@/features/dashboard/components/RecentProjectsSection";
 import "./layout.css";
 
 export default function DashboardPage() {
