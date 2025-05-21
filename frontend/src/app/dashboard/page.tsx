@@ -109,75 +109,84 @@ export default function DashboardPage() {
         </div>
 
         <section style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-          <div className="trending-section" style={{ margin: "1rem 0 3rem 0", width: "60%",display: "flex", gap: "10px"  }}>
-            <h2 className="trending-title" style={{
-              fontSize: "20px",
-              marginBottom: "5px",
-              fontWeight: "bold",
-              fontFamily: "'Dancing Script', cursive",
-              
-            }}>
+          <div
+            className="trending-section"
+            style={{
+              margin: "1rem 0 3rem 0",
+              width: "60%",
+              display: "flex",
+              gap: "10px",
+              justifyContent: "center", // Center all content horizontally
+              alignItems: "center", // Align items vertically in the row
+            }}
+          >
+            <h2
+              className="trending-title"
+              style={{
+                fontSize: "20px",
+                marginBottom: "5px",
+                fontWeight: "bold",
+                fontFamily: "'Dancing Script', cursive",
+              }}
+            >
               Trending:
             </h2>
 
-              <div style={{
+            {/* Chủ đề 1 */}
+            <div
+              style={{
                 padding: "0.5rem 1rem",
                 background: "white",
                 borderRadius: "16px",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 textAlign: "center",
-                width: "fit-content", // Giữ chiều rộng của phần tử tùy theo nội dung
-              }}>
-                <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#VideoEditing</p>
-              </div>
-
-              {/* Chủ đề 2 */}
-              <div style={{
-                padding: "0.5rem 1rem",
-                background: "white",
-                borderRadius: "16px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                textAlign: "center",
-                width: "fit-content", // Giữ chiều rộng của phần tử tùy theo nội dung
-              }}>
-                <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#VlogTips</p>
-              </div>
-
-              {/* Chủ đề 3 */}
-              <div style={{
-                padding: "0.5rem 1rem",
-                background: "white",
-                borderRadius: "16px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                textAlign: "center",
-                width: "fit-content", // Giữ chiều rộng của phần tử tùy theo nội dung
-              }}>
-                <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#AIinVideo</p>
-              </div>
-
-              {/* Chủ đề 4 */}
-              <div style={{
-                padding: "0.5rem 1rem",
-                background: "white",
-                borderRadius: "16px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                textAlign: "center",
-                width: "fit-content", // Giữ chiều rộng của phần tử tùy theo nội dung
-              }}>
-                <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#ShortsEditing</p>
-              </div>
-            <div style={{
-              display: "flex",
-              flexWrap: "wrap", // Để các phần tử tự động xuống dòng khi không đủ không gian
-              gap: "10px", // Khoảng cách giữa các ô
-              justifyContent: "center", // Căn các ô về bên trái
-            }}>
-              {/* Chủ đề 1 */}
-              
+                width: "fit-content",
+              }}
+            >
+              <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#VideoEditing</p>
             </div>
 
+            {/* Chủ đề 2 */}
+            <div
+              style={{
+                padding: "0.5rem 1rem",
+                background: "white",
+                borderRadius: "16px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                textAlign: "center",
+                width: "fit-content",
+              }}
+            >
+              <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#VlogTips</p>
+            </div>
 
+            {/* Chủ đề 3 */}
+            <div
+              style={{
+                padding: "0.5rem 1rem",
+                background: "white",
+                borderRadius: "16px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                textAlign: "center",
+                width: "fit-content",
+              }}
+            >
+              <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#AIinVideo</p>
+            </div>
 
+            {/* Chủ đề 4 */}
+            <div
+              style={{
+                padding: "0.5rem 1rem",
+                background: "white",
+                borderRadius: "16px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                textAlign: "center",
+                width: "fit-content",
+              }}
+            >
+              <p style={{ fontSize: "14px", color: "#555", margin: 0 }}>#ShortsEditing</p>
+            </div>
           </div>
         </section>
 
