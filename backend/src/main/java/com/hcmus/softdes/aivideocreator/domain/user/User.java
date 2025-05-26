@@ -59,4 +59,5 @@ public class User extends Entity {
         this.dateOfBirth = dateOfBirth;
         super.update();
     }
+
 }
