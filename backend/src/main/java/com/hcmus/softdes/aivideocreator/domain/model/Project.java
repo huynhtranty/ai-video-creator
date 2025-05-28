@@ -3,10 +3,15 @@ package com.hcmus.softdes.aivideocreator.domain.model;
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
+@SuperBuilder
 public class Project extends Entity {
     private int userId;
     private String name;

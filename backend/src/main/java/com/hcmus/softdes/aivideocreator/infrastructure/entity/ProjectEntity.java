@@ -43,15 +43,4 @@ public class ProjectEntity {
                 this.lastModified
         );
     }
-
-    // Chuyển từ domain sang entity
-    public static ProjectEntity fromDomain(Project project) {
-        return ProjectEntity.builder()
-                .id(project.getId())
-                .userId(project.getUserId())
-                .name(project.getName())
-                .creationDate(project.getCreationDate())
-                .lastModified(project.getLastModified())
-                .build();
-    }
 }

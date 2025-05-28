@@ -1,7 +1,8 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
-
+import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.ProjectRepository;
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ProjectEntity;
+import com.hcmus.softdes.aivideocreator.infrastructure.mapper.ProjectMapper;
 import com.hcmus.softdes.aivideocreator.infrastructure.jpa.ProjectJpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,20 +22,21 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public Project save(Project project) {
-        ProjectEntity entity = ProjectEntity.fromDomain(project);
+        ProjectEntity entity = ProjectMapper.toJpaEntity(project);
         ProjectEntity saved = jpaRepository.save(entity);
-        return saved.toDomain();
+        return ProjectMapper.toDomainEntity(saved);
     }
 
     @Override
     public Optional<Project> findById(UUID id) {
-        return jpaRepository.findById(id).map(ProjectEntity::toDomain);
+        return jpaRepository.findById(id)
+                .map(ProjectMapper::toDomainEntity);
     }
 
     @Override
     public List<Project> findByUserId(int userId) {
         return jpaRepository.findByUserId(userId).stream()
-                .map(ProjectEntity::toDomain)
+                .map(ProjectMapper::toDomainEntity)
                 .collect(Collectors.toList());
     }
 

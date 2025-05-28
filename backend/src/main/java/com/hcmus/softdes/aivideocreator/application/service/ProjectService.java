@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.domain.service;
+package com.hcmus.softdes.aivideocreator.application.service;
 
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
 
