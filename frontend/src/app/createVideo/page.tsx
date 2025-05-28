@@ -17,11 +17,20 @@ export default function CreateVideoPage() {
         className="p-6 overflow-auto"
       >
         {/* Tiêu đề và nút Tạo video */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Việt tiếp câu chuyện hòa bình</h1>
-          <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
-            Tạo video
-          </button>
+        <div className="flex flex-col lg:flex-row gap-0 items-center mb-6">
+          <div className="flex lg:w-7/8 items-center">
+            <h1 className="text-3xl font-bold mr-4">Việt tiếp câu chuyện hòa bình</h1>
+            <div className="lg:w-1/30">
+              <button className="w-full  text-white px-2 py-2 rounded-lg hover:bg-green-600">
+                <img src="/editBtn.svg" alt="" />
+              </button>
+            </div>
+          </div>
+          <div className="lg:w-1/8">
+            <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+              Tạo video
+            </button>
+          </div>
         </div>
 
         {/* Nội dung chính */}
