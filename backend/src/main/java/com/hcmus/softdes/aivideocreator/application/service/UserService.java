@@ -1,7 +1,7 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.UserRepository;
-import com.hcmus.softdes.aivideocreator.application.dto.userdto.UserDto;
+import com.hcmus.softdes.aivideocreator.application.dto.user.UserDto;
 import com.hcmus.softdes.aivideocreator.application.exception.userException.UserNotFoundException;
 import com.hcmus.softdes.aivideocreator.domain.entity.User;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.application.dto.projectdto;
+package com.hcmus.softdes.aivideocreator.application.dto.project;
 
 import lombok.Data;
 
