@@ -1,7 +1,6 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.mapper;
 
 import com.hcmus.softdes.aivideocreator.domain.entity.Video;
-import com.hcmus.softdes.aivideocreator.infrastructure.entity.UserEntity;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.VideoEntity;
 
 public class VideoMapper {
@@ -34,6 +33,7 @@ public class VideoMapper {
                 .projectId(jpaEntity.getProjectId())
                 .filePath(jpaEntity.getFilePath())
                 .title(jpaEntity.getTitle())
+                .duration(jpaEntity.getDuration())
                 .status(jpaEntity.getStatus())
                 .description(jpaEntity.getDescription())
                 .build();
