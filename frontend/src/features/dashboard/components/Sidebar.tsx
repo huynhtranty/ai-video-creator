@@ -3,7 +3,17 @@ import Image from "next/image";
 
 export default function Sidebar() {
   return (
-    <aside style={{ width: "50px", background: "#f4f4f4" }}>
+    <aside
+      style={{
+        width: "50px",
+        background: "#f4f4f4",
+        position: "fixed", // Cố định Sidebar
+        height: "100vh", // Chiều cao toàn màn hình
+        top: 0,
+        left: 0,
+        zIndex: 20, // Đảm bảo Sidebar nằm trên các thành phần khác
+      }}
+    >
       <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: "1rem" }}>
         {/* Button 0 */}
         <div className="pt-4 flex flex-col items-center justify-center">
