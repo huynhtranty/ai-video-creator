@@ -34,7 +34,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<Project> findByUserId(int userId) {
+    public List<Project> findByUserId(UUID userId) {
         return jpaRepository.findByUserId(userId).stream()
                 .map(ProjectMapper::toDomainEntity)
                 .collect(Collectors.toList());

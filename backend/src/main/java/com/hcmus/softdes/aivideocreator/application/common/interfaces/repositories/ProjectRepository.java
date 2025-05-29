@@ -9,6 +9,6 @@ import java.util.UUID;
 public interface ProjectRepository {
     Project save(Project project);
     Optional<Project> findById(UUID id);
-    List<Project> findByUserId(int userId);
+    List<Project> findByUserId(UUID userId);
     void deleteById(UUID id);
 }
