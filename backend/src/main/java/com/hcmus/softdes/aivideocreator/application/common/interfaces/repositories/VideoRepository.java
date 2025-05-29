@@ -29,12 +29,7 @@ public interface VideoRepository {
      */
     Video getVideo(UUID videoId);
 
-    /**
-     * Retrieves all videos associated with a specific user.
-     *
-     * @param userId The ID of the user whose videos are to be retrieved.
-     * @return A list of video paths associated with the user.
-     */
-    List<Video> getVideosByProjectId(UUID userId);
+    List<Video> getVideosByUserId(UUID userId);
+    List<Video> getVideosByProjectId(UUID projectId);
 
 }

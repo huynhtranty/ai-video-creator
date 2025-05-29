@@ -19,8 +19,10 @@ public class Video extends Entity {
     Status status;
     int duration;
     UUID projectId;
+    UUID userId;
 
-    public Video(UUID id, LocalDateTime createAt, LocalDateTime updateAt, String title, String description, String filePath, Status status, int duration, UUID projectId) {
+    public Video(UUID id, LocalDateTime createAt, LocalDateTime updateAt, String title, String description,
+                 String filePath, Status status, int duration, UUID projectId, UUID userId) {
         super(id, createAt, updateAt); // Assuming createdAt and updatedAt are not used in this context
         this.title = title;
         this.description = description;
@@ -28,5 +30,6 @@ public class Video extends Entity {
         this.status = status;
         this.duration = duration;
         this.projectId = projectId;
+        this.userId = userId;
     }
 }

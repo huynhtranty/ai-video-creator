@@ -5,7 +5,7 @@ import com.hcmus.softdes.aivideocreator.infrastructure.entity.VideoEntity;
 
 public class VideoMapper {
 
-    public static VideoEntity toJpaEntity(Video video) {
+    public static VideoEntity toJpaVideoEntity(Video video) {
         if (video == null) {
             return null;
         }
@@ -18,10 +18,11 @@ public class VideoMapper {
                 .status(video.getStatus())
                 .duration(video.getDuration())
                 .description(video.getDescription())
+                .userId(video.getUserId())
                 .build();
     }
 
-    public static Video toDomainEntity(VideoEntity jpaEntity) {
+    public static Video toDomainVideo(VideoEntity jpaEntity) {
         if (jpaEntity == null) {
             return null;
         }
@@ -31,6 +32,7 @@ public class VideoMapper {
                 .createdAt(jpaEntity.getCreationDate())
                 .updatedAt(jpaEntity.getCreationDate())
                 .projectId(jpaEntity.getProjectId())
+                .userId(jpaEntity.getUserId())
                 .filePath(jpaEntity.getFilePath())
                 .title(jpaEntity.getTitle())
                 .duration(jpaEntity.getDuration())
