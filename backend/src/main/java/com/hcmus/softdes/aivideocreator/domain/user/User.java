@@ -2,19 +2,21 @@ package com.hcmus.softdes.aivideocreator.domain.user;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
 @Getter
+@SuperBuilder
 public class User extends Entity {
     private String username;
     private String email;
     private String password;
     private Date dateOfBirth;
 
-    protected User(
+    public User(
         UUID id,
         String username,
         String email,

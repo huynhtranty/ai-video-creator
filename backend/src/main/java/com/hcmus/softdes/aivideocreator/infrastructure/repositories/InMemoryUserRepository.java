@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 // Temporary in-memory user repository for testing purposes
-@Repository
+//@Repository
 public class InMemoryUserRepository implements UserRepository {
     private final List<User> users;
 
