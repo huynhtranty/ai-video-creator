@@ -28,9 +28,7 @@ public class ProjectController {
                 null,
                 null,
                 request.getUserId(),
-                request.getName(),
-                null,
-                null
+                request.getName()
         );
 
         Project saved = projectService.createProject(project);
@@ -64,8 +62,6 @@ public class ProjectController {
         dto.setId(project.getId());
         dto.setUserId(project.getUserId());
         dto.setName(project.getName());
-        dto.setCreationDate(project.getCreationDate());
-        dto.setLastModified(project.getLastModified());
         return dto;
     }
 }

@@ -19,7 +19,7 @@ public class ProjectEntity {
     private UUID id;
 
     @Column(name = "user_id", nullable = false)
-    private int userId;
+    private UUID userId;
 
     @Column(nullable = false)
     private String name;

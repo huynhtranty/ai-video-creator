@@ -14,17 +14,14 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Project extends Entity {
-    private int userId;
+    private UUID userId;
     private String name;
-    private LocalDateTime creationDate;
-    private LocalDateTime lastModified;
 
     public Project(UUID id, LocalDateTime createdAt, LocalDateTime updatedAt,
-                   int userId, String name, LocalDateTime creationDate, LocalDateTime lastModified) {
+                   UUID userId, String name) {
         super(id, createdAt, updatedAt);
         this.userId = userId;
         this.name = name;
-        this.creationDate = creationDate;
-        this.lastModified = lastModified;
+
     }
 }

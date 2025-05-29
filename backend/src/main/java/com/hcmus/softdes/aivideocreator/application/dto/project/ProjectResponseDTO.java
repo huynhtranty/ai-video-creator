@@ -8,8 +8,6 @@ import java.util.UUID;
 @Data
 public class ProjectResponseDTO {
     private UUID id;
-    private int userId;
+    private UUID userId;
     private String name;
-    private LocalDateTime creationDate;
-    private LocalDateTime lastModified;
 }

@@ -28,9 +28,7 @@ public class ProjectService {
                 now,
                 now,
                 project.getUserId(),
-                project.getName(),
-                now,
-                now
+                project.getName()
         );
 
         return projectRepository.save(newProject);
