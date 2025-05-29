@@ -50,13 +50,19 @@ export default function CreateVideoPage() {
             <div className="flex lg:w-7/8 items-center">
               <h1 className="text-3xl font-bold mr-4">Việt tiếp câu chuyện hòa bình</h1>
               <div className="lg:w-1/30">
-                <button className="w-full text-white px-2 py-2 rounded-full hover:bg-green-600">
+                <button className="w-full text-white px-2 py-2 rounded-full hover:bg-gradient-to-bl from-[#edfffe] to-[#482af0]">
                   <img src="/editBtn.svg" alt="" />
                 </button>
               </div>
             </div>
             <div className="lg:w-1/8 lg:pl-4">
-              <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+              <button 
+                className="w-full text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                style={{
+                  background: "linear-gradient(to right, #61FFF2, #300DF4)",
+                  backgroundColor: "#61FFF2" // Fallback color
+                }}
+              >
                 Tạo video
               </button>
             </div>
@@ -108,13 +114,13 @@ export default function CreateVideoPage() {
               </div>
               {/* Phần nút chức năng bên phải */}
               <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
+                <button className="w-full bg-[#8362E5] text-white py-2 rounded-lg hover:bg-[#6F4EC8] text-sm">
                   Tạo lại ảnh
                 </button>
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
+                <button className="w-full bg-[#8362E5] text-white py-2 rounded-lg hover:bg-[#6F4EC8] text-sm">
                   Tạo lại nội dung
                 </button>
-                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 text-sm">
+                <button className="w-full bg-white text-red-600 py-2 rounded-lg hover:bg-red-600 text-sm border border-red-600 hover:text-white">
                   Xóa mục
                 </button>
               </div>
@@ -130,22 +136,20 @@ export default function CreateVideoPage() {
                 />
               </div>
               <div className="lg:w-7/9 lg:border-gray-200 lg:pl-4">
-                <p className="text-gray-700 font-semibold">
-                  Là cơ hội phong trưng bày Độc Lập, biểu trưng cho sự toàn thắng của cuộc kháng chiến, của ý chí độc lập và khát vọng hòa bình của dân tộc Việt Nam
-                </p>
+                
                 <p className="text-gray-600">
                   Là cơ hội trưng bày Dinh Độc Lập, biểu trưng cho sự toàn thắng của cuộc kháng chiến, của ý chí độc lập và khát vọng hòa bình của dân tộc Việt Nam, sau chiến tranh, hòa bình, phát triển, hội nhập quốc tế và vươn lên mạnh mẽ.
                 </p>
               </div>
               {/* Phần nút chức năng bên phải */}
               <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
+                <button className="w-full bg-[#8362E5] text-white py-2 rounded-lg hover:bg-[#6F4EC8] text-sm">
                   Tạo lại ảnh
                 </button>
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
+                <button className="w-full bg-[#8362E5] text-white py-2 rounded-lg hover:bg-[#6F4EC8] text-sm">
                   Tạo lại nội dung
                 </button>
-                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 text-sm">
+                <button className="w-full bg-white text-red-600 py-2 rounded-lg hover:bg-red-600 text-sm border border-red-600 hover:text-white">
                   Xóa mục
                 </button>
               </div>
@@ -161,19 +165,19 @@ export default function CreateVideoPage() {
                 />
               </div>
               <div className="lg:w-7/9 lg:border-gray-200 lg:pl-4">
-                <p className="text-gray-700 font-semibold">
+                <p className="text-gray-600">
                   Người dân Sài Gòn hoàn thành đón quân giải phóng, ngày đất nước thống nhất trở về ven, non sông liền một dải, Bắc - Nam sum họp một nhà
                 </p>
               </div>
               {/* Phần nút chức năng bên phải */}
               <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
+                <button className="w-full bg-[#8362E5] text-white py-2 rounded-lg hover:bg-[#6F4EC8] text-sm">
                   Tạo lại ảnh
                 </button>
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
+                <button className="w-full bg-[#8362E5] text-white py-2 rounded-lg hover:bg-[#6F4EC8] text-sm">
                   Tạo lại nội dung
                 </button>
-                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 text-sm">
+                <button className="w-full bg-white text-red-600 py-2 rounded-lg hover:bg-red-600 text-sm border border-red-600 hover:text-white">
                   Xóa mục
                 </button>
               </div>
