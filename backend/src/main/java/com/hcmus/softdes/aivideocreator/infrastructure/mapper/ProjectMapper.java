@@ -13,8 +13,8 @@ public class ProjectMapper {
                 .id(domainProject.getId())
                 .userId(domainProject.getUserId())
                 .name(domainProject.getName())
-                .creationDate(domainProject.getCreationDate())
-                .lastModified(domainProject.getLastModified())
+                .creationDate(domainProject.getCreatedAt())
+                .lastModified(domainProject.getUpdatedAt())
                 .build();
     }
 
@@ -29,8 +29,8 @@ public class ProjectMapper {
                 .updatedAt(jpaEntity.getLastModified())
                 .userId(jpaEntity.getUserId())
                 .name(jpaEntity.getName())
-                .creationDate(jpaEntity.getCreationDate())
-                .lastModified(jpaEntity.getLastModified())
+                .createdAt(jpaEntity.getCreationDate())
+                .updatedAt(jpaEntity.getLastModified())
                 .build();
     }
 }
