@@ -21,6 +21,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
+        System.out.println(">>> Password from DB: " + user.getPassword());
+
 
         return User
                 .withUsername(user.getUsername())

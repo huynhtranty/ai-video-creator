@@ -31,16 +31,4 @@ public class ProjectEntity {
     @Column(name = "last_modified", nullable = false)
     private LocalDateTime lastModified;
 
-    // Convert sang domain model
-    public Project toDomain() {
-        return new Project(
-                this.id,
-                this.creationDate,
-                this.lastModified,
-                this.userId,
-                this.name,
-                this.creationDate,
-                this.lastModified
-        );
-    }
 }

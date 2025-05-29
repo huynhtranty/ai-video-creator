@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> findAllUsers() {
         return jpaRepository.findAll().stream()
-                .map(UserEntity::toDomain)
+                .map(UserMapper::toDomainUser)
                 .toList();
     }
 
@@ -40,14 +40,16 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findUserById(UUID userId) {
         return jpaRepository.findById(userId)
-                 .map(UserEntity::toDomain)
+                 .map(UserMapper::toDomainUser)
                  .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
     public User findUserByUsername(String username) {
-        return jpaRepository.findByUsername(username).map(UserEntity::toDomain)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return jpaRepository.findByUsername(username)
+                 .map(UserMapper::toDomainUser)
+                 .stream().findFirst()
+                 .orElse(null);
     }
 
     @Override

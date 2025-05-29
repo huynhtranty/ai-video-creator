@@ -42,16 +42,4 @@ public class UserEntity {
     private LocalDateTime lastModified;
 
 
-    // Convert to domain model
-    public User toDomain() {
-        return new User(
-                this.id,
-                this.username,
-                this.password,
-                this.email,
-                this.DOB,
-                this.creationDate,
-                this.lastModified
-        );
-    }
 }
