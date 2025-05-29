@@ -108,13 +108,13 @@ export default function CreateVideoPage() {
               </div>
               {/* Phần nút chức năng bên phải */}
               <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
+                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
                   Tạo lại ảnh
                 </button>
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
+                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
                   Tạo lại nội dung
                 </button>
-                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
+                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 text-sm">
                   Xóa mục
                 </button>
               </div>
@@ -139,13 +139,13 @@ export default function CreateVideoPage() {
               </div>
               {/* Phần nút chức năng bên phải */}
               <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
+                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
                   Tạo lại ảnh
                 </button>
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
+                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
                   Tạo lại nội dung
                 </button>
-                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
+                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 text-sm">
                   Xóa mục
                 </button>
               </div>
@@ -167,42 +167,44 @@ export default function CreateVideoPage() {
               </div>
               {/* Phần nút chức năng bên phải */}
               <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
+                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
                   Tạo lại ảnh
                 </button>
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
+                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
                   Tạo lại nội dung
                 </button>
-                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
+                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 text-sm">
                   Xóa mục
                 </button>
               </div>
             </div>
 
-            {/* Thêm đoạn 4 để kiểm tra cuộn (bạn có thể thêm nhiều đoạn hơn) */}
-            {/* <div className="flex flex-col lg:flex-row gap-0 items-start">
-              <div className="lg:w-1/9">
-                <img
-                  src="/rand4.svg"
-                  alt="Extra segment"
-                  className="w-full aspect-square object-cover"
-                />
-              </div>
-              <div className="lg:w-7/9 lg:border-gray-200 lg:pl-4">
-                <p className="text-gray-600">Nội dung bổ sung để kiểm tra cuộn.</p>
-              </div>
-              <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
-                  Tạo lại ảnh
+            {/* Đoạn 4 */}
+            <div className="flex flex-col lg:flex-row gap-0 items-start">
+              <div
+                className="w-full flex items-center justify-center"
+                style={{
+                  border: "2px dashed #a855f7", // Dashed purple border
+                  backgroundColor: "#ffffff",
+                  height: "0",
+                  paddingBottom: "11.1111%",
+                  position: "relative",
+                  borderRadius: "10px",
+                }}
+              >
+                <button
+                  className="text-fuchsia-700 px-4 py-2 rounded-lg"
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  Thêm mục
                 </button>
-                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
-                  Tạo lại nội dung
-                </button>
-                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
-                  Xóa mục
-                </button>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </main>
