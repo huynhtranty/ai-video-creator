@@ -29,24 +29,24 @@ export default function CreateVideoPage() {
       <main
         style={{
           flex: 1,
-          padding: "2rem",
+          padding: "1rem 2rem",
           backgroundSize: "cover",
           marginLeft: "50px", // Đảm bảo main không bị che bởi Sidebar cố định
         }}
         className="overflow-hidden" // Ngăn main cuộn toàn bộ
       >
-        {/* Phần cố định: Tiêu đề, nút Tạo video, và textarea */}
+        {/* Phần cố định: Tiêu đề, nút Tạo video, textarea, và tiêu đề Tài nguyên */}
         <div
           style={{
             position: "sticky",
             top: 0,
             zIndex: 10,
             backgroundColor: "white", // Đảm bảo phần cố định không bị trong suốt
-            paddingBottom: "1rem",
+            paddingBottom: "10px", // Khoảng cách dưới cùng
           }}
         >
           {/* Tiêu đề và nút Tạo video */}
-          <div className="flex flex-col lg:flex-row gap-20 items-center mb-6">
+          <div className="flex flex-col lg:flex-row gap-20 items-center mb-4">
             <div className="flex lg:w-7/8 items-center">
               <h1 className="text-3xl font-bold mr-4">Việt tiếp câu chuyện hòa bình</h1>
               <div className="lg:w-1/30">
@@ -65,7 +65,7 @@ export default function CreateVideoPage() {
           {/* Khu vực nhập văn bản với viền gradient */}
           <textarea
             ref={textareaRef}
-            className="rounded-lg p-4 mb-6 w-full text-gray-700"
+            className="rounded-lg p-4 mb-3 w-full text-gray-700"
             style={{
               border: "2px solid transparent",
               background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
@@ -76,38 +76,38 @@ export default function CreateVideoPage() {
             rows={1}
             onInput={handleInput}
           ></textarea>
+
+          {/* Tiêu đề "Tài nguyên" */}
+          <h2 className="text-xl font-semibold">Tài nguyên</h2>
         </div>
 
-        {/* Phần cuộn: Tài nguyên trở xuống */}
+        {/* Phần cuộn: Nội dung Tài nguyên */}
         <div
           style={{
-            maxHeight: "calc(100vh - 200px)", // Giới hạn chiều cao để tạo thanh cuộn
-            overflowY: "auto", // Cho phép cuộn dọc
-            paddingBottom: "2rem",
+            maxHeight: "calc(100vh - 200px)", // Chiều cao đủ để hiển thị 3 đoạn (~600px cho 3 đoạn)
+            overflowY: "auto", // Cho phép cuộn dọc khi vượt quá 3 đoạn
+            marginBottom: "1rem",
           }}
         >
-          {/* Tiêu đề "Tài nguyên" */}
-          <h2 className="text-xl font-semibold mb-4">Tài nguyên</h2>
-
           {/* Đoạn văn và hình ảnh */}
-          <div className="space-y-6 lg:pr-4">
+          <div className="space-y-3 lg:pr-4">
             {/* Đoạn 1 - Sắp xếp ngang */}
-            <div className="flex flex-col lg:flex-row gap-4 items-start">
-              <div className="lg:w-1/8">
+            <div className="flex flex-col lg:flex-row gap-0 items-start">
+              <div className="lg:w-1/9">
                 <img
                   src="/rand1.svg"
                   alt="Tank entering Saigon"
-                  className="w-full h-40 object-cover"
+                  className="w-full aspect-square object-cover"
                 />
               </div>
-              <div className="lg:w-6/8 lg:border-gray-200 lg:pr-4">
+              <div className="lg:w-7/9 lg:border-gray-200 lg:pl-4">
                 <p className="text-gray-600">
                   50 năm thống nhất đất nước: Hòa bình, thống nhất và khắc vùng vươn lên. 
                   Những dấu xe tăng hằn mạnh của quân giải phóng tiến vào Sài Gòn ngày 30/4/1975, đánh dấu thời khắc lịch sử của chiến dịch Hồ Chí Minh lịch sử, cuộc kháng chiến chống Mỹ và mở ra một chương mới cho đất nước.
                 </p>
               </div>
               {/* Phần nút chức năng bên phải */}
-              <div className="lg:w-1/8 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
+              <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
                 <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
                   Tạo lại ảnh
                 </button>
@@ -121,15 +121,15 @@ export default function CreateVideoPage() {
             </div>
 
             {/* Đoạn 2 - Sắp xếp ngang */}
-            <div className="flex flex-col lg:flex-row gap-4 items-start">
-              <div className="lg:w-1/8">
+            <div className="flex flex-col lg:flex-row gap-0 items-start">
+              <div className="lg:w-1/9">
                 <img
                   src="/rand2.svg"
                   alt="Independence Palace"
-                  className="w-full h-40 object-cover"
+                  className="w-full aspect-square object-cover"
                 />
               </div>
-              <div className="lg:w-6/8 lg:border-gray-200 lg:pr-4">
+              <div className="lg:w-7/9 lg:border-gray-200 lg:pl-4">
                 <p className="text-gray-700 font-semibold">
                   Là cơ hội phong trưng bày Độc Lập, biểu trưng cho sự toàn thắng của cuộc kháng chiến, của ý chí độc lập và khát vọng hòa bình của dân tộc Việt Nam
                 </p>
@@ -138,7 +138,7 @@ export default function CreateVideoPage() {
                 </p>
               </div>
               {/* Phần nút chức năng bên phải */}
-              <div className="lg:w-1/8 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
+              <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
                 <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
                   Tạo lại ảnh
                 </button>
@@ -152,21 +152,21 @@ export default function CreateVideoPage() {
             </div>
 
             {/* Đoạn 3 */}
-            <div className="flex flex-col lg:flex-row gap-4 items-start">
-              <div className="lg:w-1/8">
+            <div className="flex flex-col lg:flex-row gap-0 items-start">
+              <div className="lg:w-1/9">
                 <img
                   src="/rand3.svg"
                   alt="People welcoming liberation army"
-                  className="w-full h-40 object-cover"
+                  className="w-full aspect-square object-cover"
                 />
               </div>
-              <div className="lg:w-6/8 lg:border-gray-200 lg:pr-4">
+              <div className="lg:w-7/9 lg:border-gray-200 lg:pl-4">
                 <p className="text-gray-700 font-semibold">
                   Người dân Sài Gòn hoàn thành đón quân giải phóng, ngày đất nước thống nhất trở về ven, non sông liền một dải, Bắc - Nam sum họp một nhà
                 </p>
               </div>
               {/* Phần nút chức năng bên phải */}
-              <div className="lg:w-1/8 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
+              <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
                 <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
                   Tạo lại ảnh
                 </button>
@@ -178,6 +178,31 @@ export default function CreateVideoPage() {
                 </button>
               </div>
             </div>
+
+            {/* Thêm đoạn 4 để kiểm tra cuộn (bạn có thể thêm nhiều đoạn hơn) */}
+            {/* <div className="flex flex-col lg:flex-row gap-0 items-start">
+              <div className="lg:w-1/9">
+                <img
+                  src="/rand4.svg"
+                  alt="Extra segment"
+                  className="w-full aspect-square object-cover"
+                />
+              </div>
+              <div className="lg:w-7/9 lg:border-gray-200 lg:pl-4">
+                <p className="text-gray-600">Nội dung bổ sung để kiểm tra cuộn.</p>
+              </div>
+              <div className="lg:w-1/9 space-y-4 lg:border-l-2 lg:border-gray-200 lg:pl-4">
+                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
+                  Tạo lại ảnh
+                </button>
+                <button className="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
+                  Tạo lại nội dung
+                </button>
+                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
+                  Xóa mục
+                </button>
+              </div>
+            </div> */}
           </div>
         </div>
       </main>
