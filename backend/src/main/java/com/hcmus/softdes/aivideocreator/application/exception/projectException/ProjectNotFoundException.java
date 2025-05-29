@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.application.project;
+package com.hcmus.softdes.aivideocreator.application.exception.projectException;
 
 import com.hcmus.softdes.aivideocreator.application.common.exceptions.NotFoundException;
 

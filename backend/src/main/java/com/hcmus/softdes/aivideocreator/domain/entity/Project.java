@@ -1,10 +1,7 @@
-package com.hcmus.softdes.aivideocreator.domain.model;
+package com.hcmus.softdes.aivideocreator.domain.entity;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
 
-import com.hcmus.softdes.aivideocreator.domain.common.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;

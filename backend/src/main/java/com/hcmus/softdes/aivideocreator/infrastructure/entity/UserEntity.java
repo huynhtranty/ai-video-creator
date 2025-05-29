@@ -1,6 +1,5 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.entity;
 
-import com.hcmus.softdes.aivideocreator.domain.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.domain.user;
+package com.hcmus.softdes.aivideocreator.domain.entity;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
 import lombok.Getter;

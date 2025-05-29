@@ -1,6 +1,6 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.mapper;
 
-import com.hcmus.softdes.aivideocreator.domain.model.Project;
+import com.hcmus.softdes.aivideocreator.domain.entity.Project;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ProjectEntity;
 
 public class ProjectMapper {

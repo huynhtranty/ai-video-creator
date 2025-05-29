@@ -1,6 +1,6 @@
 package com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories;
 
-import com.hcmus.softdes.aivideocreator.domain.user.User;
+import com.hcmus.softdes.aivideocreator.domain.entity.User;
 
 import java.util.List;
 import java.util.UUID;

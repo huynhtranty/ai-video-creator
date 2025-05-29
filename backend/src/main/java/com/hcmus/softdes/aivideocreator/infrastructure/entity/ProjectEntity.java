@@ -1,6 +1,5 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.entity;
 
-import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import jakarta.persistence.*;
 import lombok.*;
 
