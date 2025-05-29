@@ -1,8 +1,9 @@
-package com.hcmus.softdes.aivideocreator.domain.repositories;
+package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.VideoRepository;
 import com.hcmus.softdes.aivideocreator.domain.entity.Video;
-import com.hcmus.softdes.aivideocreator.infrastructure.repository.VideoJpaRepository;
+import com.hcmus.softdes.aivideocreator.infrastructure.entity.VideoEntity;
+import com.hcmus.softdes.aivideocreator.infrastructure.jpa.VideoJpaRepository;
 import com.hcmus.softdes.aivideocreator.infrastructure.mapper.VideoMapper;
 import org.springframework.stereotype.Repository;
 
@@ -19,8 +20,17 @@ public class VideoRepositoryImpl implements VideoRepository {
         this.videoJpaRepository = videoJpaRepository;
     }
     @Override
-    public void saveVideo(String videoPath) {
+    public void saveVideo(Video video) {
+        // Convert the video path to a
+        VideoEntity videoEntity = VideoMapper.toJpaVideoEntity(video);
+        VideoEntity savedVideoEntity = videoJpaRepository.save(videoEntity);
+    }
 
+    @Override
+    public Video getVideoById(UUID videoId) {
+        return videoJpaRepository.findById(videoId)
+                .map(VideoMapper::toDomainVideo)
+                .orElseThrow(() -> new RuntimeException("Video not found"));
     }
 
     @Override
@@ -30,16 +40,22 @@ public class VideoRepositoryImpl implements VideoRepository {
     }
     @Override
     public Video getVideo(UUID videoId) {
-        return videoJpaRepository.findById(videoId).orElse(null);
-    }
-    @Override
-    public List<Video> getVideosByProjectId(UUID projectId) {
-        // Retrieve all videos for the user and convert them to paths
-//        return videoJpaRepository.findByProjectId(projectId)
-//                .stream()
-////                .map(VideoMapper::toDomainEntity)
-//                .collect(Collectors.toList());
-        return null;
+        return videoJpaRepository.findById(videoId)
+                .map(VideoMapper::toDomainVideo)
+                .orElseThrow(() -> new RuntimeException("Video not found"));
     }
 
+    @Override
+    public List<Video> getVideosByUserId(UUID userId) {
+        return videoJpaRepository.findByUserId(userId).stream()
+                .map(VideoMapper::toDomainVideo)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Video> getVideosByProjectId(UUID projectId) {
+        return videoJpaRepository.findByProjectId(projectId).stream()
+                .map(VideoMapper::toDomainVideo)
+                .collect(Collectors.toList());
+    }
 }

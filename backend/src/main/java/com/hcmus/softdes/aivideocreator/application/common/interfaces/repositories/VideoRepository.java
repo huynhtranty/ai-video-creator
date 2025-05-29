@@ -9,10 +9,10 @@ public interface VideoRepository {
     /**
      * Saves the video to the repository.
      *
-     * @param videoPath The path to the video file.
+     * @param video The path to the video file.
      * @return The saved video path.
      */
-    void saveVideo(String videoPath);
+    void saveVideo(Video video);
 
     /**
      * Deletes the video from the repository.
@@ -31,5 +31,6 @@ public interface VideoRepository {
 
     List<Video> getVideosByUserId(UUID userId);
     List<Video> getVideosByProjectId(UUID projectId);
+    Video getVideoById(UUID videoId);
 
 }
