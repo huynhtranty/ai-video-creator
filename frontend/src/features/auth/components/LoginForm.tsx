@@ -36,7 +36,7 @@ export function LoginForm() {
     <div className="w-full max-w-md mx-auto">
       {/* Title */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold">ĐĂNG NHẬP</h1>
+        <h1 className="text-4xl font-bold">Chào mừng trở lại!</h1>
       </div>
 
       {loginMutation.error && (
