@@ -43,7 +43,7 @@ public class ProjectController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ProjectResponseDTO>> getByUser(@PathVariable UUID userId) {
+    public ResponseEntity<List<ProjectResponseDTO>> getByUser(@PathVariable int userId) {
         List<Project> projects = projectService.getProjectsByUserId(userId);
         List<ProjectResponseDTO> dtos = projects.stream()
                 .map(this::toResponse)
