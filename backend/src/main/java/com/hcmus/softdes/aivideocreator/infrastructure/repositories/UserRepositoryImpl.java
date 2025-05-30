@@ -15,24 +15,22 @@ import java.util.UUID;
 public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository jpaRepository;
     private final BCryptPasswordEncoder encoder;
-    private final UserMapper userMapper;
 
-    public UserRepositoryImpl(UserJpaRepository userJpaRepository, UserMapper userMapper) {
+    public UserRepositoryImpl(UserJpaRepository userJpaRepository) {
         this.encoder = new BCryptPasswordEncoder();
         this.jpaRepository = userJpaRepository;
-        this.userMapper = userMapper;
     }
 
     @Override
     public List<User> findAllUsers() {
         return jpaRepository.findAll().stream()
-                .map(userMapper::toDomainUser)
+                .map(UserMapper::toDomainUser)
                 .toList();
     }
 
     @Override
     public void saveUser(User user) {
-        UserEntity userEntity = userMapper.toUserEntity(user);
+        UserEntity userEntity = UserMapper.toUserEntity(user);
         userEntity.setPassword(encoder.encode(user.getPassword()));
         jpaRepository.save(userEntity);
     }
@@ -40,14 +38,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findUserById(UUID userId) {
         return jpaRepository.findById(userId)
-                .map(userMapper::toDomainUser)
+                .map(UserMapper::toDomainUser)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
     public User findUserByUsername(String username) {
         return jpaRepository.findByUsername(username)
-                .map(userMapper::toDomainUser)
+                .map(UserMapper::toDomainUser)
                 .stream().findFirst()
                 .orElse(null);
     }

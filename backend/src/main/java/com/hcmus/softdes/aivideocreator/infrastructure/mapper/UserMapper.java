@@ -2,18 +2,35 @@ package com.hcmus.softdes.aivideocreator.infrastructure.mapper;
 
 import com.hcmus.softdes.aivideocreator.domain.entity.User;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.UserEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public interface UserMapper {
+public class UserMapper {
 
-    @Mapping(source = "createdAt", target = "creationDate")
-    @Mapping(source = "updatedAt", target = "lastModified")
-    UserEntity toUserEntity(User user);
+    public static UserEntity toUserEntity(User user) {
+        if (user == null) {
+            return null;
+        }
+        return UserEntity.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .username(user.getUsername())
+                .creationDate(user.getCreatedAt())
+                .lastModified(user.getUpdatedAt())
+                .build();
+    }
 
-    @Mapping(source = "creationDate", target = "createdAt")
-    @Mapping(source = "lastModified", target = "updatedAt")
-    @Mapping(source = "DOB", target = "dateOfBirth")
-    User toDomainUser(UserEntity jpaEntity);
+    public static User toDomainUser(UserEntity jpaEntity) {
+        if (jpaEntity == null) {
+            return null;
+        }
+        return User.builder()
+                .id(jpaEntity.getId())
+                .username(jpaEntity.getUsername())
+                .email(jpaEntity.getEmail())
+                .password(jpaEntity.getPassword())
+                .dateOfBirth(jpaEntity.getDOB())
+                .createdAt(jpaEntity.getCreationDate())
+                .updatedAt(jpaEntity.getLastModified())
+                .build();
+    }
 }

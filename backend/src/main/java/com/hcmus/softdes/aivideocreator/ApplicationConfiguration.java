@@ -1,7 +1,6 @@
 package com.hcmus.softdes.aivideocreator;
 
 import com.hcmus.softdes.aivideocreator.api.services.JwtAuthenticationFilter;
-import com.hcmus.softdes.aivideocreator.infrastructure.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

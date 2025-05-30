@@ -2,17 +2,35 @@ package com.hcmus.softdes.aivideocreator.infrastructure.mapper;
 
 import com.hcmus.softdes.aivideocreator.domain.entity.Project;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ProjectEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public interface ProjectMapper {
+public class ProjectMapper {
 
-    @Mapping(source = "createdAt", target = "creationDate")
-    @Mapping(source = "updatedAt", target = "lastModified")
-    ProjectEntity toJpaEntity(Project domainProject);
+    public static ProjectEntity toJpaEntity(Project domainProject) {
+        if (domainProject == null) {
+            return null;
+        }
+        return ProjectEntity.builder()
+                .id(domainProject.getId())
+                .userId(domainProject.getUserId())
+                .name(domainProject.getName())
+                .creationDate(domainProject.getCreatedAt())
+                .lastModified(domainProject.getUpdatedAt())
+                .build();
+    }
 
-    @Mapping(source = "creationDate", target = "createdAt")
-    @Mapping(source = "lastModified", target = "updatedAt")
-    Project toDomainEntity(ProjectEntity jpaEntity);
+    public static Project toDomainEntity(ProjectEntity jpaEntity) {
+        if (jpaEntity == null) {
+            return null;
+        }
+
+        return Project.builder()
+                .id(jpaEntity.getId())
+                .createdAt(jpaEntity.getCreationDate())
+                .updatedAt(jpaEntity.getLastModified())
+                .userId(jpaEntity.getUserId())
+                .name(jpaEntity.getName())
+                .createdAt(jpaEntity.getCreationDate())
+                .updatedAt(jpaEntity.getLastModified())
+                .build();
+    }
 }
