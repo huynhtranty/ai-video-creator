@@ -6,27 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface VideoRepository {
-    /**
-     * Saves the video to the repository.
-     *
-     * @param video The path to the video file.
-     * @return The saved video path.
-     */
+
     void saveVideo(Video video);
-
-    /**
-     * Deletes the video from the repository.
-     *
-     * @param videoId The path to the video file to be deleted.
-     */
     void deleteVideo(UUID videoId);
-
-    /**
-     * Retrieves the video from the repository.
-     *
-     * @param videoId The ID of the video to retrieve.
-     * @return The path to the retrieved video file.
-     */
     Video getVideo(UUID videoId);
 
     List<Video> getVideosByUserId(UUID userId);

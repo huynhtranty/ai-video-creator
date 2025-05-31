@@ -23,7 +23,7 @@ public class Video extends Entity {
 
     public Video(UUID id, LocalDateTime createAt, LocalDateTime updateAt, String title, String description,
                  String filePath, Status status, int duration, UUID projectId, UUID userId) {
-        super(id, createAt, updateAt); // Assuming createdAt and updatedAt are not used in this context
+        super(id, createAt, updateAt);
         this.title = title;
         this.description = description;
         this.filePath = filePath;
