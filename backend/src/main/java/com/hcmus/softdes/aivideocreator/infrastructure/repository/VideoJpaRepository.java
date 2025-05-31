@@ -1,10 +1,8 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.repository;
 
-import com.hcmus.softdes.aivideocreator.domain.entity.Video;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.VideoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
