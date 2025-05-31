@@ -1,9 +1,9 @@
-package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
+package com.hcmus.softdes.aivideocreator.domain.repositories;
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.ProjectRepository;
 import com.hcmus.softdes.aivideocreator.domain.entity.Project;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ProjectEntity;
 import com.hcmus.softdes.aivideocreator.infrastructure.mapper.ProjectMapper;
-import com.hcmus.softdes.aivideocreator.infrastructure.jpa.ProjectJpaRepository;
+import com.hcmus.softdes.aivideocreator.infrastructure.repository.ProjectJpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

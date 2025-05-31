@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.infrastructure.jpa;
+package com.hcmus.softdes.aivideocreator.infrastructure.repository;
 
 
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.UserEntity;

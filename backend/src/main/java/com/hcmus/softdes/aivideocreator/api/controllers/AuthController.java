@@ -3,7 +3,7 @@ package com.hcmus.softdes.aivideocreator.api.controllers;
 import com.hcmus.softdes.aivideocreator.api.contracts.auth.AuthResponse;
 import com.hcmus.softdes.aivideocreator.api.contracts.auth.LoginRequest;
 import com.hcmus.softdes.aivideocreator.api.services.JwtUtils;
-import com.hcmus.softdes.aivideocreator.application.dto.user.UserDto;
+import com.hcmus.softdes.aivideocreator.application.dto.request.UserDto;
 import com.hcmus.softdes.aivideocreator.application.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

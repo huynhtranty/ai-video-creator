@@ -1,8 +1,7 @@
-package com.hcmus.softdes.aivideocreator.application.dto.project;
+package com.hcmus.softdes.aivideocreator.application.dto.response;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
