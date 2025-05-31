@@ -55,12 +55,12 @@ export function LoginForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <div className="relative group">
-            <div className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 p-0.5 shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-200">
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <div className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 p-0.5 shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-200">
                     <FormControl>
                       <Input
                         placeholder="Nhập tên đăng nhập"
@@ -68,20 +68,20 @@ export function LoginForm() {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="mx-2 flex items-center text-xs font-medium text-red-500" />
-                  </FormItem>
-                )}
-              />
-            </div>
+                  </div>
+                  <FormMessage className="mt-0.5 px-2 text-xs font-medium text-red-500" />
+                </FormItem>
+              )}
+            />
           </div>
 
           <div className="relative group">
-            <div className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 p-0.5 shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-200">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <div className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 p-0.5 shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-200">
                     <FormControl>
                       <Input
                         type="password"
@@ -90,16 +90,16 @@ export function LoginForm() {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="mx-2 flex items-center text-xs font-medium text-red-500" />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="flex justify-end mt-1">
-              <Link href="/forgot-password" className="text-xs text-blue-600 hover:underline">
-                Quên mật khẩu?
-              </Link>
-            </div>
+                  </div>
+                  <div className="flex justify-between mt-0.5 px-2">
+                    <FormMessage className="text-xs font-medium text-red-500" />
+                    <Link href="/forgot-password" className="text-xs text-blue-600 hover:underline">
+                      Quên mật khẩu?
+                    </Link>
+                  </div>
+                </FormItem>
+              )}
+            />
           </div>
 
           <Button

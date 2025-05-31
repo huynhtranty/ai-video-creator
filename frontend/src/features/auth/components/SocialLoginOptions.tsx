@@ -2,24 +2,24 @@ import React from 'react';
 
 export const SocialLoginOptions: React.FC = () => {
   return (
-    <div className="w-full space-y-4">
-      <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+    <div className="w-full max-w-sm mx-auto space-y-3">
+      <h2 className="text-xl font-bold text-center mb-4 bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
         Hoặc đăng nhập với
       </h2>
 
-      <button className="w-full flex items-center justify-center gap-3 p-3 rounded-xl border hover:bg-pink-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-pink-100 transform hover:-translate-y-0.5 group">
-        <div className="w-5 h-5 text-black group-hover:text-pink-600 transition-colors">
+      <button className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border hover:bg-pink-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-pink-100 transform hover:-translate-y-0.5 group">
+        <div className="w-4 h-4 text-black group-hover:text-pink-600 transition-colors">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43V7.56a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.05z" />
           </svg>
         </div>
-        <span className="font-medium group-hover:text-pink-600 transition-colors">
+        <span className="font-medium text-sm group-hover:text-pink-600 transition-colors">
           Đăng nhập bằng TikTok
         </span>
       </button>
 
-      <button className="w-full flex items-center justify-center gap-3 p-3 rounded-xl border hover:bg-blue-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-blue-100 transform hover:-translate-y-0.5">
-        <div className="w-5 h-5">
+      <button className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border hover:bg-blue-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-blue-100 transform hover:-translate-y-0.5">
+        <div className="w-4 h-4">
           <svg viewBox="0 0 24 24">
             <path
               fill="#4285F4"
@@ -39,11 +39,11 @@ export const SocialLoginOptions: React.FC = () => {
             />
           </svg>
         </div>
-        <span className="font-medium">Đăng nhập bằng Google</span>
+        <span className="font-medium text-sm">Đăng nhập bằng Google</span>
       </button>
 
-      <button className="w-full flex items-center justify-center gap-3 p-3 rounded-xl border hover:bg-blue-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-blue-100 transform hover:-translate-y-0.5 group">
-        <div className="w-5 h-5">
+      <button className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border hover:bg-blue-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-blue-100 transform hover:-translate-y-0.5 group">
+        <div className="w-4 h-4">
           <svg
             fill="#1877F2"
             viewBox="0 0 24 24"
@@ -52,13 +52,13 @@ export const SocialLoginOptions: React.FC = () => {
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
           </svg>
         </div>
-        <span className="font-medium group-hover:text-blue-600 transition-colors">
+        <span className="font-medium text-sm group-hover:text-blue-600 transition-colors">
           Đăng nhập bằng Facebook
         </span>
       </button>
 
-      <div className="text-center text-xs text-gray-600 mt-6 px-4 border-t pt-5">
-        <p className="mb-2">
+      <div className="text-center text-xs text-gray-600 mt-5 px-3 border-t pt-4">
+        <p className="text-xs">
           Tôi đã đọc và xác nhận{" "}
           <a
             href="#"
