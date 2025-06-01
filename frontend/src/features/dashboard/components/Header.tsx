@@ -3,6 +3,7 @@ import { Island_Moments } from "next/font/google";
 
 const islandMoments = Island_Moments({
   weight: ["400"],
+  subsets: ["latin"], 
 });
 
 export default function Header() {

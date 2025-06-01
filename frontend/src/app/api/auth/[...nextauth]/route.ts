@@ -17,7 +17,7 @@ const handler = NextAuth({
         }
         
         try {
-          const response = await apiClient.post('/auth/login', {
+          const response = await apiClient.post('/auth/internal/login', {
             username: credentials.username,
             password: credentials.password,
           });

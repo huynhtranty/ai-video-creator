@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
-import { LoginRequest, LoginResponse } from '@/types/api';
+import { AuthenticationResponse, LoginRequest, RegisterRequest } from '@/types/api';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -26,24 +26,19 @@ apiClient.interceptors.request.use(
   }
 );
 
-export type RegisterRequest = {
-  username: string;
-  email: string;
-  password: string;
-};
-
 export const authApi = {
   login: (data: LoginRequest) => 
-    apiClient.post<LoginResponse>('/auth/login', {
+    apiClient.post<AuthenticationResponse>('/auth/internal/login', {
       username: data.username,
       password: data.password
     }).then(response => response.data),
 
   register: (data: RegisterRequest) => 
-    apiClient.post<void>('/auth/register', {
+    apiClient.post<AuthenticationResponse>('/auth/internal/register', {
       username: data.username,
       email: data.email,
-      password: data.password
+      password: data.password,
+      dateOfBirth: data.dateOfBirth
     }),
 
   getUserProfile: () => 

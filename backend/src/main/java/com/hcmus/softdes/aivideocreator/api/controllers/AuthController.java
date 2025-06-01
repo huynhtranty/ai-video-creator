@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth/internal")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;

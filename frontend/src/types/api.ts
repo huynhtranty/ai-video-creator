@@ -3,6 +3,13 @@ export interface LoginRequest {
   password: string;
 }
 
+export type RegisterRequest = {
+  username: string;
+  email: string;
+  password: string;
+  dateOfBirth: string;
+};
+
 export interface User {
   id: string;
   username: string;
@@ -13,11 +20,6 @@ export interface User {
 }
 
 export interface AuthenticationResponse {
-  user: User;
-  token: string;
-}
-
-export interface LoginResponse {
   user: User;
   token: string;
 }
