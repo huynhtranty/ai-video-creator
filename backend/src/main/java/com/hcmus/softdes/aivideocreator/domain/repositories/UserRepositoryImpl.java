@@ -57,6 +57,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         existingUser.setUsername(user.getUsername());
         existingUser.setEmail(user.getEmail());
+        existingUser.setFullname(user.getFullname());
         existingUser.setPassword(encoder.encode(user.getPassword()));
         existingUser.setDOB(user.getDateOfBirth());
 

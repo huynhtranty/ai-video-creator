@@ -21,12 +21,14 @@ public class InMemoryUserRepository implements UserRepository {
         users.add(User.create(
             "admin",
             "admin@mail.com",
+            "Admin User",
             encoder.encode("123"),
             new Date(2004, 1, 1)
         ));
         users.add(User.create(
             "user",
             "user@mail.com",
+            "Regular User",
             encoder.encode("123"),
             new Date(2004, 1, 1)
         ));
