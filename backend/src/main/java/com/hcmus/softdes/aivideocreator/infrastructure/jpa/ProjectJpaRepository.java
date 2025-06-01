@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.infrastructure.repository;
+package com.hcmus.softdes.aivideocreator.infrastructure.jpa;
 
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ProjectEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
