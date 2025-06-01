@@ -14,6 +14,7 @@ public class User extends Entity {
     private String username;
     private String email;
     private String password;
+    private String fullname;
     private Date dateOfBirth;
 
     public User(
@@ -21,6 +22,7 @@ public class User extends Entity {
         String username,
         String email,
         String password,
+        String fullname,
         Date dateOfBirth,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
@@ -35,6 +37,7 @@ public class User extends Entity {
     public static User create(
         String username,
         String email,
+        String fullname,
         String password,
         Date dateOfBirth
     ) {
@@ -43,6 +46,7 @@ public class User extends Entity {
             username,
             email,
             password,
+            fullname,
             dateOfBirth,
             LocalDateTime.now(),
             LocalDateTime.now()
@@ -52,12 +56,14 @@ public class User extends Entity {
     public void update(
         String username,
         String email,
+        String fullname,
         String password,
         Date dateOfBirth
     ) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.fullname = fullname;
         this.dateOfBirth = dateOfBirth;
         super.update();
     }

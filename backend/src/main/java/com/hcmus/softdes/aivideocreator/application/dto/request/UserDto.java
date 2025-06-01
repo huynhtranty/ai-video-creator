@@ -10,6 +10,7 @@ import java.util.Date;
 public class UserDto {
     String username;
     String email;
+    String fullname;
     String password;
     Date dateOfBirth;
 }

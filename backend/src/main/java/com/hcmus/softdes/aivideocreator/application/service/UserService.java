@@ -31,6 +31,7 @@ public class UserService {
         User newUser = User.create(
             user.getUsername(),
             user.getEmail(),
+            user.getFullname(),
             user.getPassword(),
             user.getDateOfBirth()
         );

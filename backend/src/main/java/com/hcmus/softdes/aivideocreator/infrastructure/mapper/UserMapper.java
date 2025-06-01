@@ -14,6 +14,8 @@ public class UserMapper {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .username(user.getUsername())
+                .DOB(user.getDateOfBirth())
+                .fullname(user.getFullname())
                 .creationDate(user.getCreatedAt())
                 .lastModified(user.getUpdatedAt())
                 .build();
@@ -29,6 +31,7 @@ public class UserMapper {
                 .email(jpaEntity.getEmail())
                 .password(jpaEntity.getPassword())
                 .dateOfBirth(jpaEntity.getDOB())
+                .fullname(jpaEntity.getFullname())
                 .createdAt(jpaEntity.getCreationDate())
                 .updatedAt(jpaEntity.getLastModified())
                 .build();
