@@ -45,6 +45,7 @@ public class ApplicationConfiguration {
                     authorize.anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
