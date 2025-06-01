@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { ErrorMessage } from "@/components/errors/ErrorMessage"
 import Link from "next/link"
-import { useLogin } from "../api/auth"
 import { useState } from "react"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 const loginSchema = z.object({
   username: z.string().min(1, "Tên đăng nhập là bắt buộc"),
@@ -20,6 +21,8 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
   
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -29,12 +32,22 @@ export function LoginForm() {
     },
   })
 
-  const loginMutation = useLogin()
-
   const handleSubmit = async (data: LoginFormValues) => {
     setIsLoading(true)
+    setError(null)
+    
     try {
-      await loginMutation.mutateAsync(data)
+      const response = await signIn("credentials", {
+        username: data.username,
+        password: data.password,
+        redirect: false,
+      })
+      
+      if (response?.error) {
+        setError("Đăng nhập thất bại. Vui lòng kiểm tra lại tên đăng nhập và mật khẩu.")
+      } else if (response?.ok) {
+        router.push("/dashboard")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -48,8 +61,8 @@ export function LoginForm() {
         <p className="text-gray-600 mt-1 text-sm">Đăng nhập để tiếp tục sáng tạo</p>
       </div>
 
-      {loginMutation.error && (
-        <ErrorMessage message={(loginMutation.error as Error).message || "Đăng nhập thất bại"} className="mb-3" />
+      {error && (
+        <ErrorMessage message={error} className="mb-3" />
       )}
 
       <Form {...form}>
@@ -105,9 +118,9 @@ export function LoginForm() {
           <Button
             type="submit"
             className="w-full h-11 rounded-xl bg-gradient-to-r from-purple-600 to-purple-400 hover:from-purple-700 hover:to-purple-500 text-white font-bold text-base shadow-md hover:shadow-lg hover:shadow-purple-200 transition-all duration-300 transform hover:-translate-y-0.5"
-            disabled={loginMutation.isPending || isLoading}
+            disabled={isLoading}
           >
-            {loginMutation.isPending || isLoading ? (
+            {isLoading ? (
               <div className="flex items-center justify-center">
                 <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

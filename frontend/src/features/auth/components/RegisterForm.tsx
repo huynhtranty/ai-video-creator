@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import Link from "next/link";
 import { ErrorMessage } from "@/components/errors/ErrorMessage";
-import { useRegister } from "../api/auth";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const registerSchema = z.object({
   username: z.string().min(1, "Tên đăng nhập là bắt buộc"),
@@ -21,6 +22,8 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
   
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -31,12 +34,27 @@ export function RegisterForm() {
     },
   });
 
-  const registerMutation = useRegister();
-
   const handleSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
+    setError(null);
+    
     try {
-      await registerMutation.mutateAsync(data);
+      await axios.post('/api/auth/register', {
+        username: data.username,
+        email: data.email,
+        password: data.password
+      });
+      
+      router.push("/");
+    } catch (err: unknown) {
+      const errorMessage = 
+        err && typeof err === 'object' && 'response' in err && 
+        err.response && typeof err.response === 'object' && 'data' in err.response && 
+        err.response.data && typeof err.response.data === 'object' && 'message' in err.response.data && 
+        typeof err.response.data.message === 'string' ? 
+        err.response.data.message : "Đăng ký thất bại. Vui lòng thử lại.";
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -50,8 +68,8 @@ export function RegisterForm() {
         <p className="text-gray-600 mt-1 text-sm">Đăng ký để bắt đầu sáng tạo video</p>
       </div>
 
-      {registerMutation.error && (
-        <ErrorMessage message={(registerMutation.error as Error).message || "Đăng ký thất bại"} className="mb-3" />
+      {error && (
+        <ErrorMessage message={error} className="mb-3" />
       )}
 
       <Form {...form}>
@@ -123,9 +141,9 @@ export function RegisterForm() {
           <Button
             type="submit"
             className="w-full h-11 rounded-xl bg-gradient-to-r from-purple-600 to-purple-400 hover:from-purple-700 hover:to-purple-500 text-white font-bold text-base shadow-md hover:shadow-lg hover:shadow-purple-200 transition-all duration-300 transform hover:-translate-y-0.5"
-            disabled={registerMutation.isPending || isLoading}
+            disabled={isLoading}
           >
-            {registerMutation.isPending || isLoading ? (
+            {isLoading ? (
               <div className="flex items-center justify-center">
                 <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

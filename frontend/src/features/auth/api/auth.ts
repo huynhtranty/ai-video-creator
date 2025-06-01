@@ -1,11 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { authApi } from "@/lib/api-client";
 import { useRouter } from "next/navigation";
-
-export type LoginCredentials = {
-  username: string;
-  password: string;
-};
+import { LoginRequest } from "@/types/api";
 
 export type RegisterCredentials = {
   username: string;
@@ -17,10 +13,9 @@ export const useLogin = () => {
   const router = useRouter();
   
   return useMutation({
-    mutationFn: (data: LoginCredentials) => authApi.login(data),
-    onSuccess: (data) => {
-      localStorage.setItem("token", data.access_token);
-      router.push("/");
+    mutationFn: (data: LoginRequest) => authApi.login(data),
+    onSuccess: () => {
+      router.push("/dashboard");
     },
   });
 };

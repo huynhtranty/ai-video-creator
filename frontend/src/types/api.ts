@@ -3,9 +3,23 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  dateOfBirth: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AuthenticationResponse {
+  user: User;
+  token: string;
+}
+
 export interface LoginResponse {
-  access_token: string;
-  token_type: string;
+  user: User;
+  token: string;
 }
 
 export interface ApiError {
