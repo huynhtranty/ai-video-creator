@@ -5,8 +5,7 @@ import Sidebar from "@/features/dashboard/components/Sidebar";
 import HeaderSection from "@/features/projects/components/HeaderSection";
 import TextInput from "@/features/projects/components/TextInput";
 import ResourceSection from "@/features/projects/components/ResourceSection";
-import ResourceItem from "@/features/projects/components/ResourceItem";
-import "../dashboard/layout.css";
+
 
 export default function CreateVideoPage() {
   return (
