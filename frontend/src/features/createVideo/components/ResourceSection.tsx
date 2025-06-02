@@ -4,7 +4,7 @@ import ResourceItem from "./ResourceItem";
 export default function ResourceSection() {
   return (
     <div>
-      <h2 className="text-xl font-semibold">Tài nguyên</h2>
+      <h2 className="text-xl font-semibold pb-2.5">Tài nguyên</h2>
       <div
         style={{
           maxHeight: "calc(100vh - 200px)", // Chiều cao đủ để hiển thị 3 đoạn (~600px cho 3 đoạn)
@@ -12,7 +12,7 @@ export default function ResourceSection() {
           marginBottom: "1rem",
         }}
       >
-        <div className="space-y-3 lg:pr-4">
+        <div className="space-y-5 lg:pr-4 lg:pb-4">
           {/* Resource Item 1 */}
           <ResourceItem
             imageSrc="/rand1.svg"
@@ -54,14 +54,13 @@ export default function ResourceSection() {
           {/* Add Item Section */}
           <div className="flex flex-col lg:flex-row gap-0 items-start">
             <div
-              className="w-full flex items-center justify-center"
+              className="w-full flex items-center justify-center rounded-lg"
               style={{
                 border: "2px dashed #a855f7",
                 backgroundColor: "#ffffff",
                 height: "0",
                 paddingBottom: "11.1111%",
                 position: "relative",
-                borderRadius: "10px",
               }}
             >
               <button
