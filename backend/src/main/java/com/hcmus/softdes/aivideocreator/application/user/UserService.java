@@ -23,6 +23,10 @@ public class UserService {
         }
         return user;
     }
+    
+    public User findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
 
     public User registerUser(UserDto user) {
         var existingUser = userRepository.findUserByUsername(user.getUsername());
@@ -36,6 +40,42 @@ public class UserService {
             passwordEncoder.encode(user.getPassword()),
             user.getDateOfBirth()
         );
+        userRepository.saveUser(newUser);
+        return newUser;
+    }
+    
+    public User registerGoogleUser(UserDto user, String googleId) {
+        // Check if user with this email already exists
+        var existingUserByEmail = userRepository.findUserByEmail(user.getEmail());
+        if (existingUserByEmail != null) {
+            // User already exists with this email, link Google ID and return
+            existingUserByEmail.linkGoogleAccount(googleId);
+            userRepository.updateUser(existingUserByEmail);
+            return existingUserByEmail;
+        }
+        
+        // Check if username exists
+        var existingUserByUsername = userRepository.findUserByUsername(user.getUsername());
+        String username = user.getUsername();
+        
+        // If username exists, append a number to make it unique
+        if (existingUserByUsername != null) {
+            int counter = 1;
+            while (userRepository.findUserByUsername(username + counter) != null) {
+                counter++;
+            }
+            username = username + counter;
+        }
+        
+        // Create new user with Google info
+        User newUser = User.createWithGoogleId(
+            username,
+            user.getEmail(),
+            passwordEncoder.encode(user.getPassword()),
+            user.getDateOfBirth(),
+            googleId
+        );
+        
         userRepository.saveUser(newUser);
         return newUser;
     }

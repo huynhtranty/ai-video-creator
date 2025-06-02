@@ -44,8 +44,8 @@ public class ApplicationConfiguration {
                     authorize.requestMatchers("/auth/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-//                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 

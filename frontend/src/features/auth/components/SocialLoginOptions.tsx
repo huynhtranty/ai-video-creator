@@ -1,4 +1,7 @@
+"use client";
+
 import React from 'react';
+import { signIn } from 'next-auth/react';
 
 interface SocialLoginOptionsProps {
   mode?: 'login' | 'register';
@@ -22,7 +25,10 @@ export const SocialLoginOptions: React.FC<SocialLoginOptionsProps> = ({ mode = '
         </span>
       </button>
 
-      <button className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border hover:bg-blue-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-blue-100 transform hover:-translate-y-0.5">
+      <button 
+        onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+        className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border hover:bg-blue-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-blue-100 transform hover:-translate-y-0.5"
+      >
         <div className="w-4 h-4">
           <svg viewBox="0 0 24 24">
             <path

@@ -13,6 +13,8 @@ public class User extends Entity {
     private String email;
     private String password;
     private Date dateOfBirth;
+    private String googleId; // Added for Google OAuth
+    private boolean isGoogleAccount; // Flag to indicate if this is a Google account
 
     protected User(
         UUID id,
@@ -20,6 +22,8 @@ public class User extends Entity {
         String email,
         String password,
         Date dateOfBirth,
+        String googleId,
+        boolean isGoogleAccount,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
@@ -28,6 +32,8 @@ public class User extends Entity {
         this.password = password;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
+        this.googleId = googleId;
+        this.isGoogleAccount = isGoogleAccount;
     }
 
     public static User create(
@@ -42,6 +48,28 @@ public class User extends Entity {
             email,
             password,
             dateOfBirth,
+            null, // No Google ID
+            false, // Not a Google account
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        );
+    }
+    
+    public static User createWithGoogleId(
+        String username,
+        String email,
+        String password,
+        Date dateOfBirth,
+        String googleId
+    ) {
+        return new User(
+            UUID.randomUUID(),
+            username,
+            email,
+            password,
+            dateOfBirth,
+            googleId,
+            true, // Is a Google account
             LocalDateTime.now(),
             LocalDateTime.now()
         );
@@ -57,6 +85,12 @@ public class User extends Entity {
         this.password = password;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
+        super.update();
+    }
+    
+    public void linkGoogleAccount(String googleId) {
+        this.googleId = googleId;
+        this.isGoogleAccount = true;
         super.update();
     }
 }

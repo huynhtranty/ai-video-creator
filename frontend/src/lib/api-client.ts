@@ -41,6 +41,12 @@ export const authApi = {
       dateOfBirth: data.dateOfBirth
     }),
 
+  googleAuth: (accessToken: string, idToken: string) =>
+    apiClient.post<AuthenticationResponse>('/auth/google/callback', {
+      accessToken,
+      idToken
+    }).then(response => response.data),
+
   getUserProfile: () => 
     apiClient.get('/auth/profile').then(response => response.data),
 };
