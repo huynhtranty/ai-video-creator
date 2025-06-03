@@ -7,22 +7,38 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/videos")
+@RequestMapping("/api/dashboard")
 public class VideoController {
-    // This controller will handle video-related endpoints in the future
+    @PostMapping
+    public ResponseEntity<VideoResponseDTO> createVideo (@RequestBody VideoRequestDTO request){
 
-@ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-public String notImplemented() {
-    return "This endpoint is not implemented yet.";
-}
-// Add methods for video creation, retrieval, deletion, etc. as needed
-// For example:
- @PostMapping
- public ResponseEntity<VideoResponseDTO> createVideo(@RequestBody VideoRequestDTO request) {
-
-        // Logic to create a video
         return ResponseEntity.status(HttpStatus.CREATED).body(new VideoResponseDTO());
     }
+    @GetMapping("/videos/{videoId}")
+    public ResponseEntity<VideoResponseDTO> getVideo(@PathVariable String videoId) {
+        // Logic to retrieve the video by ID
+        VideoResponseDTO videoResponse = new VideoResponseDTO(); // Replace with actual retrieval logic
+        return ResponseEntity.ok(videoResponse);
+    }
 
-    // Other methods for video management can be added here
+    @GetMapping("/videos")
+    public ResponseEntity<VideoResponseDTO[]> getAllVideos() {
+        // Logic to retrieve all videos
+        VideoResponseDTO[] videoResponses = new VideoResponseDTO[0]; // Replace with actual retrieval logic
+        return ResponseEntity.ok(videoResponses);
+    }
+
+    @DeleteMapping("/videos/{videoId}")
+    public ResponseEntity<Void> deleteVideo(@PathVariable String videoId) {
+        // Logic to delete the video by ID
+        // If deletion is successful, return 204 No Content
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/analytics")
+    public ResponseEntity<String> getAnalytics() {
+        // Logic to retrieve analytics data
+        String analyticsData = "Analytics data"; // Replace with actual retrieval logic
+        return ResponseEntity.ok(analyticsData);
+    }
 }
