@@ -30,6 +30,7 @@ public class User extends Entity {
         super(id, createdAt, updatedAt);
         this.username = username;
         this.password = password;
+        this.fullname = fullname;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
     }

@@ -27,6 +27,7 @@ public class UserService {
         if (existingUser != null) {
             throw new RuntimeException("Username already exists");
         }
+        System.out.println("Registering user full name: " + user.getFullname());
 
         User newUser = User.create(
             user.getUsername(),
