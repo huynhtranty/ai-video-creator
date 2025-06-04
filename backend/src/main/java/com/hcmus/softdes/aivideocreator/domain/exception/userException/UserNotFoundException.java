@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.application.exception.userException;
+package com.hcmus.softdes.aivideocreator.domain.exception.userException;
 
 import com.hcmus.softdes.aivideocreator.application.common.exceptions.NotFoundException;
 

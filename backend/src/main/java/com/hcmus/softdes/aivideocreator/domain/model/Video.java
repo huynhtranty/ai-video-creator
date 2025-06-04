@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.domain.entity;
+package com.hcmus.softdes.aivideocreator.domain.model;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
 import com.hcmus.softdes.aivideocreator.domain.enums.Status;
