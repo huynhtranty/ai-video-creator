@@ -1,15 +1,13 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
-import com.hcmus.softdes.aivideocreator.application.dto.request.ProjectRequestDTO;
-import com.hcmus.softdes.aivideocreator.application.dto.response.ProjectResponseDTO;
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import com.hcmus.softdes.aivideocreator.application.service.ProjectService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -22,46 +20,27 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectResponseDTO> create(@RequestBody ProjectRequestDTO request) {
-        Project project = new Project(
-                null,
-                null,
-                null,
-                request.getUserId(),
-                request.getName()
-        );
-
-        Project saved = projectService.createProject(project);
-        return ResponseEntity.ok(toResponse(saved));
+    public ResponseEntity<Project> create(@RequestBody Project request) {
+        Project saved = projectService.createProject(request);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectResponseDTO> getById(@PathVariable UUID id) {
+    public ResponseEntity<Project> getById(@PathVariable UUID id) {
         return projectService.getProjectById(id)
-                .map(project -> ResponseEntity.ok(toResponse(project)))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ProjectResponseDTO>> getByUser(@PathVariable UUID userId) {
+    public ResponseEntity<List<Project>> getByUser(@PathVariable UUID userId) {
         List<Project> projects = projectService.getProjectsByUserId(userId);
-        List<ProjectResponseDTO> dtos = projects.stream()
-                .map(this::toResponse)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(projects);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private ProjectResponseDTO toResponse(Project project) {
-        ProjectResponseDTO dto = new ProjectResponseDTO();
-        dto.setId(project.getId());
-        dto.setUserId(project.getUserId());
-        dto.setName(project.getName());
-        return dto;
     }
 }

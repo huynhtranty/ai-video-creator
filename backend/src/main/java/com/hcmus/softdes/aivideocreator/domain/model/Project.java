@@ -24,4 +24,14 @@ public class Project extends Entity {
         this.name = name;
 
     }
+
+    public static Project create(UUID userId, String name) {
+        return new Project(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                userId,
+                name
+        );
+    }
 }

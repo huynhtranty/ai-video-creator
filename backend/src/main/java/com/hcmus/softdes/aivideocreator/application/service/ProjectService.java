@@ -20,13 +20,11 @@ public class ProjectService {
 
 
     public Project createProject(Project project) {
-        UUID id = UUID.randomUUID();
-        LocalDateTime now = LocalDateTime.now();
-
-        Project newProject = new Project(
-                id,
-                now,
-                now,
+        var existingProject = projectRepository.findByProjectName(project.getName());
+        if (existingProject.isPresent()) {
+            throw new IllegalArgumentException("Project with this ID already exists.");
+        }
+        Project newProject = Project.create(
                 project.getUserId(),
                 project.getName()
         );

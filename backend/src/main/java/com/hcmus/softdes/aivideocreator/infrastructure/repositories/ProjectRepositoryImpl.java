@@ -44,4 +44,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public void deleteById(UUID id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Project> findByProjectName(String name) {
+        return jpaRepository.findByName(name)
+                .map(ProjectMapper::toDomainEntity);
+    }
 }
