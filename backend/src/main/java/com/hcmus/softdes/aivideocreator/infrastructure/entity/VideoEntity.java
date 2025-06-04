@@ -1,5 +1,6 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.entity;
 
+import com.hcmus.softdes.aivideocreator.domain.enums.Platform;
 import com.hcmus.softdes.aivideocreator.domain.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,8 +39,11 @@ public class VideoEntity {
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
-    @Column(name = "status", nullable = false)
-    private Status status;
+    @Column(name = "platform", columnDefinition = "VARCHAR(255) DEFAULT 'None'")
+    private Platform platform; // Default to 'None'
+
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'UNPUBLISHED'")
+    private Status status; // Default to 'Unpublished'
 
     @Column(name = "duration", nullable = false)
     private int duration;

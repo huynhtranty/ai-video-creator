@@ -1,6 +1,7 @@
 package com.hcmus.softdes.aivideocreator.domain.entity;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
+import com.hcmus.softdes.aivideocreator.domain.enums.Platform;
 import com.hcmus.softdes.aivideocreator.domain.enums.Status;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,12 +18,12 @@ public class Video extends Entity {
     String description;
     String filePath;
     Status status;
-    String platform; // Optional field for social media platform
+    Platform platform; // Optional field for social media platform
     int duration;
     UUID projectId;
     UUID userId;
 
-    public Video(UUID id, LocalDateTime createAt, LocalDateTime updateAt, String title, String description, String platform,
+    public Video(UUID id, LocalDateTime createAt, LocalDateTime updateAt, String title, String description, Platform platform,
                  String filePath, Status status, int duration, UUID projectId, UUID userId) {
         super(id, createAt, updateAt);
         this.title = title;

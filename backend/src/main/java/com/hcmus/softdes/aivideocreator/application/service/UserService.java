@@ -1,7 +1,7 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.UserRepository;
-import com.hcmus.softdes.aivideocreator.application.dto.request.UserDto;
+import com.hcmus.softdes.aivideocreator.application.dto.request.UserDTO;
 import com.hcmus.softdes.aivideocreator.application.exception.userException.UserNotFoundException;
 import com.hcmus.softdes.aivideocreator.domain.entity.User;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class UserService {
         return user;
     }
 
-    public User registerUser(UserDto user) {
+    public User registerUser(UserDTO user) {
         var existingUser = userRepository.findUserByUsername(user.getUsername());
         if (existingUser != null) {
             throw new RuntimeException("Username already exists");
