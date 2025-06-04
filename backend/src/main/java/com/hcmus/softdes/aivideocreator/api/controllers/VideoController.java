@@ -5,6 +5,7 @@ import com.hcmus.softdes.aivideocreator.application.dto.response.VideoResponseDT
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -15,6 +16,8 @@ public class VideoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new VideoResponseDTO());
     }
     @GetMapping("/videos/{videoId}")
+    @Operation(summary = "Get video by ID",
+            description = "Retrieve a video by its unique identifier.")
     public ResponseEntity<VideoResponseDTO> getVideo(@PathVariable String videoId) {
         // Logic to retrieve the video by ID
         VideoResponseDTO videoResponse = new VideoResponseDTO(); // Replace with actual retrieval logic
