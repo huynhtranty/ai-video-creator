@@ -1,7 +1,7 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.UserRepository;
-import com.hcmus.softdes.aivideocreator.domain.entity.User;
+import com.hcmus.softdes.aivideocreator.domain.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;

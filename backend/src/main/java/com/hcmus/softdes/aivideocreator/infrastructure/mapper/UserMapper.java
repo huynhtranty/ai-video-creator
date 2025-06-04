@@ -1,6 +1,6 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.mapper;
 
-import com.hcmus.softdes.aivideocreator.domain.entity.User;
+import com.hcmus.softdes.aivideocreator.domain.model.User;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.UserEntity;
 
 public class UserMapper {

@@ -1,6 +1,6 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.ProjectRepository;
-import com.hcmus.softdes.aivideocreator.domain.entity.Project;
+import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ProjectEntity;
 import com.hcmus.softdes.aivideocreator.infrastructure.mapper.ProjectMapper;
 import com.hcmus.softdes.aivideocreator.infrastructure.jpa.ProjectJpaRepository;

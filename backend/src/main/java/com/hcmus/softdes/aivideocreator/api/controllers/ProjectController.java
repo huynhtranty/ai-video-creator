@@ -2,7 +2,7 @@ package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.application.dto.request.ProjectRequestDTO;
 import com.hcmus.softdes.aivideocreator.application.dto.response.ProjectResponseDTO;
-import com.hcmus.softdes.aivideocreator.domain.entity.Project;
+import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import com.hcmus.softdes.aivideocreator.application.service.ProjectService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

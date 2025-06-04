@@ -1,6 +1,6 @@
 package com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories;
 
-import com.hcmus.softdes.aivideocreator.domain.entity.Project;
+import com.hcmus.softdes.aivideocreator.domain.model.Project;
 
 import java.util.List;
 import java.util.Optional;
