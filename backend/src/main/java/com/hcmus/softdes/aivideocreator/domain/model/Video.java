@@ -1,13 +1,11 @@
 package com.hcmus.softdes.aivideocreator.domain.model;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
-import com.hcmus.softdes.aivideocreator.domain.enums.Platform;
 import com.hcmus.softdes.aivideocreator.domain.enums.Status;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @SuperBuilder
@@ -18,21 +16,6 @@ public class Video extends Entity {
     String description;
     String filePath;
     Status status;
-    Platform platform; // Optional field for social media platform
     int duration;
     UUID projectId;
-    UUID userId;
-
-    public Video(UUID id, LocalDateTime createAt, LocalDateTime updateAt, String title, String description, Platform platform,
-                 String filePath, Status status, int duration, UUID projectId, UUID userId) {
-        super(id, createAt, updateAt);
-        this.title = title;
-        this.description = description;
-        this.filePath = filePath;
-        this.status = status;
-        this.platform = platform; // Default to null, can be set later if needed
-        this.duration = duration;
-        this.projectId = projectId;
-        this.userId = userId;
-    }
 }

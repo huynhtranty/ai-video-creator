@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Value
 @Builder
-public class UserDTO {
+public class UserDto {
     String username;
     String email;
     String fullname;

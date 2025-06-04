@@ -11,4 +11,5 @@ public interface ProjectRepository {
     Optional<Project> findById(UUID id);
     List<Project> findByUserId(UUID userId);
     void deleteById(UUID id);
+    Optional<Project> findByName(String name);
 }
