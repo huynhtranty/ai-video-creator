@@ -11,8 +11,6 @@ public interface UserRepository {
     User findUserById(UUID userId);
     User findUserByUsername(String username);
     User findUserByEmail(String email);
-    User findUserByGoogleId(String googleId);
-    void updateUser(User user);
     void updateUser(UUID userId, User user);
     void deleteUser(UUID userId);
 }

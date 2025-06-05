@@ -8,6 +8,10 @@ interface SocialLoginOptionsProps {
 }
 
 export const SocialLoginOptions: React.FC<SocialLoginOptionsProps> = ({ mode = 'login' }) => {
+  const handleGoogleSignIn = async () => {
+    await signIn('google', { callbackUrl: '/dashboard' });
+  };
+
   return (
     <div className="w-full max-w-sm mx-auto space-y-3">
       <h2 className="text-xl font-bold text-center mb-4 bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
@@ -26,7 +30,7 @@ export const SocialLoginOptions: React.FC<SocialLoginOptionsProps> = ({ mode = '
       </button>
 
       <button 
-        onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+        onClick={handleGoogleSignIn}
         className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border hover:bg-blue-50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-blue-100 transform hover:-translate-y-0.5"
       >
         <div className="w-4 h-4">

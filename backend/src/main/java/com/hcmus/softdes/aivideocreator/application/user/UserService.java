@@ -1,18 +1,23 @@
 package com.hcmus.softdes.aivideocreator.application.user;
 
+import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.GoogleTokenRepository;
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.UserRepository;
 import com.hcmus.softdes.aivideocreator.domain.user.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.UUID;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final GoogleTokenRepository googleTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, GoogleTokenRepository googleTokenRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.googleTokenRepository = googleTokenRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -23,7 +28,7 @@ public class UserService {
         }
         return user;
     }
-    
+
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
@@ -43,40 +48,22 @@ public class UserService {
         userRepository.saveUser(newUser);
         return newUser;
     }
-    
-    public User registerGoogleUser(UserDto user, String googleId) {
-        // Check if user with this email already exists
-        var existingUserByEmail = userRepository.findUserByEmail(user.getEmail());
-        if (existingUserByEmail != null) {
-            // User already exists with this email, link Google ID and return
-            existingUserByEmail.linkGoogleAccount(googleId);
-            userRepository.updateUser(existingUserByEmail);
-            return existingUserByEmail;
+
+
+    public User findOrCreateGoogleUser(String email, String name) {
+        User user = userRepository.findUserByEmail(email);
+        if (user == null) {
+            user = User.createGoogleUser(email, name);
+            userRepository.saveUser(user);
         }
-        
-        // Check if username exists
-        var existingUserByUsername = userRepository.findUserByUsername(user.getUsername());
-        String username = user.getUsername();
-        
-        // If username exists, append a number to make it unique
-        if (existingUserByUsername != null) {
-            int counter = 1;
-            while (userRepository.findUserByUsername(username + counter) != null) {
-                counter++;
-            }
-            username = username + counter;
+        return user;
+    }
+
+    public void saveGoogleTokens(UUID id, String accessToken, String refreshToken, Instant expiresAt) {
+        User user = userRepository.findUserById(id);
+        if (user == null) {
+            throw new UserNotFoundException();
         }
-        
-        // Create new user with Google info
-        User newUser = User.createWithGoogleId(
-            username,
-            user.getEmail(),
-            passwordEncoder.encode(user.getPassword()),
-            user.getDateOfBirth(),
-            googleId
-        );
-        
-        userRepository.saveUser(newUser);
-        return newUser;
+        googleTokenRepository.saveToken(user.getEmail(), accessToken, refreshToken, expiresAt);
     }
 }

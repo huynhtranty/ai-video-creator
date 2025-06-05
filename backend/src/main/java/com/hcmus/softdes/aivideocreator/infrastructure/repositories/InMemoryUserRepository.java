@@ -66,19 +66,6 @@ public class InMemoryUserRepository implements UserRepository {
             .findFirst()
             .orElse(null);
     }
-    
-    @Override
-    public User findUserByGoogleId(String googleId) {
-        return users.stream()
-            .filter(user -> googleId.equals(user.getGoogleId()))
-            .findFirst()
-            .orElse(null);
-    }
-    
-    @Override
-    public void updateUser(User user) {
-        updateUser(user.getId(), user);
-    }
 
     @Override
     public void updateUser(UUID userId, User user) {

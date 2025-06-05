@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
-import { AuthenticationResponse, LoginRequest, RegisterRequest } from '@/types/api';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -25,30 +24,5 @@ apiClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-export const authApi = {
-  login: (data: LoginRequest) => 
-    apiClient.post<AuthenticationResponse>('/auth/internal/login', {
-      username: data.username,
-      password: data.password
-    }).then(response => response.data),
-
-  register: (data: RegisterRequest) => 
-    apiClient.post<AuthenticationResponse>('/auth/internal/register', {
-      username: data.username,
-      email: data.email,
-      password: data.password,
-      dateOfBirth: data.dateOfBirth
-    }),
-
-  googleAuth: (accessToken: string, idToken: string) =>
-    apiClient.post<AuthenticationResponse>('/auth/google/callback', {
-      accessToken,
-      idToken
-    }).then(response => response.data),
-
-  getUserProfile: () => 
-    apiClient.get('/auth/profile').then(response => response.data),
-};
 
 export default apiClient;

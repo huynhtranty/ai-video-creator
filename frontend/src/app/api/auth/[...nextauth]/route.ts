@@ -9,6 +9,13 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope: "openid email profile https://www.googleapis.com/auth/youtube.upload",
+          access_type: "offline", 
+          prompt: "consent"
+        }
+      }
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -43,26 +50,42 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (account && user) {
-        if (account.provider === 'google') {
-          try {
-            const response = await apiClient.post('/auth/google/callback', {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google" && account?.access_token) {
+        try {
+          const response = await apiClient.post("/auth/google/callback", 
+            {
               accessToken: account.access_token,
               idToken: account.id_token,
-            });
-            
-            if (response.data && response.data.token) {
-              token.accessToken = response.data.token;
-              token.id = response.data.user?.id;
+              email: profile?.email,
+              name: profile?.name,
+              refreshToken: account.refresh_token,
+              expiresAt: account.expires_at
             }
-          } catch (error) {
-            console.error("Error exchanging Google token:", error);
+          );
+          
+          if (response.data && response.data.token) {
+            user.accessToken = response.data.token;
+            user.id = response.data.user?.id;
+            return true;
           }
-        } else {
-          token.accessToken = user.accessToken;
-          token.id = user.id;
+          
+          return false; 
+        } catch (error) {
+          console.error("Error during Google authentication with backend:", error);
+          return false;
         }
+      }
+      
+      return true; 
+    },
+    async jwt({ token, user, account }) {
+      if (user) {
+        return {
+          ...token,
+          accessToken: user?.accessToken,
+          id: user?.id,
+        };
       }
       return token;
     },

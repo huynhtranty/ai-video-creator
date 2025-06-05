@@ -10,6 +10,15 @@ export type RegisterRequest = {
   dateOfBirth: string;
 };
 
+export interface GoogleAuthRequest {
+  accessToken: string;
+  idToken: string;
+  email?: string;
+  name?: string;
+  refreshToken?: string;
+  expiresAt?: number;
+}
+
 export interface User {
   id: string;
   username: string;

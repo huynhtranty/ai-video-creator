@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { authApi } from "@/lib/api-client";
+import apiClient from "@/lib/api-client";
 import { useRouter } from "next/navigation";
 import { LoginRequest } from "@/types/api";
 
@@ -14,7 +14,7 @@ export const useLogin = () => {
   const router = useRouter();
   
   return useMutation({
-    mutationFn: (data: LoginRequest) => authApi.login(data),
+    mutationFn: (data: LoginRequest) => apiClient.post("/auth/login", data),
     onSuccess: () => {
       router.push("/dashboard");
     },
@@ -25,7 +25,7 @@ export const useRegister = () => {
   const router = useRouter();
   
   return useMutation({
-    mutationFn: (data: RegisterCredentials) => authApi.register(data),
+    mutationFn: (data: RegisterCredentials) => apiClient.post("/auth/register", data),
     onSuccess: () => {
       router.push("/login");
     },
