@@ -6,7 +6,6 @@ import Header from "@/features/dashboard/components/Header";
 import SearchBar from "@/features/dashboard/components/SearchBar";
 import TrendingSection from "@/features/dashboard/components/TrendingSection";
 import RecentProjectsSection from "@/features/dashboard/components/RecentProjectsSection";
-import "./layout.css";
 
 export default function DashboardPage() {
   return (

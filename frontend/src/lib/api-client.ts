@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { LoginRequest, LoginResponse } from '@/types/api';
+import { create } from 'domain';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -33,7 +34,14 @@ export const authApi = {
             username: data.username,
             password: data.password
         }).then(response => response.data)
-    }
+    },
+    createVideo: (data: FormData) =>
+    apiClient.post<void>('/auth/createVideo', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }),
+
 };
 
 export default apiClient;
