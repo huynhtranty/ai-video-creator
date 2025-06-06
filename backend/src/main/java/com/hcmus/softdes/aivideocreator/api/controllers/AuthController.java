@@ -2,6 +2,7 @@ package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.api.contracts.auth.AuthResponse;
 import com.hcmus.softdes.aivideocreator.api.contracts.auth.LoginRequest;
+import com.hcmus.softdes.aivideocreator.api.mappers.UserMapper;
 import com.hcmus.softdes.aivideocreator.api.services.JwtUtils;
 import com.hcmus.softdes.aivideocreator.application.dto.user.UserDto;
 import com.hcmus.softdes.aivideocreator.application.service.UserService;
@@ -42,7 +43,7 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", "authorization=" + jwtToken + "; Path=/; HttpOnly");
 
-        var response = new AuthResponse(applicationUser, jwtToken);
+        var response = new AuthResponse(UserMapper.toUserResponse(applicationUser), jwtToken);
         return ResponseEntity.ok().headers(headers).body(response);
     }
 
@@ -61,7 +62,7 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", "authorization=" + jwtToken + "; Path=/; HttpOnly");
 
-        var response = new AuthResponse(applicationUser, jwtToken);
+        var response = new AuthResponse(UserMapper.toUserResponse(applicationUser), jwtToken);
         return ResponseEntity.ok().headers(headers).body(response);
     }
 
@@ -75,7 +76,7 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", "authorization=" + jwtToken + "; Path=/; HttpOnly");
 
-        var response = new AuthResponse(applicationUser, jwtToken);
+        var response = new AuthResponse(UserMapper.toUserResponse(applicationUser), jwtToken);
         return ResponseEntity.ok().headers(headers).body(response);
     }
     @PostMapping("/dashboard")
