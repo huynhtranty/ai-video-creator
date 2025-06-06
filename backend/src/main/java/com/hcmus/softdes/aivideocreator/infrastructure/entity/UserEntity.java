@@ -42,6 +42,4 @@ public class UserEntity {
 
     @Column(name = "last_modified", nullable = false)
     private LocalDateTime lastModified;
-
-
 }

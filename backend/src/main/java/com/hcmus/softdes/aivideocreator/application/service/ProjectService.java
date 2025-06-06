@@ -1,10 +1,9 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
-import com.hcmus.softdes.aivideocreator.domain.repositories.ProjectRepository;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
