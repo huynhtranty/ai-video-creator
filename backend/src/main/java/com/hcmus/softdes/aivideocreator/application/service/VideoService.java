@@ -1,6 +1,6 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
-import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.VideoRepository;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.VideoRepository;
 import com.hcmus.softdes.aivideocreator.domain.model.Video;
 import org.springframework.stereotype.Service;
 

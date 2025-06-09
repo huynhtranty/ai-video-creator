@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories;
+package com.hcmus.softdes.aivideocreator.application.common.repositories;
 
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
 
@@ -11,5 +11,5 @@ public interface ProjectRepository {
     Optional<Project> findById(UUID id);
     List<Project> findByUserId(UUID userId);
     void deleteById(UUID id);
-    Optional<Project> findByName(String name);
+    Optional<Project> findByProjectName(String name);
 }

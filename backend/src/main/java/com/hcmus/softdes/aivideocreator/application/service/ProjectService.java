@@ -1,10 +1,10 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
+import com.hcmus.softdes.aivideocreator.application.dto.projects.ProjectDto;
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
-import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.ProjectRepository;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,13 +19,14 @@ public class ProjectService {
     }
 
 
-    public Project createProject(Project project) {
-        UUID id = UUID.randomUUID();
-        LocalDateTime now = LocalDateTime.now();
-
+    public Project createProject(ProjectDto project) {
+        var existingProject = projectRepository.findByProjectName(project.getName());
+        if (existingProject.isPresent()) {
+            throw new IllegalArgumentException("Project with this ID already exists.");
+        }
         Project newProject = Project.create(
-                project.getUserId(),
-                project.getName()
+            project.getUserId(),
+            project.getName()
         );
 
         return projectRepository.save(newProject);

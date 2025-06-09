@@ -1,8 +1,12 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
+import com.hcmus.softdes.aivideocreator.application.dto.projects.ProjectDto;
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import com.hcmus.softdes.aivideocreator.application.service.ProjectService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -14,13 +18,15 @@ import java.util.UUID;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final AuthenticationManager authenticationManager;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, AuthenticationManager authenticationManager) {
         this.projectService = projectService;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping
-    public ResponseEntity<Project> create(@RequestBody Project request) {
+    public ResponseEntity<Project> create(@RequestBody ProjectDto request) {
         Project saved = projectService.createProject(request);
         return ResponseEntity.ok(saved);
     }
@@ -32,8 +38,9 @@ public class ProjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Project>> getByUser(@PathVariable UUID userId) {
+    @GetMapping
+    public ResponseEntity<List<Project>> getByUser() {
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getDetails().toString());
         List<Project> projects = projectService.getProjectsByUserId(userId);
         return ResponseEntity.ok(projects);
     }

@@ -1,5 +1,5 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
-import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.ProjectRepository;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.ProjectRepository;
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ProjectEntity;
 import com.hcmus.softdes.aivideocreator.infrastructure.mapper.ProjectMapper;
@@ -46,8 +46,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Optional<Project> findByName(String projectName) {
-        return jpaRepository.findByName(projectName)
+    public Optional<Project> findByProjectName(String name) {
+        return jpaRepository.findByName(name)
                 .map(ProjectMapper::toDomainEntity);
     }
 }
