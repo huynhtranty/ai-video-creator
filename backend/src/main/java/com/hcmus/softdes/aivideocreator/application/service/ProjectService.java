@@ -33,14 +33,29 @@ public class ProjectService {
     }
 
     public Optional<Project> getProjectById(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Project ID cannot be null");
+        }
         return projectRepository.findById(id);
     }
 
     public List<Project> getProjectsByUserId(UUID userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
         return projectRepository.findByUserId(userId);
     }
 
     public void deleteProject(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Project ID cannot be null");
+        }
+        if (!projectRepository.existsById(id)) {
+            throw new IllegalArgumentException("Project with this ID does not exist.");
+        }
         projectRepository.deleteById(id);
+        if (projectRepository.existsById(id)) {
+            throw new RuntimeException("Failed to delete project");
+        }
     }
 }

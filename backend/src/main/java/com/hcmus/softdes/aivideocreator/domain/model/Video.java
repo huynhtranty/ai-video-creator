@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @SuperBuilder
@@ -21,4 +22,49 @@ public class Video extends Entity {
     int duration;
     UUID projectId;
     UUID userId;
+
+    public Video(
+        UUID id,
+        String title,
+        String description,
+        String filePath,
+        Status status,
+        Platform platform,
+        int duration,
+        UUID projectId,
+        UUID userId
+    ) {
+        super(id, LocalDateTime.now() , LocalDateTime.now());
+        this.title = title;
+        this.description = description;
+        this.filePath = filePath;
+        this.status = status;
+        this.platform = platform;
+        this.duration = duration;
+        this.projectId = projectId;
+        this.userId = userId;
+    }
+
+    public static Video create(
+        String title,
+        String description,
+        String filePath,
+        Status status,
+        Platform platform,
+        int duration,
+        UUID projectId,
+        UUID userId
+    ) {
+        return new Video(
+            UUID.randomUUID(),
+            title,
+            description,
+            filePath,
+            status,
+            platform,
+            duration,
+            projectId,
+            userId
+        );
+    }
 }
