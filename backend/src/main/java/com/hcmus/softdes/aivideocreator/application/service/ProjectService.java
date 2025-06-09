@@ -23,10 +23,7 @@ public class ProjectService {
         UUID id = UUID.randomUUID();
         LocalDateTime now = LocalDateTime.now();
 
-        Project newProject = new Project(
-                id,
-                now,
-                now,
+        Project newProject = Project.create(
                 project.getUserId(),
                 project.getName()
         );
