@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { LoginRequest, LoginResponse } from '@/types/api';
 import { create } from 'domain';
+import { ListProject } from '@/features/listProject/api/listProject';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -37,6 +38,12 @@ export const authApi = {
     },
     createVideo: (data: FormData) =>
     apiClient.post<void>('/auth/createVideo', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }),
+    ListProject: (data: LoginRequest) => 
+    apiClient.post<void>('/auth/listProject', data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
