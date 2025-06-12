@@ -24,7 +24,7 @@ export default function ListProjectPage() {
             justifyContent: "space-between",
             alignItems: "center",
             padding: "0 2rem",
-            marginBottom: "2rem",
+            marginBottom: "1rem",
             marginTop: "4rem",
           }}
         >
@@ -55,13 +55,27 @@ export default function ListProjectPage() {
           <button
             style={{
               background: "none",
-              border: "none",
+              border: "2px solid #ccc", // Viền xám nhẹ khi không hover
+              borderRadius: "7px",
               cursor: "pointer",
               fontSize: "0.9rem",
-              color: "#666",
+              fontWeight: "bold", // Giữ in đậm cho chữ
+              padding: "0.25rem 0.5rem",
+              display: "flex",
+              alignItems: "center",
+              transition: "border-color 0.2s, background-color 0.2s", // Hiệu ứng chuyển đổi mượt mà
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.borderColor = "#000"; // Thay đổi viền thành đen khi hover
+              e.currentTarget.style.backgroundColor = "#f0f0f0"; // Thêm background nhẹ khi hover
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.borderColor = "#ccc"; // Quay lại viền xám nhẹ
+              e.currentTarget.style.backgroundColor = "none"; // Quay lại background ban đầu
             }}
           >
-            Ngày sửa đổi gần nhất: 12/06/2025 14:07
+            <img src="/PickDate.svg" alt="Calendar" style={{ marginRight: "0.5rem", width: "16px", height: "16px" }} />
+            Ngày sửa đổi gần nhất
           </button>
         </div>
         <div style={{ padding: "0 2rem", marginTop: "2rem" }}>
