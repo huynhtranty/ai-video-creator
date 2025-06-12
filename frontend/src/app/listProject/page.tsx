@@ -5,19 +5,29 @@ import Sidebar from "@/features/dashboard/components/Sidebar";
 import SearchBar from "@/features/listProject/components/SearchBar";
 
 export default function ListProjectPage() {
+  const projects = [
+    { id: 1, alt: "Video 1" },
+    { id: 2, alt: "Video 2" },
+    { id: 3, alt: "Video 3" },
+    { id: 4, alt: "Video 4" },
+    { id: 5, alt: "Video 5" },
+    { id: 6, alt: "Video 6" },
+    { id: 7, alt: "Video 7" },
+    { id: 8, alt: "Video 8" },
+    { id: 9, alt: "Video 9" }, // Sửa id từ 8 thành 9
+  ];
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <Sidebar />
       <main
         style={{
           flex: 1,
-          padding: "2rem 0 0 0",
+          padding: "2rem 2rem 0 50px", // Thêm padding phải 2rem để đồng nhất với lề phải
           background: "url('/Bg.svg') no-repeat center top",
           backgroundSize: "cover",
-          marginLeft: "50px", // Đảm bảo main không bị che bởi Sidebar cố định
         }}
       >
-        <SearchBar/>
+        <SearchBar />
         <div
           style={{
             display: "flex",
@@ -37,16 +47,16 @@ export default function ListProjectPage() {
                 background: "none",
                 border: "none",
                 marginLeft: "0.5rem",
-                transform: "scale(0.8)", // Giảm kích thước nút xuống 80% kích thước gốc
-                transition: "transform 0.2s, opacity 0.2s", // Thêm hiệu ứng chuyển động mượt mà
+                transform: "scale(0.8)",
+                transition: "transform 0.2s, opacity 0.2s",
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.transform = "scale(0.9)"; // Tăng kích thước nhẹ khi hover
-                e.currentTarget.style.opacity = "0.8"; // Giảm độ mờ khi hover
+                e.currentTarget.style.transform = "scale(0.9)";
+                e.currentTarget.style.opacity = "0.8";
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.transform = "scale(0.8)"; // Quay lại kích thước ban đầu
-                e.currentTarget.style.opacity = "1"; // Quay lại độ mờ ban đầu
+                e.currentTarget.style.transform = "scale(0.8)";
+                e.currentTarget.style.opacity = "1";
               }}
             >
               <img src="/Swap.svg" alt="Swap" />              
@@ -55,76 +65,58 @@ export default function ListProjectPage() {
           <button
             style={{
               background: "none",
-              border: "2px solid #ccc", // Viền xám nhẹ khi không hover
+              border: "2px solid #ccc",
               borderRadius: "7px",
               cursor: "pointer",
               fontSize: "0.9rem",
-              fontWeight: "bold", // Giữ in đậm cho chữ
+              fontWeight: "bold",
               padding: "0.25rem 0.5rem",
               display: "flex",
               alignItems: "center",
-              transition: "border-color 0.2s, background-color 0.2s", // Hiệu ứng chuyển đổi mượt mà
+              transition: "border-color 0.2s, background-color 0.2s",
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.borderColor = "#000"; // Thay đổi viền thành đen khi hover
-              e.currentTarget.style.backgroundColor = "#f0f0f0"; // Thêm background nhẹ khi hover
+              e.currentTarget.style.borderColor = "#000";
+              e.currentTarget.style.backgroundColor = "#f0f0f0";
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.borderColor = "#ccc"; // Quay lại viền xám nhẹ
-              e.currentTarget.style.backgroundColor = "none"; // Quay lại background ban đầu
+              e.currentTarget.style.borderColor = "#ccc";
+              e.currentTarget.style.backgroundColor = "none";
             }}
           >
             <img src="/PickDate.svg" alt="Calendar" style={{ marginRight: "0.5rem", width: "16px", height: "16px" }} />
             Ngày sửa đổi gần nhất
           </button>
         </div>
-        <div style={{ padding: "0 2rem", marginTop: "2rem" }}>
-          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-            <div style={{ cursor: "pointer", textAlign: "center" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, minmax(200px, 1fr))",
+            gap: "1rem",
+            padding: "0 2rem", // Thêm padding phải 2rem để đồng nhất với lề phải
+          }}
+        >
+          {projects.map((project) => (
+            <div key={project.id}>
               <div
                 style={{
-                  width: "200px",
-                  height: "150px",
-                  backgroundColor: "#e0e0e0",
-                  borderRadius: "8px",
+                  padding: "1rem",
+                  background: "white",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  textAlign: "center",
+                  width: "100%",
+                  height: "180px",
+                  backgroundColor: "#EEEEEE",
                 }}
-              />
-              <p style={{ marginTop: "0.5rem" }}>Xín chào Việt Nam</p>
+              >
+                <img src="/videoTemp.svg" alt={project.alt} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <div style={{ padding: "5px 15px", background: "white" }}>
+                <p style={{ fontSize: "14px", color: "#00000", fontFamily: "'Inter', cursive" }}>#VideoEditing</p>
+              </div>
             </div>
-            <div style={{ cursor: "pointer", textAlign: "center" }}>
-              <div
-                style={{
-                  width: "200px",
-                  height: "150px",
-                  backgroundColor: "#e0e0e0",
-                  borderRadius: "8px",
-                }}
-              />
-              <p style={{ marginTop: "0.5rem" }}>Cơn mưa đầu tiên</p>
-            </div>
-            <div style={{ cursor: "pointer", textAlign: "center" }}>
-              <div
-                style={{
-                  width: "200px",
-                  height: "150px",
-                  backgroundColor: "#e0e0e0",
-                  borderRadius: "8px",
-                }}
-              />
-              <p style={{ marginTop: "0.5rem" }}>Đào, pháo và piano</p>
-            </div>
-            <div style={{ cursor: "pointer", textAlign: "center" }}>
-              <div
-                style={{
-                  width: "200px",
-                  height: "150px",
-                  backgroundColor: "#e0e0e0",
-                  borderRadius: "8px",
-                }}
-              />
-              <p style={{ marginTop: "0.5rem" }}>Việt điệu cầu chuyền hạ binh</p>
-            </div>
-          </div>
+          ))}
         </div>
       </main>
     </div>
