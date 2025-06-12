@@ -14,7 +14,7 @@ export default function ListProjectPage() {
     { id: 6, alt: "Video 6" },
     { id: 7, alt: "Video 7" },
     { id: 8, alt: "Video 8" },
-    { id: 9, alt: "Video 9" }, // Sửa id từ 8 thành 9
+    { id: 9, alt: "Video 9" },
   ];
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -22,7 +22,7 @@ export default function ListProjectPage() {
       <main
         style={{
           flex: 1,
-          padding: "2rem 2rem 0 50px", // Thêm padding phải 2rem để đồng nhất với lề phải
+          padding: "2rem 2rem 4rem 50px", // Thêm padding-bottom 4rem để tạo khoảng cách với đáy trang
           background: "url('/Bg.svg') no-repeat center top",
           backgroundSize: "cover",
         }}
@@ -93,7 +93,8 @@ export default function ListProjectPage() {
             display: "grid",
             gridTemplateColumns: "repeat(4, minmax(200px, 1fr))",
             gap: "1rem",
-            padding: "0 2rem", // Thêm padding phải 2rem để đồng nhất với lề phải
+            padding: "0 2rem",
+            paddingBottom: "2rem",
           }}
         >
           {projects.map((project) => (
