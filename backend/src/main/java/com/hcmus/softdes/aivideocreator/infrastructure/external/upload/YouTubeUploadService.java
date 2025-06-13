@@ -14,13 +14,10 @@ import org.json.JSONObject;
 @Service
 public class YouTubeUploadService {
 
-    @Value("${youtube.access.token}")
-    private String accessToken;
-
     private static final String UPLOAD_URL = "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable";
     private static final String META_URL = "https://www.googleapis.com/youtube/v3/videos?part=snippet,status";
 
-    public String uploadVideo(File videoFile, String title, String description) throws Exception {
+    public String uploadVideo(File videoFile, String accessToken, String title, String description) throws Exception {
         // 1. Prepare metadata
         JSONObject metadata = new JSONObject();
         JSONObject snippet = new JSONObject();
@@ -59,7 +56,7 @@ public class YouTubeUploadService {
         return uploadResponse.body(); // Contains video ID and metadata
     }
 
-    public JSONObject getYouTubeVideoStats(String videoId) throws IOException, InterruptedException {
+    public JSONObject getYouTubeVideoStats(String videoId, String accessToken) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=" + videoId))
                 .header("Authorization", "Bearer " + accessToken)
