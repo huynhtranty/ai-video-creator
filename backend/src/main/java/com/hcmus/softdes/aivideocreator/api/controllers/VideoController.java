@@ -28,12 +28,12 @@ public class VideoController {
             description = "Create a new video with the provided details.")
     public ResponseEntity<VideoDto> createVideo (@RequestBody VideoDto request){
         // check if the request is valid
-        if (request.getTitle() == null || request.getDescription() == null || request.getFilePath() == null) {
+        if (request.getTitle() == null || request.getDescription() == null) {
             return ResponseEntity.badRequest().build();
         }
-        // Logic to create a new video
+
         Video videoData = VideoMapper.toVideo(request);
-        videoService.createVideo(videoData);
+        videoService.createVideo(videoData.getTitle(), videoData.getDescription(), videoData.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
     @GetMapping("/videos/{videoId}")
