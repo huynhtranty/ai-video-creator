@@ -36,7 +36,7 @@ services:
       - mysql
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - DB_URL=jdbc:mysql://localhost:3307/${MYSQL_DB:-aivideocreator}?useSSL=false&serverTimezone=UTC
+      - DB_URL=jdbc:mysql://mysql:3306/${MYSQL_DB:-aivideocreator}?useSSL=false&serverTimezone=UTC
       - DB_USERNAME=${MYSQL_USER:-root}
       - DB_PASSWORD=${MYSQL_PASS:-root}
       - CLIENT_URL=http://localhost:3000

@@ -1,15 +1,20 @@
-package com.hcmus.softdes.aivideocreator.application.user;
+package com.hcmus.softdes.aivideocreator.application.service;
 
-import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.UserRepository;
-import com.hcmus.softdes.aivideocreator.domain.user.User;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.UserRepository;
+import com.hcmus.softdes.aivideocreator.application.dto.user.UserDto;
+import com.hcmus.softdes.aivideocreator.domain.exception.user.UserNotFoundException;
+import com.hcmus.softdes.aivideocreator.domain.model.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User findUserByUsername(String username) {
@@ -29,7 +34,8 @@ public class UserService {
         User newUser = User.create(
             user.getUsername(),
             user.getEmail(),
-            user.getPassword(),
+            user.getFullname(),
+            passwordEncoder.encode(user.getPassword()),
             user.getDateOfBirth()
         );
         userRepository.saveUser(newUser);

@@ -1,9 +1,8 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 
-import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.UserRepository;
-import com.hcmus.softdes.aivideocreator.domain.user.User;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.UserRepository;
+import com.hcmus.softdes.aivideocreator.domain.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 // Temporary in-memory user repository for testing purposes
-@Repository
+//@Repository
 public class InMemoryUserRepository implements UserRepository {
     private final List<User> users;
 
@@ -22,12 +21,14 @@ public class InMemoryUserRepository implements UserRepository {
         users.add(User.create(
             "admin",
             "admin@mail.com",
+            "Admin User",
             encoder.encode("123"),
             new Date(2004, 1, 1)
         ));
         users.add(User.create(
             "user",
             "user@mail.com",
+            "Regular User",
             encoder.encode("123"),
             new Date(2004, 1, 1)
         ));

@@ -30,14 +30,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username = JwtUtils.getClaims(token).getSubject();
             String userId = JwtUtils.getUserId(token);
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     username,
                     null, // Verify credentials when calling isTokenValid()
                     Collections.emptyList() // Roles can be added here if needed
             );
 
             // Attach userId as a detail to the authentication object
-            ((UsernamePasswordAuthenticationToken) authentication).setDetails(userId);
+            authentication.setDetails(userId);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
