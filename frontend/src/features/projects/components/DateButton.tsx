@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from 'next/image';
 
 const DateButton = () => {
   return (
@@ -26,7 +27,13 @@ const DateButton = () => {
         e.currentTarget.style.backgroundColor = "none";
       }}
     >
-      <img src="/PickDate.svg" alt="Calendar" style={{ marginRight: "0.5rem", width: "16px", height: "16px" }} />
+      <Image 
+        src="/PickDate.svg" 
+        alt="Calendar" 
+        width={16} 
+        height={16} 
+        style={{ marginRight: "0.5rem" }} 
+      />
       Ngày sửa đổi gần nhất
     </button>
   );

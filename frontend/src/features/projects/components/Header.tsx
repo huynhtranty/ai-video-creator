@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 const Header = () => {
   return (
@@ -25,7 +26,7 @@ const Header = () => {
           e.currentTarget.style.opacity = "1";
         }}
       >
-        <img src="/Swap.svg" alt="Swap" />              
+        <Image src="/Swap.svg" alt="Swap" width={24} height={24} />          
       </button>
     </h2>
   );

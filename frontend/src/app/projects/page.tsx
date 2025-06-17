@@ -2,10 +2,10 @@
 
 import React from "react";
 import Sidebar from "@/features/dashboard/components/Sidebar";
-import SearchBar from "@/features/listProject/components/SearchBar";
-import Header from "@/features/listProject/components/Header";
-import DateButton from "@/features/listProject/components/DateButton";
-import ProjectGrid from "@/features/listProject/components/ProjectGrid";
+import SearchBar from "@/features/projects/components/SearchBar";
+import Header from "@/features/projects/components/Header";
+import DateButton from "@/features/projects/components/DateButton";
+import ProjectGrid from "@/features/projects/components/ProjectGrid";
 
 export default function ListProjectPage() {
   const projects = [
