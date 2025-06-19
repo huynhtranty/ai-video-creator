@@ -50,4 +50,16 @@ public class R2ServiceImpl implements R2Client {
     public InputStream getVideo(String key) {
         return s3Client.getObject(builder -> builder.bucket(bucketName).key(key));
     }
+
+    public String uploadFile(String filename, byte[] data, String contentType) {
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(filename)
+                .contentType(contentType)
+                .acl("public-read")
+                .build();
+
+        s3Client.putObject(request, RequestBody.fromBytes(data));
+        return String.format("https://%s.r2.cloudflarestorage.com/%s", bucketName, filename);
+    }
 }

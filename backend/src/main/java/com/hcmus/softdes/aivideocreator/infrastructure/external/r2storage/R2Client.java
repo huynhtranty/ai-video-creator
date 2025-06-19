@@ -9,4 +9,5 @@ public interface R2Client {
     public void deleteVideo(String key);
     public boolean videoExists(String key);
     public InputStream getVideo(String key);
+    public String uploadFile(String filename, byte[] data, String contentType);
 }

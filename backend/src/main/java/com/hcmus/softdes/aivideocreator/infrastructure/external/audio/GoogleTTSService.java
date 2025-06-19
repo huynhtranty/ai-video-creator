@@ -1,29 +1,28 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.external.audio;
 
 import com.google.cloud.texttospeech.v1.*;
-import com.google.protobuf.ByteString;
-import java.io.FileOutputStream;
+import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsRequest;
+import com.hcmus.softdes.aivideocreator.domain.model.Voice;
+import org.springframework.stereotype.Service;
 
-public class GoogleTTSService {
-    public void synthesizeText(String text, String outputFile) throws Exception {
-        try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
-            SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
-
+@Service("google")
+public class GoogleTTSService implements TtsService {
+    @Override
+    public byte[] synthesize(TtsRequest request) {
+        try (TextToSpeechClient client = TextToSpeechClient.create()) {
+            SynthesisInput input = SynthesisInput.newBuilder().setText(request.getText()).build();
             VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
-                    .setLanguageCode("en-US")
-                    .setSsmlGender(SsmlVoiceGender.NEUTRAL)
+                    .setLanguageCode(request.getLanguageCode())
+                    .setSsmlGender(SsmlVoiceGender.valueOf(request.getGender()))
                     .build();
-
-            AudioConfig audioConfig = AudioConfig.newBuilder()
+            AudioConfig config = AudioConfig.newBuilder()
                     .setAudioEncoding(AudioEncoding.MP3)
+                    .setSpeakingRate(request.getSpeakingRate())
                     .build();
-
-            SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
-            ByteString audioContents = response.getAudioContent();
-
-            try (FileOutputStream out = new FileOutputStream(outputFile)) {
-                out.write(audioContents.toByteArray());
-            }
+            var response = client.synthesizeSpeech(input, voice, config);
+            return response.getAudioContent().toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("Google TTS error: " + e.getMessage());
         }
     }
 }

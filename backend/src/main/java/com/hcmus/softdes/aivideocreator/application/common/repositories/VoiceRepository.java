@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface VoiceRepository {
-    // Define methods for voice repository operations
-    // For example:
      void saveVoice(Voice voice);
      Optional<Voice> findVoiceById(UUID id);
      List<Voice> findAllVoices();
