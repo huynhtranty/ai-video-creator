@@ -53,7 +53,6 @@ const handler = NextAuth({
 
           return null;
         } catch (_error) {
-          console.log(_error);
           return null;
         }
       },
@@ -116,9 +115,9 @@ const handler = NextAuth({
     },
   },
   pages: {
-    signIn: "/",
-    signOut: "/",
-    error: "/",
+    signIn: "/login",
+    signOut: "/login",
+    error: "/login",
   },
   session: {
     strategy: "jwt",
