@@ -1,8 +1,12 @@
-package com.hcmus.softdes.aivideocreator.application.user;
+package com.hcmus.softdes.aivideocreator.application.service;
 
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.GoogleTokenRepository;
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.UserRepository;
 import com.hcmus.softdes.aivideocreator.domain.user.User;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.UserRepository;
+import com.hcmus.softdes.aivideocreator.application.dto.user.UserDto;
+import com.hcmus.softdes.aivideocreator.domain.exception.user.UserNotFoundException;
+import com.hcmus.softdes.aivideocreator.domain.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +46,7 @@ public class UserService {
         User newUser = User.create(
             user.getUsername(),
             user.getEmail(),
+            user.getFullname(),
             passwordEncoder.encode(user.getPassword()),
             user.getDateOfBirth()
         );

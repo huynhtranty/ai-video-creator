@@ -1,25 +1,28 @@
-package com.hcmus.softdes.aivideocreator.domain.user;
+package com.hcmus.softdes.aivideocreator.domain.model;
 
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
 import lombok.Getter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
 @Getter
+@SuperBuilder
 public class User extends Entity {
     private String username;
     private String email;
     private String password;
+    private String fullname;
     private Date dateOfBirth;
 
-    protected User(
+    public User(
         UUID id,
         String username,
         String email,
         String password,
+        String fullname,
         Date dateOfBirth,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
@@ -27,6 +30,7 @@ public class User extends Entity {
         super(id, createdAt, updatedAt);
         this.username = username;
         this.password = password;
+        this.fullname = fullname;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
     }
@@ -34,6 +38,7 @@ public class User extends Entity {
     public static User create(
         String username,
         String email,
+        String fullname,
         String password,
         Date dateOfBirth
     ) {
@@ -42,6 +47,7 @@ public class User extends Entity {
             username,
             email,
             password,
+            fullname,
             dateOfBirth,
             LocalDateTime.now(),
             LocalDateTime.now()
@@ -63,13 +69,16 @@ public class User extends Entity {
     public void update(
         String username,
         String email,
+        String fullname,
         String password,
         Date dateOfBirth
     ) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.fullname = fullname;
         this.dateOfBirth = dateOfBirth;
         super.update();
     }
+
 }
