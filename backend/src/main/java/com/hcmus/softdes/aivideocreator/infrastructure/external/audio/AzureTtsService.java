@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 @Service("azure")
 public class AzureTtsService implements TtsService {
 
-    @Value("${azure.key}")
+    @Value("${azure.speech.key}")
     private String apiKey;
 
-    @Value("${azure.region}")
+    @Value("${azure.speech.region}")
     private String region;
 
     @Override
