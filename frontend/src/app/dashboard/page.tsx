@@ -7,7 +7,6 @@ import SearchBar from "@/features/dashboard/components/SearchBar";
 import TrendingSection from "@/features/dashboard/components/TrendingSection";
 import RecentProjectsSection from "@/features/dashboard/components/RecentProjectsSection";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
-import "./layout.css";
 
 export default function DashboardPage() {
   return (

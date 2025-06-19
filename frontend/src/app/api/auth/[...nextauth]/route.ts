@@ -2,7 +2,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import apiClient from "@/lib/api-client";
 
 const handler = NextAuth({
   providers: [
@@ -29,21 +28,32 @@ const handler = NextAuth({
         }
         
         try {
-          const response = await apiClient.post('/auth/internal/login', {
-            username: credentials.username,
-            password: credentials.password,
+          const response = await fetch(`${process.env.NEXT_BACKEND_API_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username: credentials.username,
+              password: credentials.password,
+            }),
           });
-          
-          if (response.data && response.data.user) {
-            return {
-              id: response.data.user.id,
-              name: response.data.user.username,
-              email: response.data.user.email,
-              accessToken: response.data.token,
-            };
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data.user) {
+              return {
+                id: data.user.id,
+                name: data.user.username,
+                email: data.user.email,
+                accessToken: data.token,
+              };
+            }
           }
+
           return null;
         } catch (_error) {
+          console.log(_error);
           return null;
         }
       },
@@ -53,21 +63,28 @@ const handler = NextAuth({
     async signIn({ user, account, profile }) {
       if (account?.provider === "google" && account?.access_token) {
         try {
-          const response = await apiClient.post("/auth/google/callback", 
-            {
+          const response = await fetch(`${process.env.NEXT_BACKEND_API_URL}/auth/google/callback`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
               accessToken: account.access_token,
               idToken: account.id_token,
               email: profile?.email,
               name: profile?.name,
               refreshToken: account.refresh_token,
               expiresAt: account.expires_at
-            }
-          );
+            }),
+          });
           
-          if (response.data && response.data.token) {
-            user.accessToken = response.data.token;
-            user.id = response.data.user?.id;
-            return true;
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data.token) {
+              user.accessToken = data.token;
+              user.id = data.user?.id;
+              return true;
+            }
           }
           
           return false; 

@@ -8,10 +8,8 @@ const apiClient = axios.create({
   },
 });
 
-// Add a request interceptor to attach the auth token to requests
 apiClient.interceptors.request.use(
   async (config) => {
-    // Only in browser context
     if (typeof window !== 'undefined') {
       const session = await getSession();
       if (session?.user?.accessToken) {
