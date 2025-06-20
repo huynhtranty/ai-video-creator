@@ -1,6 +1,7 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.api.contracts.auth.AuthResponse;
+import com.hcmus.softdes.aivideocreator.api.contracts.auth.GoogleAuthRequest;
 import com.hcmus.softdes.aivideocreator.api.contracts.auth.LoginRequest;
 import com.hcmus.softdes.aivideocreator.api.mappers.UserMapper;
 import com.hcmus.softdes.aivideocreator.api.services.JwtUtils;
@@ -79,23 +80,25 @@ public class AuthController {
         var response = new AuthResponse(UserMapper.toUserResponse(applicationUser), jwtToken);
         return ResponseEntity.ok().headers(headers).body(response);
     }
-    @PostMapping("/dashboard")
-    public ResponseEntity<String> dashboard(@RequestBody LoginRequest request) {
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(request.username(), request.password());
+    @PostMapping("/google/callback")
+    public ResponseEntity<AuthResponse> googleAuth(@RequestBody GoogleAuthRequest request) {
+        var applicationUser = userService.findOrCreateGoogleUser(request.email(), request.name());
 
-        Authentication authentication = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        userService.saveGoogleTokens(
+                applicationUser.getId(),
+                request.accessToken(),
+                request.refreshToken(),
+                request.expiresAt()
+        );
 
-        var user = ((User) authentication.getPrincipal());
-        var applicationUser = userService.findUserByUsername(user.getUsername());
-
+        User user = new User(applicationUser.getUsername(), "", new ArrayList<>());
         String jwtToken = JwtUtils.generateToken(user, applicationUser.getId().toString());
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", "authorization=" + jwtToken + "; Path=/; HttpOnly");
 
-        return ResponseEntity.ok().headers(headers).body("Dashboard");
-
+        var response = new AuthResponse(UserMapper.toUserResponse(applicationUser), jwtToken);
+        return ResponseEntity.ok().headers(headers).body(response);
     }
 }
