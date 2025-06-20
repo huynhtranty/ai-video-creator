@@ -7,6 +7,7 @@ import com.hcmus.softdes.aivideocreator.domain.model.Voice;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.audio.TtsService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage.R2ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -46,5 +47,29 @@ public class VoiceService {
         repository.saveVoice(record);
 
         return new TtsResponse(url, "mp3", request.getProjectId());
+    }
+
+    public TtsResponse uploadMp3File(MultipartFile file, String projectId, String languageCode, String provider) {
+        if (file == null || file.isEmpty() || !file.getOriginalFilename().endsWith(".mp3")) {
+            throw new RuntimeException("Invalid file. Please upload an mp3 file.");
+        }
+        try {
+            byte[] audio = file.getBytes();
+            String filename = java.util.UUID.randomUUID() + ".mp3";
+            String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
+
+            java.util.UUID projectUuid;
+            try {
+                projectUuid = java.util.UUID.fromString(projectId);
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
+            }
+            Voice record = Voice.create(file.getOriginalFilename(), languageCode, provider.toLowerCase(), url, projectUuid);
+            repository.saveVoice(record);
+
+            return new TtsResponse(url, "mp3", projectId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload file", e);
+        }
     }
 }
