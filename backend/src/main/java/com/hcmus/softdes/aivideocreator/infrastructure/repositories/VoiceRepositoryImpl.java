@@ -2,7 +2,9 @@ package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 
 import com.hcmus.softdes.aivideocreator.application.common.repositories.VoiceRepository;
 import com.hcmus.softdes.aivideocreator.domain.model.Voice;
+import com.hcmus.softdes.aivideocreator.infrastructure.entity.VoiceEntity;
 import com.hcmus.softdes.aivideocreator.infrastructure.jpa.VoiceJpaRepository;
+import com.hcmus.softdes.aivideocreator.infrastructure.mapper.VoiceMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.UUID;
 @Repository
 public class VoiceRepositoryImpl implements VoiceRepository {
 
-    private VoiceJpaRepository voiceJpaRepository;
+    private final VoiceJpaRepository voiceJpaRepository;
 
     public VoiceRepositoryImpl(VoiceJpaRepository voiceJpaRepository) {
         this.voiceJpaRepository = voiceJpaRepository;
@@ -21,8 +23,9 @@ public class VoiceRepositoryImpl implements VoiceRepository {
 
     @Override
     public void saveVoice(Voice voice) {
-
-        voiceJpaRepository.save(voice);
+        // Convert the Voice object to a VoiceEntity and save it
+        VoiceEntity voiceEntity = VoiceMapper.toJpaVoiceEntity(voice);
+        voiceJpaRepository.save(voiceEntity);
     }
 
     @Override

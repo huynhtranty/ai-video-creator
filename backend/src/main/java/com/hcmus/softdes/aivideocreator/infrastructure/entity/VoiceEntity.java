@@ -23,11 +23,20 @@ public class VoiceEntity {
     @Column(nullable = false)
     private UUID id;
 
-    @Column(name = "fileName", nullable = false)
-    private String fileName;
+    @Column(name = "text", nullable = false)
+    private String text;
 
     @Column(name = "provider")
     private String provider;
+
+    @Column(name = "language_code", nullable = false)
+    private String languageCode;
+
+    @Column(name = "url", nullable = false)
+    private String url;
+
+    @Column(name ="speaking_rate", nullable = false)
+    private double speakingRate;
 
     @Column(name = "project_id", nullable = false)
     private UUID projectId;

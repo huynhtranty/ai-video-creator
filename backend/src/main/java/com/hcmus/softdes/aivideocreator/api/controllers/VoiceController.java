@@ -3,7 +3,6 @@ package com.hcmus.softdes.aivideocreator.api.controllers;
 import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsResponse;
 import com.hcmus.softdes.aivideocreator.application.service.VoiceService;
-import com.hcmus.softdes.aivideocreator.domain.model.Voice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
