@@ -64,4 +64,9 @@ public class R2ServiceImpl implements R2Client {
         s3Client.putObject(request, RequestBody.fromBytes(data));
         return String.format("https://%s.r2.cloudflarestorage.com/%s", bucketName, filename);
     }
+
+    @Override
+    public void deleteFile(String filename) {
+        s3Client.deleteObject(builder -> builder.bucket(bucketName).key(filename));
+    }
 }

@@ -12,4 +12,5 @@ public interface VoiceRepository {
      List<Voice> findAllVoices();
      void deleteVoiceById(UUID id);
      boolean existsById(UUID id);
+     List<Voice> findVoicesByProjectId(UUID projectId);
 }

@@ -23,14 +23,17 @@ public class VoiceRepositoryImpl implements VoiceRepository {
 
     @Override
     public void saveVoice(Voice voice) {
-        // Convert the Voice object to a VoiceEntity and save it
         VoiceEntity voiceEntity = VoiceMapper.toJpaVoiceEntity(voice);
         voiceJpaRepository.save(voiceEntity);
     }
 
     @Override
     public Optional<Voice> findVoiceById(UUID id) {
-        // Implementation for finding a voice by ID
+        Optional<VoiceEntity> voiceEntityOptional = voiceJpaRepository.findById(id);
+        if (voiceEntityOptional.isPresent()) {
+            Voice voice = VoiceMapper.toDomainVoice(voiceEntityOptional.get());
+            return Optional.of(voice);
+        }
         return Optional.empty();
     }
 
@@ -42,13 +45,26 @@ public class VoiceRepositoryImpl implements VoiceRepository {
 
     @Override
     public void deleteVoiceById(UUID id) {
-        // Implementation for deleting a voice by ID
+        voiceJpaRepository.deleteById(id);
     }
 
     @Override
     public boolean existsById(UUID id) {
         // Implementation to check if a voice exists by ID
         return false;
+    }
+
+    @Override
+    public List<Voice> findVoicesByProjectId(UUID projectId) {
+    // Implementation for finding voices by project ID
+        List<VoiceEntity> voiceEntities = voiceJpaRepository.findByProjectId(projectId);
+        // Convert the list of VoiceEntity to a list of Voice
+        List<Voice> voices = new ArrayList<>();
+        for (VoiceEntity entity : voiceEntities) {
+            voices.add(VoiceMapper.toDomainVoice(entity));
+        }
+        // Return the list of Voice objects
+        return voices;
     }
 
 

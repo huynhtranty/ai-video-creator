@@ -72,4 +72,12 @@ public class VoiceService {
             throw new RuntimeException("Failed to upload file", e);
         }
     }
+
+    public void deleteVoice(String voiceId) {
+        Voice voice = repository.findVoiceById(UUID.fromString(voiceId))
+                .orElseThrow(() -> new RuntimeException("Voice not found with id: " + voiceId));
+
+        r2StorageService.deleteFile(voice.getUrl());
+        repository.deleteVoiceById(UUID.fromString(voiceId));
+    }
 }
