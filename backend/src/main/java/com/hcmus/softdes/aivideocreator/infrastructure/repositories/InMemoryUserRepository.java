@@ -59,6 +59,14 @@ public class InMemoryUserRepository implements UserRepository {
             .findFirst()
             .orElse(null);
     }
+    
+    @Override
+    public User findUserByEmail(String email) {
+        return users.stream()
+            .filter(user -> user.getEmail().equals(email))
+            .findFirst()
+            .orElse(null);
+    }
 
     @Override
     public void updateUser(UUID userId, User user) {

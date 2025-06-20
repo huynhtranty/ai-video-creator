@@ -1,26 +1,22 @@
 import { useMutation } from "@tanstack/react-query";
-import { authApi } from "@/lib/api-client";
+import apiClient from "@/lib/api-client";
 import { useRouter } from "next/navigation";
-
-export type LoginCredentials = {
-  username: string;
-  password: string;
-};
+import { LoginRequest } from "@/types/api";
 
 export type RegisterCredentials = {
   username: string;
   email: string;
   password: string;
+  dateOfBirth: string;
 };
 
 export const useLogin = () => {
   const router = useRouter();
   
   return useMutation({
-    mutationFn: (data: LoginCredentials) => authApi.login(data),
-    onSuccess: (data) => {
-      localStorage.setItem("token", data.access_token);
-      router.push("/");
+    mutationFn: (data: LoginRequest) => apiClient.post("/auth/login", data),
+    onSuccess: () => {
+      router.push("/dashboard");
     },
   });
 };
@@ -29,7 +25,7 @@ export const useRegister = () => {
   const router = useRouter();
   
   return useMutation({
-    mutationFn: (data: RegisterCredentials) => authApi.register(data),
+    mutationFn: (data: RegisterCredentials) => apiClient.post("/auth/register", data),
     onSuccess: () => {
       router.push("/login");
     },

@@ -54,7 +54,6 @@ services:
       - app-network
     volumes:
       - ./frontend:/app
-      - /app/node_modules
       - ./frontend/.env.local:/app/.env.local
     working_dir: /app
     command: npm run dev
@@ -62,7 +61,11 @@ services:
       - backend
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8080
-
+      - NEXT_BACKEND_API_URL=http://backend:8080
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-null}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-null}
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-your-secret-key-here}
 networks:
   app-network:
     driver: bridge
