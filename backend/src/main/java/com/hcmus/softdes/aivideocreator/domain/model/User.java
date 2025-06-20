@@ -57,9 +57,10 @@ public class User extends Entity {
     public static User createGoogleUser(String email, String name) {
         return new User(
             UUID.randomUUID(),
-            name,
+            null,
             email,
             null, // Password is not needed for Google users
+            name,
             null, // Date of birth is not provided
             LocalDateTime.now(),
             LocalDateTime.now()

@@ -98,7 +98,7 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", "authorization=" + jwtToken + "; Path=/; HttpOnly");
 
-        var response = new AuthResponse(applicationUser, jwtToken);
+        var response = new AuthResponse(UserMapper.toUserResponse(applicationUser), jwtToken);
         return ResponseEntity.ok().headers(headers).body(response);
     }
 }
