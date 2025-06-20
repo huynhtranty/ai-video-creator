@@ -15,6 +15,7 @@ public class VoiceMapper {
                 .languageCode(voice.getLanguageCode())
                 .text(voice.getText())
                 .url(voice.getUrl())
+                .speakingRate(voice.getSpeakingRate())
                 .projectId(voice.getProjectId())
                 .creationDate(voice.getCreatedAt())
                 .build();

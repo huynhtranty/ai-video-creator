@@ -36,7 +36,13 @@ public class VoiceService {
         String filename = UUID.randomUUID() + ".mp3";
         String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
 
-        Voice record = Voice.create(filename, request.getLanguageCode() ,providerKey, url, UUID.fromString(request.getProjectId()));
+        UUID projectId;
+        try {
+            projectId = UUID.fromString(request.getProjectId());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
+        }
+        Voice record = Voice.create(request.getText(), request.getLanguageCode() ,providerKey, url, projectId);
         repository.saveVoice(record);
 
         return new TtsResponse(url, "mp3", request.getProjectId());

@@ -1,7 +1,6 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage;
 
-import com.google.api.client.util.Value;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -10,13 +9,16 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.InputStream;
 
 @Service
-@RequiredArgsConstructor
 public class R2ServiceImpl implements R2Client {
 
     @Value("${cloudflare.r2.bucket-name}")
     private String bucketName;
 
     private final S3Client s3Client;
+
+    public R2ServiceImpl(S3Client s3Client) {
+        this.s3Client = s3Client;
+    }
 
     @Override
     public String uploadVideo(String key, InputStream videoStream, long size) {

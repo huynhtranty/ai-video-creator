@@ -34,12 +34,12 @@ public class R2StorageConfig {
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
 
         return S3Client.builder()
-                .region(Region.of(region)) // "auto" vẫn được R2 hỗ trợ
+                .region(Region.of(region)) // Use a valid AWS region, e.g., "us-east-1"
                 .endpointOverride(URI.create(endpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .serviceConfiguration(
                         S3Configuration.builder()
-                                .pathStyleAccessEnabled(true) // Bắt buộc với R2
+                                .pathStyleAccessEnabled(true)
                                 .build()
                 )
                 .build();

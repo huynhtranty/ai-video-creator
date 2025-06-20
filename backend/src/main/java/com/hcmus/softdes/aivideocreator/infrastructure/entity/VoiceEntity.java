@@ -29,13 +29,13 @@ public class VoiceEntity {
     @Column(name = "provider")
     private String provider;
 
-    @Column(name = "language_code", nullable = false)
+    @Column(name = "language_code", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'en-US'")
     private String languageCode;
 
     @Column(name = "url", nullable = false)
     private String url;
 
-    @Column(name ="speaking_rate", nullable = false)
+    @Column(name ="speaking_rate", nullable = false, columnDefinition = "DOUBLE DEFAULT 1.0")
     private double speakingRate;
 
     @Column(name = "project_id", nullable = false)
