@@ -1,35 +1,5 @@
-import Image from "next/image";
-import { LoginForm } from "@/features/auth/components/LoginForm";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-8">
-      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        {/* Left side - Login Form */}
-        <div className="w-full">
-          <LoginForm />
-        </div>
-
-        {/* Right side - Social Login Options */}
-        <div className="w-full space-y-6">
-          <h2 className="text-2xl font-semibold text-center mb-8">Or continue with</h2>
-          
-          <button className="w-full flex items-center justify-center gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-            <Image src="/google.svg" alt="Google" width={24} height={24} />
-            <span>Continue with Google</span>
-          </button>
-
-          <button className="w-full flex items-center justify-center gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-            <Image src="/facebook.svg" alt="Facebook" width={24} height={24} />
-            <span>Continue with Facebook</span>
-          </button>
-
-          <button className="w-full flex items-center justify-center gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-            <Image src="/tiktok.svg" alt="TikTok" width={24} height={24} />
-            <span>Continue with TikTok</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  redirect("/dashboard");
 }

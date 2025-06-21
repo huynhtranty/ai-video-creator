@@ -1,4 +1,4 @@
-package com.hcmus.softdes.aivideocreator.api.controllers;
+package com.hcmus.softdes.aivideocreator.api.exception;
 
 import com.hcmus.softdes.aivideocreator.application.common.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;

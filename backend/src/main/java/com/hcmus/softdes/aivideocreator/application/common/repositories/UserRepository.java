@@ -1,6 +1,6 @@
-package com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories;
+package com.hcmus.softdes.aivideocreator.application.common.repositories;
 
-import com.hcmus.softdes.aivideocreator.domain.user.User;
+import com.hcmus.softdes.aivideocreator.domain.model.User;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +10,7 @@ public interface UserRepository {
     void saveUser(User user);
     User findUserById(UUID userId);
     User findUserByUsername(String username);
+    User findUserByEmail(String email);
     void updateUser(UUID userId, User user);
     void deleteUser(UUID userId);
 }

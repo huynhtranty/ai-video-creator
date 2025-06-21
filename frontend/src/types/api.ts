@@ -3,9 +3,34 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
-  access_token: string;
-  token_type: string;
+export type RegisterRequest = {
+  username: string;
+  email: string;
+  password: string;
+  dateOfBirth: string;
+};
+
+export interface GoogleAuthRequest {
+  accessToken: string;
+  idToken: string;
+  email?: string;
+  name?: string;
+  refreshToken?: string;
+  expiresAt?: number;
+}
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  dateOfBirth: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AuthenticationResponse {
+  user: User;
+  token: string;
 }
 
 export interface ApiError {
