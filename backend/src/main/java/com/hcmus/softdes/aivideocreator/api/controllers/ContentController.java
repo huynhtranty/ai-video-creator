@@ -38,7 +38,25 @@ public class ContentController {
                         .build(),
                     "contents", Schema.builder()
                         .type(Type.Known.ARRAY)
-                        .items(Schema.builder().type(Type.Known.STRING))
+                        .items(Schema.builder().type(Type.Known.OBJECT)
+                            .properties(
+                                ImmutableMap.of(
+                                    "description", Schema.builder()
+                                            .type(Type.Known.STRING)
+                                            .description("A paragraph of the script")
+                                            .build(),
+                                    "subtitles", Schema.builder()
+                                            .type(Type.Known.ARRAY)
+                                            .items(Schema.builder()
+                                                    .type(Type.Known.STRING)
+                                                    .description("Subtitles for the paragraph")
+                                                    .build())
+                                            .build()
+                                )
+                            )
+                            .required("description", "subtitles")
+                            .build()
+                        )
                         .description("List of contents")
                         .build()
                 )
@@ -54,12 +72,25 @@ public class ContentController {
 
         String prompt = "Create a video script about this topic: "
             + request.prompt()
-            + ". The script should include an introduction, a discussion of key points, and a conclusion."
-            + "The context of the script should use the topic and describe a more specific, more informative context, enough to describe the aspects of the video"
-            + "The contents should be a list of strings, minimum 4 items, each item is a paragraph of the script"
-            + " and they should be concise, informative, and short enough to describe an image. "
-            + "The number of items should be long enough to cover the topic, but not too long to be overwhelming, depending on the topic, it can be 4-10 items."
-            + "You should detect the language of the script and return the same language as the input topic";
+            + """ 
+            . 
+            The script should include an introduction, a discussion of key points, and a conclusion.
+            The context of the script should use the topic and describe a more specific, more informative context,
+            enough to describe the aspects of the video.
+            Each content contains an description and a list of subtitles. 
+            The number of contents should be long enough to cover the topic, but not too long to be overwhelming, 
+            depending on the topic, it normally be 4-10 items, could be more or less than if the topic is too broad or too narrow.
+            The description is a paragraph of the script
+            and they should be concise, informative, and short enough to describe an image.
+            The subtitles are a list of subtitles for the paragraph, they should be short and concise,
+            and have be the same as the description, but split into multiple string.
+            They need to have a reasonable length (18-25 words) to show as the subtitles of the video 
+            (That means if you have a long sentence, split it into multiple subtitles,
+            but when you split it, make sure that the subtitles still make sense and can be read easily).
+            
+            You should detect the language of the topic and 
+            return everything in the response with the same language as the input topic.
+            """;
 
         GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, prompt, config);
         return response.text();
