@@ -106,7 +106,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
                   border: "2px solid transparent",
                   borderRadius: "20px",
                   marginBottom: "0.5rem",
-                  backgroundColor: "#ffffff", // Light background for textarea
+                  backgroundColor: "#ffffff",
                   background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
                 }}
               />
@@ -122,7 +122,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
                   borderRadius: "20px",
                   minHeight: "100px",
                   resize: "vertical",
-                  backgroundColor: "#ffffff", // Light background for textarea
+                  backgroundColor: "#ffffff",
                   background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
                 }}
               ></textarea>
@@ -132,10 +132,26 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
                 style={{
                   background: "linear-gradient(to right, #5DEFFF, #4105F5)",
                   color: "white",
-                  padding: "0.5rem 2.5rem", // Increased horizontal padding
+                  padding: "0.5rem 2.5rem",
                   borderRadius: "10px",
                   border: "none",
                   cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = "linear-gradient(to right, #4105F5, #FF5FFF)";
+                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = "linear-gradient(to right, #5DEFFF, #4105F5)";
+                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = "scale(0.98)";
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
                 }}
               >
                 Lưu Video
@@ -144,10 +160,26 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
                 style={{
                   background: "linear-gradient(to right, #5DEFFF, #4105F5)",
                   color: "white",
-                  padding: "0.5rem 3rem", // Increased horizontal padding
+                  padding: "0.5rem 3rem",
                   borderRadius: "10px",
                   border: "none",
                   cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = "linear-gradient(to right, #4105F5, #FF5FFF)";
+                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = "linear-gradient(to right, #5DEFFF, #4105F5)";
+                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = "scale(0.98)";
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
                 }}
               >
                 Chia sẻ
