@@ -63,7 +63,8 @@ export default function DashboardPage() {
                   }}
                 />
               </div>
-              <div style={{ background: "#e0c4f0", padding: "5px", marginTop: "10px", textAlign: "center" }}>
+              <div style={{ background: "#e0c4f0", padding: "5px", marginTop: "10px", textAlign: "center",border: "1px solid #ddd",
+                  borderRadius: "10px", }}>
                 Project Name
               </div>
             </div>
