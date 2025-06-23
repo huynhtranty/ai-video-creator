@@ -1,6 +1,7 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
-import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.GoogleTokenRepository;
+// import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.GoogleTokenRepository;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.GoogleTokenRepository;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.UserRepository;
 import com.hcmus.softdes.aivideocreator.application.dto.user.UserDto;
 import com.hcmus.softdes.aivideocreator.domain.exception.user.UserNotFoundException;
