@@ -28,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
         borderRadius: "10px",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
         zIndex: 1000,
-        width: "500px",
+        width: "80%",
         height: "auto",
       }}
     >
@@ -50,47 +50,53 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
           ×
         </button>
       </div>
-      <img
-        src="/videoTemp.svg"
-        alt={project.alt ?? "Project Thumbnail"}
-        style={{ width: "100%", height: "auto", borderRadius: "10px", marginTop: "1rem" }}
-      />
-      <p style={{ color: "#666", marginTop: "0.5rem" }}>Project Name</p>
-      <div style={{ marginTop: "1rem" }}>
-        <input
-          type="text"
-          placeholder="Tiêu đề"
-          style={{
-            width: "100%",
-            padding: "0.5rem",
-            border: "2px solid #ccc",
-            borderRadius: "5px",
-            marginBottom: "0.5rem",
-          }}
-        />
-        <textarea
-          placeholder="Nhập mô tả"
-          style={{
-            width: "100%",
-            padding: "0.5rem",
-            border: "2px solid #ccc",
-            borderRadius: "5px",
-            minHeight: "100px",
-            resize: "vertical",
-          }}
-        ></textarea>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
-        <button
-          style={{ background: "#00f", color: "white", padding: "0.5rem 1rem", borderRadius: "5px" }}
-        >
-          Lưu Video
-        </button>
-        <button
-          style={{ background: "#f00", color: "white", padding: "0.5rem 1rem", borderRadius: "5px" }}
-        >
-          Chia sẻ
-        </button>
+      <div style={{ display: "flex", padding: "1rem" }}>
+        <div style={{ flex: 1, marginRight: "1rem" }}>
+          <img
+            src="/videoTemp.svg"
+            alt={project.alt ?? "Project Thumbnail"}
+            style={{ width: "100%", height: "auto", borderRadius: "10px" }}
+          />
+          <p style={{ color: "#666", marginTop: "0.5rem" }}>Project Name</p>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ marginTop: "0rem" }}>
+            <input
+              type="text"
+              placeholder="Tiêu đề"
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                border: "2px solid #ccc",
+                borderRadius: "5px",
+                marginBottom: "0.5rem",
+              }}
+            />
+            <textarea
+              placeholder="Nhập mô tả"
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                border: "2px solid #ccc",
+                borderRadius: "5px",
+                minHeight: "100px",
+                resize: "vertical",
+              }}
+            ></textarea>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
+            <button
+              style={{ background: "#00f", color: "white", padding: "0.5rem 1rem", borderRadius: "5px" }}
+            >
+              Lưu Video
+            </button>
+            <button
+              style={{ background: "#f00", color: "white", padding: "0.5rem 1rem", borderRadius: "5px" }}
+            >
+              Chia sẻ
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
