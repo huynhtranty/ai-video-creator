@@ -87,9 +87,9 @@ export default function DashboardPage() {
                   background: "#d8b4e2",
                   border: "1px solid #e5e7eb",
                   padding: "10px 15px",
-                  borderRadius: "5px",
+                  borderRadius: "15px",
                   cursor: "pointer",
-                  marginBottom: "10px",
+                  marginBottom: "15px",
                   width: "80%",
                   display: "flex",
                   alignItems: "center",
@@ -109,7 +109,7 @@ export default function DashboardPage() {
                 }}
               >
                 <img src="/Download.svg" alt="Download" style={{ width: "16px", height: "16px", marginRight: "8px" }} />
-                <span style={{ fontSize: "14px", fontWeight: "500", color: "#000", transition: "color 300ms ease" }}>
+                <span style={{ fontSize: "17px", fontWeight: "500", color: "#000", transition: "color 300ms ease" }}>
                   Download
                 </span>
               </button>
@@ -118,9 +118,9 @@ export default function DashboardPage() {
                   background: "#d8b4e2",
                   border: "1px solid #e5e7eb",
                   padding: "10px 15px",
-                  borderRadius: "5px",
+                  borderRadius: "15px",
                   cursor: "pointer",
-                  marginBottom: "10px",
+                  marginBottom: "15px",
                   width: "80%",
                   display: "flex",
                   alignItems: "center",
@@ -140,7 +140,7 @@ export default function DashboardPage() {
                 }}
               >
                 <img src="/Vector.svg" alt="Exit" style={{ width: "16px", height: "16px", marginRight: "24px",}} />
-                <span style={{ fontSize: "14px", fontWeight: "500", color: "#000", transition: "color 300ms ease", marginRight: "24px", }}>
+                <span style={{ fontSize: "17px", fontWeight: "500", color: "#000", transition: "color 300ms ease", marginRight: "24px", }}>
                   Exit
                 </span>
               </button>
@@ -149,7 +149,7 @@ export default function DashboardPage() {
                   background: "#d8b4e2",
                   border: "1px solid #e5e7eb",
                   padding: "10px 15px",
-                  borderRadius: "5px",
+                  borderRadius: "15px",
                   cursor: "pointer",
                   width: "80%",
                   display: "flex",
@@ -170,7 +170,7 @@ export default function DashboardPage() {
                 }}
               >
                 <img src="/Edit_Pencil_01.svg" alt="Edit Video" style={{ width: "16px", height: "16px", marginRight: "8px" }} />
-                <span style={{ fontSize: "14px", fontWeight: "500", color: "#000", transition: "color 300ms ease" }}>
+                <span style={{ fontSize: "17px", fontWeight: "500", color: "#000", transition: "color 300ms ease" }}>
                   Edit Video
                 </span>
               </button>
