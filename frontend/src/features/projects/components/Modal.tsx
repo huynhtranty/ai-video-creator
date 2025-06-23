@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 interface Project {
   id: string | number;
@@ -15,6 +15,12 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
   if (!isOpen || !project) return null;
+
+  const [activeButton, setActiveButton] = useState("tiktok"); // Default active button is TikTok
+
+  const handleButtonClick = (buttonId: string) => {
+    setActiveButton(buttonId);
+  };
 
   return (
     <div
@@ -83,9 +89,60 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
               alignItems: "center",
             }}
           >
-            <img src="/tiktok-icon.svg" alt="TikTok" style={{ width: "48px", height: "48px", marginTop: "0.25rem" }} />
-            <img src="/facebook-icon.svg" alt="Facebook" style={{ width: "48px", height: "48px", marginBottom: "0.25rem" }} />
-            <img src="/youtube-icon.svg" alt="YouTube" style={{ width: "35px", height: "35px", marginTop: "0.25rem" }} />
+            <button
+              onClick={() => handleButtonClick("tiktok")}
+              style={{
+                background: activeButton === "tiktok" ? "#FFFFFF" : "transparent",
+                border: "none",
+                padding: "0",
+                cursor: "pointer",
+                borderRadius: "50%",
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                transition: "background 0.3s ease",
+              }}
+            >
+              <img src="/tiktok-icon.svg" alt="TikTok" style={{ width: "48px", height: "48px" }} />
+            </button>
+            <button
+              onClick={() => handleButtonClick("facebook")}
+              style={{
+                background: activeButton === "facebook" ? "#FFFFFF" : "transparent",
+                border: "none",
+                padding: "0",
+                cursor: "pointer",
+                borderRadius: "50%",
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                transition: "background 0.3s ease",
+              }}
+            >
+              <img src="/facebook-icon.svg" alt="Facebook" style={{ width: "48px", height: "48px" }} />
+            </button>
+            <button
+              onClick={() => handleButtonClick("youtube")}
+              style={{
+                background: activeButton === "youtube" ? "#FFFFFF" : "transparent",
+                border: "none",
+                padding: "0",
+                cursor: "pointer",
+                borderRadius: "50%",
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                transition: "background 0.3s ease",
+              }}
+            >
+              <img src="/youtube-icon.svg" alt="YouTube" style={{ width: "35px", height: "35px", objectFit: "contain" }} />
+            </button>
           </div>
           <div
             style={{
