@@ -59,42 +59,83 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
           />
           <p style={{ color: "#666", marginTop: "0.5rem" }}>Project Name</p>
         </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ marginTop: "0rem" }}>
-            <input
-              type="text"
-              placeholder="Tiêu đề"
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "2px solid #ccc",
-                borderRadius: "5px",
-                marginBottom: "0.5rem",
-              }}
-            />
-            <textarea
-              placeholder="Nhập mô tả"
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "2px solid #ccc",
-                borderRadius: "5px",
-                minHeight: "100px",
-                resize: "vertical",
-              }}
-            ></textarea>
+        <div style={{ flex: 2, display: "flex" }}>
+          <div
+            style={{
+              width: "60px",
+              background: "#D3D3D3", // Gray background
+              padding: "0.5rem 0",
+              borderRadius: "10px 0 0 10px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <img src="/tiktok-icon.svg" alt="TikTok" style={{ width: "48px", height: "48px", margin: "0.25rem 0" }} />
+            <img src="/facebook-icon.svg" alt="Facebook" style={{ width: "48px", height: "48px", margin: "0.25rem 0" }} />
+            <img src="/youtube-icon.svg" alt="YouTube" style={{ width: "35px", height: "35px", margin: "0.25rem 0" }} />
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
-            <button
-              style={{ background: "#00f", color: "white", padding: "0.5rem 1rem", borderRadius: "5px" }}
-            >
-              Lưu Video
-            </button>
-            <button
-              style={{ background: "#f00", color: "white", padding: "0.5rem 1rem", borderRadius: "5px" }}
-            >
-              Chia sẻ
-            </button>
+          <div
+            style={{
+              flex: 1,
+              background: "linear-gradient(to bottom, #D8B4FE, #F5EBFF)",
+              padding: "1rem",
+              borderRadius: "0 10px 10px 0",
+            }}
+          >
+            <div style={{ marginBottom: "1rem" }}>
+              <input
+                type="text"
+                placeholder="Tiêu đề"
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  border: "2px solid #ccc",
+                  borderRadius: "20px",
+                  marginBottom: "0.5rem",
+                }}
+              />
+            </div>
+            <div style={{ marginBottom: "1rem" }}>
+              <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Mô tả</p>
+              <textarea
+                placeholder="Nhập mô tả"
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  border: "2px solid #ccc",
+                  borderRadius: "20px",
+                  minHeight: "100px",
+                  resize: "vertical",
+                }}
+              ></textarea>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button
+                style={{
+                  background: "linear-gradient(to right, #4FC3F7, #228BE6)",
+                  color: "white",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "20px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Lưu Video
+              </button>
+              <button
+                style={{
+                  background: "linear-gradient(to right, #FF6B6B, #C53030)",
+                  color: "white",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "20px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Chia sẻ
+              </button>
+            </div>
           </div>
         </div>
       </div>
