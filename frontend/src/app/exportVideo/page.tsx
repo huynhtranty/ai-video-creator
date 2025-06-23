@@ -28,32 +28,31 @@ export default function DashboardPage() {
         <div
           style={{
           display: "flex",
-          width: "80%",
-          margin: "20px auto",
+          width: "90%",
+          margin: "10px",
           }}
           >
           <div
           style={{
                background: "#fff",
-               padding: "10px",
+               padding: "0px",
                border: "1px solid #ddd",
                borderRadius: "5px",
                flex: "0 0 80%", // Chiếm 80% chiều rộng
                textAlign: "center",
           }}
           >
-          <div style={{ background: "#e0c4f0", padding: "5px", marginBottom: "10px" }}>
-               Player
-          </div>
-          <img
-               src="/path-to-your-house-image.jpg" // Thay bằng đường dẫn hình ảnh thực tế
-               alt="House"
-               style={{ width: "100%", borderRadius: "5px" }}
-          />
-          <div style={{ margin: "10px 0", color: "#000" }}>00:02</div>
-          <div style={{ background: "#e0c4f0", padding: "5px", marginBottom: "10px" }}>
-               Project Name
-          </div>
+               <div style={{ background: "#e0c4f0", padding: "5px", marginBottom: "10px" }}>
+                    Player
+               </div>
+               <img
+                    src="/Screen.svg" // Thay bằng đường dẫn hình ảnh thực tế
+                    alt="House"
+                    style={{ width: "90%", borderRadius: "5px" }}
+               />
+               <div style={{ background: "#e0c4f0", padding: "5px", marginBottom: "10px" }}>
+                    Project Name
+               </div>
           </div>
           <div
           style={{
