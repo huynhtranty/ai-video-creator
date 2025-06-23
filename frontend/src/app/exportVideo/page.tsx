@@ -38,7 +38,8 @@ export default function DashboardPage() {
             <div
               style={{
                 flex: "0 0 80%", // Chiếm 80% chiều rộng
-                textAlign: "center",
+                fontSize: "16px",
+                fontWeight: "500",
               }}
             >
               <div
@@ -49,7 +50,7 @@ export default function DashboardPage() {
                   borderRadius: "5px",
                 }}
               >
-                <div style={{ background: "#e0c4f0", padding: "5px", marginBottom: "10px" }}>
+                <div style={{ background: "linear-gradient(to bottom, #BA85FB, #ffffff)", padding: "5px 5px 5px 15px", marginBottom: "10px" }}>
                   Player
                 </div>
                 <img
@@ -63,8 +64,8 @@ export default function DashboardPage() {
                   }}
                 />
               </div>
-              <div style={{ background: "#e0c4f0", padding: "5px", marginTop: "10px", textAlign: "center",border: "1px solid #ddd",
-                  borderRadius: "10px", }}>
+              <div style={{ background: "linear-gradient(to bottom, #BA85FB, #ffffff)", padding: "8px 8px 8px 15px", marginTop: "10px", border: "1px solid #ddd", borderRadius: "10px",
+                fontSize: "16px", }}>
                 Project Name
               </div>
             </div>
@@ -81,11 +82,11 @@ export default function DashboardPage() {
                 padding: "0",
               }}
             >
-              <div style={{ background: "#e0c4f0", padding: "5px", marginBottom: "10px", textAlign: "center", width: "100%", height: "35px" }}>
+              <div style={{ background: "linear-gradient(to bottom, #BA85FB, #ffffff)", padding: "5px", marginBottom: "10px", textAlign: "center", width: "100%", height: "35px" }}>
               </div>
               <button
                 style={{
-                  background: "#d8b4e2",
+                  background: "linear-gradient(to right, #BA85FB, #E4D5D5)",
                   border: "1px solid #e5e7eb",
                   padding: "10px 15px",
                   borderRadius: "15px",
@@ -99,24 +100,33 @@ export default function DashboardPage() {
                   boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#fdf2f8";
+                  e.currentTarget.style.background = "linear-gradient(to right, #BA85FB, #E4D5D5)";
                   e.currentTarget.style.boxShadow = "0 4px 6px rgba(255, 192, 203, 0.2)";
                   e.currentTarget.style.transform = "translateY(-0.5px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "#d8b4e2";
+                  e.currentTarget.style.background = "linear-gradient(to right, #BA85FB, #E4D5D5)";
                   e.currentTarget.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 <img src="/Download.svg" alt="Download" style={{ width: "16px", height: "16px", marginRight: "8px" }} />
-                <span style={{ fontSize: "17px", fontWeight: "500", color: "#000", transition: "color 300ms ease" }}>
+                <span
+                  style={{
+                    fontSize: "17px",
+                    fontWeight: "500",
+                    color: "#000",
+                    transition: "color 300ms ease",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "#333"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "#000"; }}
+                >
                   Download
                 </span>
               </button>
               <button
                 style={{
-                  background: "#d8b4e2",
+                  background: "linear-gradient(to right, #BA85FB, #E4D5D5)",
                   border: "1px solid #e5e7eb",
                   padding: "10px 15px",
                   borderRadius: "15px",
@@ -130,24 +140,34 @@ export default function DashboardPage() {
                   boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#fdf2f8";
+                  e.currentTarget.style.background = "linear-gradient(to right, #BA85FB, #E4D5D5)";
                   e.currentTarget.style.boxShadow = "0 4px 6px rgba(255, 192, 203, 0.2)";
                   e.currentTarget.style.transform = "translateY(-0.5px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "#d8b4e2";
+                  e.currentTarget.style.background = "linear-gradient(to right, #BA85FB, #E4D5D5)";
                   e.currentTarget.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                <img src="/Vector.svg" alt="Exit" style={{ width: "16px", height: "16px", marginRight: "24px",}} />
-                <span style={{ fontSize: "17px", fontWeight: "500", color: "#000", transition: "color 300ms ease", marginRight: "24px", }}>
+                <img src="/Vector.svg" alt="Exit" style={{ width: "16px", height: "16px", marginRight: "24px" }} />
+                <span
+                  style={{
+                    fontSize: "17px",
+                    fontWeight: "500",
+                    color: "#000",
+                    transition: "color 300ms ease",
+                    marginRight: "24px",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "#333"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "#000"; }}
+                >
                   Exit
                 </span>
               </button>
               <button
                 style={{
-                  background: "#d8b4e2",
+                  background: "linear-gradient(to right, #BA85FB, #E4D5D5)",
                   border: "1px solid #e5e7eb",
                   padding: "10px 15px",
                   borderRadius: "15px",
@@ -160,18 +180,27 @@ export default function DashboardPage() {
                   boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#fdf2f8";
+                  e.currentTarget.style.background = "linear-gradient(to right, #BA85FB, #E4D5D5)";
                   e.currentTarget.style.boxShadow = "0 4px 6px rgba(255, 192, 203, 0.2)";
                   e.currentTarget.style.transform = "translateY(-0.5px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "#d8b4e2";
+                  e.currentTarget.style.background = "linear-gradient(to right, #BA85FB, #E4D5D5)";
                   e.currentTarget.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 <img src="/Edit_Pencil_01.svg" alt="Edit Video" style={{ width: "16px", height: "16px", marginRight: "8px" }} />
-                <span style={{ fontSize: "17px", fontWeight: "500", color: "#000", transition: "color 300ms ease" }}>
+                <span
+                  style={{
+                    fontSize: "17px",
+                    fontWeight: "500",
+                    color: "#000",
+                    transition: "color 300ms ease",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "#333"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "#000"; }}
+                >
                   Edit Video
                 </span>
               </button>
