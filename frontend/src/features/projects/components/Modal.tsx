@@ -28,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
         borderRadius: "10px",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
         zIndex: 1000,
-        width: "80%",
+        width: "70%",
         height: "auto",
       }}
     >
@@ -51,13 +51,25 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
         </button>
       </div>
       <div style={{ display: "flex", padding: "1rem" }}>
-        <div style={{ flex: 1, marginRight: "1rem" }}>
+        <div style={{ flex: 3, marginRight: "1rem" }}>
           <img
             src="/videoTemp.svg"
             alt={project.alt ?? "Project Thumbnail"}
             style={{ width: "100%", height: "auto", borderRadius: "10px" }}
           />
-          <p style={{ color: "#666", marginTop: "0.5rem" }}>Project Name</p>
+          <div
+            style={{
+              background: "linear-gradient(to bottom, #BA85FB, #ffffff)",
+              padding: "8px 8px 8px 15px",
+              marginTop: "0",
+              border: "1px solid #ddd",
+              borderRadius: "10px",
+              fontSize: "16px",
+              fontWeight: "bold",
+            }}
+          >
+            Project Name
+          </div>
         </div>
         <div style={{ flex: 2, display: "flex" }}>
           <div
@@ -71,9 +83,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
               alignItems: "center",
             }}
           >
-            <img src="/tiktok-icon.svg" alt="TikTok" style={{ width: "48px", height: "48px", margin: "0.25rem 0" }} />
-            <img src="/facebook-icon.svg" alt="Facebook" style={{ width: "48px", height: "48px", margin: "0.25rem 0" }} />
-            <img src="/youtube-icon.svg" alt="YouTube" style={{ width: "35px", height: "35px", margin: "0.25rem 0" }} />
+            <img src="/tiktok-icon.svg" alt="TikTok" style={{ width: "48px", height: "48px", marginTop: "0.25rem" }} />
+            <img src="/facebook-icon.svg" alt="Facebook" style={{ width: "48px", height: "48px", marginBottom: "0.25rem" }} />
+            <img src="/youtube-icon.svg" alt="YouTube" style={{ width: "35px", height: "35px", marginTop: "0.25rem" }} />
           </div>
           <div
             style={{
@@ -84,15 +96,18 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
             }}
           >
             <div style={{ marginBottom: "1rem" }}>
+              <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Tiêu đề</p>
               <input
                 type="text"
-                placeholder="Tiêu đề"
+                placeholder="Nhập tiêu đề"
                 style={{
                   width: "100%",
-                  padding: "0.5rem",
-                  border: "2px solid #ccc",
+                  padding: "0.5rem 1rem",
+                  border: "2px solid transparent",
                   borderRadius: "20px",
                   marginBottom: "0.5rem",
+                  backgroundColor: "#ffffff", // Light background for textarea
+                  background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
                 }}
               />
             </div>
@@ -102,21 +117,23 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
                 placeholder="Nhập mô tả"
                 style={{
                   width: "100%",
-                  padding: "0.5rem",
-                  border: "2px solid #ccc",
+                  padding: "0.5rem 1rem",
+                  border: "2px solid transparent",
                   borderRadius: "20px",
                   minHeight: "100px",
                   resize: "vertical",
+                  backgroundColor: "#ffffff", // Light background for textarea
+                  background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
                 }}
               ></textarea>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <button
                 style={{
-                  background: "linear-gradient(to right, #4FC3F7, #228BE6)",
+                  background: "linear-gradient(to right, #5DEFFF, #4105F5)",
                   color: "white",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "20px",
+                  padding: "0.5rem 2.5rem", // Increased horizontal padding
+                  borderRadius: "10px",
                   border: "none",
                   cursor: "pointer",
                 }}
@@ -125,10 +142,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, project, onClose }) => {
               </button>
               <button
                 style={{
-                  background: "linear-gradient(to right, #FF6B6B, #C53030)",
+                  background: "linear-gradient(to right, #5DEFFF, #4105F5)",
                   color: "white",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "20px",
+                  padding: "0.5rem 3rem", // Increased horizontal padding
+                  borderRadius: "10px",
                   border: "none",
                   cursor: "pointer",
                 }}
