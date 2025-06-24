@@ -101,11 +101,11 @@ public class ContentController {
         produces = MediaType.IMAGE_JPEG_VALUE
     )
     public byte[] getImage(
-            // @RequestBody ContentRequest request
+        @RequestBody ContentRequest request
     ) {
         Client client = Client.builder().apiKey(apiKey).build();
 
-        String prompt = "Create an image that represents the topic of the video script. "
+        String prompt = "Create an image that represents the topic of the video script. " + request
             + "The image should be visually appealing, relevant to the topic, and suitable for use as a thumbnail for the video. "
             + "The image should be in JPEG format and have a resolution of at least 1280x720 pixels.";
         
