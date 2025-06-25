@@ -6,11 +6,18 @@ import com.google.genai.Client;
 import com.google.genai.ResponseStream;
 import com.google.genai.types.*;
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.ContentRequest;
+import com.hcmus.softdes.aivideocreator.api.contracts.contents.ImageRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/contents")
@@ -20,6 +27,21 @@ public class ContentController {
     
     @Value("${gemini.api.key}")
     private String apiKey;
+    
+    // Define path for temporary image storage
+    private static final String TEMP_IMAGE_DIR = "src/main/resources/static/images/tmp/";
+    
+    // Ensure the directory exists
+    private void ensureTempDirectoryExists() {
+        try {
+            Path path = Paths.get(TEMP_IMAGE_DIR);
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create temporary directory for images", e);
+        }
+    }
 
     @PostMapping("/script")
     public String generateScript(@RequestBody ContentRequest request) {
@@ -40,23 +62,6 @@ public class ContentController {
                     "scripts", Schema.builder()
                         .type(Type.Known.ARRAY)
                         .items(Schema.builder().type(Type.Known.STRING)
-//                            .properties(
-//                                ImmutableMap.of(
-//                                    "description", Schema.builder()
-//                                        .type(Type.Known.STRING)
-//                                        .description("A paragraph of the script")
-//                                        .build(),
-//                                    "subtitles", Schema.builder()
-//                                        .type(Type.Known.ARRAY)
-//                                        .items(Schema.builder()
-//                                            .type(Type.Known.STRING)
-//                                            .description("Subtitles for the paragraph")
-//                                            .build())
-//                                        .build()
-//                                )
-//                            )
-//                            .required("description", "subtitles")
-//                            .build()
                         )
                         .description("List of contents")
                         .build()
@@ -94,10 +99,10 @@ public class ContentController {
             This section will serve as the unified **context** for generating a consistent image style throughout the video.
         
             Then, generate the **scripts**:
-            - Each script must contain a short paragraph that is vivid, informative, and concrete enough to describe a single scene.
-            - The scripts will be used to generate voiceover narration and subtitles, so they should be clear and concise.
-            - The context will be used to ensure that the scripts are visually coherent and consistent with the overall theme
-            so the scripts don't need to have too much detail about the visual elements.
+            - The scripts should only focus on the storytelling aspect, not the visual elements.
+            - Each script must contain a short paragraph that is vivid, informative, and concrete enough to describe a single scene,
+            and they should be written so that they can be narrated in a video.
+            - The scripts should be clear and concise.
             
             The length and number of scripts should be balanced: enough to explain the topic without overwhelming the viewer.
             Adapt this based on topic complexity. Usually, 4-10 scripts are sufficient for a normal topic.
@@ -112,18 +117,22 @@ public class ContentController {
         return response.text();
     }
 
-    @GetMapping(
-        value = "/image",
-        produces = MediaType.IMAGE_JPEG_VALUE
-    )
-    public byte[] getImage(
-        @RequestBody ContentRequest request
-    ) {
+    @PostMapping(value = "/image")
+    public String generateImage(@RequestBody ImageRequest request) {
         Client client = Client.builder().apiKey(apiKey).build();
 
-        String prompt = "Create an image that represents the topic of the video script. " + request
-            + "The image should be visually appealing, relevant to the topic, and suitable for use as a thumbnail for the video. "
-            + "The image should be in JPEG format and have a resolution of at least 1280x720 pixels.";
+        String prompt = """
+            Generate a detailed, stylistically consistent image based on the following:
+            """ + request.context() + """
+                Scene Description:
+            """ + request.prompt() + """
+                Use the context to ensure visual consistency across a series. Focus on the described moment,
+                and align all elements (style, tone, character design, environment) with the visual context.
+                The result should feel like one cinematic frame in a cohesive animated story.
+            
+            Please ensure that the image is:
+                - High resolution (at least 1024x1024 pixels)
+            """;
         
         List<Content> contents = ImmutableList.of(
             Content.builder()
@@ -176,7 +185,28 @@ public class ContentController {
         if (imageBytes == null) {
             throw new RuntimeException("Failed to generate image");
         }
+
+        // Temp directory for images
+        String imageUrl = saveImageToTempDirectory(imageBytes);
+        return imageUrl;
+    }
+    
+    /**
+     * Saves image bytes to a temporary file and returns the URL path
+     * @param imageBytes The binary image data
+     * @return URL path to the saved image
+     */
+    private String saveImageToTempDirectory(byte[] imageBytes) {
+        ensureTempDirectoryExists();
+
+        String filename = UUID.randomUUID().toString() + ".jpg";
+        String filepath = TEMP_IMAGE_DIR + filename;
         
-        return imageBytes;
+        try (FileOutputStream fos = new FileOutputStream(filepath)) {
+            fos.write(imageBytes);
+            return "http://localhost:8080/images/tmp/" + filename;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save image to temporary directory", e);
+        }
     }
 }
