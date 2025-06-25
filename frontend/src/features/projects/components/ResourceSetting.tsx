@@ -10,14 +10,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function ResourceSetting() {
+interface ResourceSettingProps {
+  onGenerateResources: (scriptStyle: string, imageStyle: string, voiceStyle: string) => Promise<void>;
+  isGenerating: boolean;
+}
+
+export default function ResourceSetting({ onGenerateResources, isGenerating }: ResourceSettingProps) {
   const [scriptStyle, setScriptStyle] = useState("Chuyên nghiệp");
   const [imageStyle, setImageStyle] = useState("Thực tế");
   const [voiceStyle, setVoiceStyle] = useState("Nam thanh niên");
 
   const scriptStyles = ["Chuyên nghiệp", "Thân thiện", "Hài hước", "Nghiêm túc", "Sáng tạo"];
   const imageStyles = ["Thực tế", "Hoạt hình", "Nghệ thuật", "Tối giản", "Cổ điển"];
-  const voiceStyles = ["Nam thanh niên", "Nữ thanh niên", "Nam trung niên", "Nữ trung niên", "Trẻ em"];
+  const voiceStyles = ["Nam thanh niên", "Nữ thanh niên"];
+
+  const handleGenerateResources = async () => {
+    await onGenerateResources(scriptStyle, imageStyle, voiceStyle);
+  };
 
   return (
     <Card className="h-fit">
@@ -152,6 +161,29 @@ export default function ResourceSetting() {
 
         {/* Action Buttons */}
         <div className="space-y-3 pt-4 border-t border-gray-200">
+          <Button
+            onClick={handleGenerateResources}
+            disabled={isGenerating}
+            className="w-full text-white py-2.5 rounded-lg transition-colors font-medium"
+            style={{
+              background: isGenerating 
+                ? "linear-gradient(to right, #9CA3AF, #6B7280)" 
+                : "linear-gradient(to right, #61FFF2, #300DF4)",
+              opacity: isGenerating ? 0.6 : 1,
+            }}
+          >
+            {isGenerating ? (
+              <div className="flex items-center gap-2">
+                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Đang tạo...
+              </div>
+            ) : (
+              "Tạo tài nguyên"
+            )}
+          </Button>
           <Button
             className="w-full bg-[#8362E5] text-white py-2.5 rounded-lg hover:bg-[#6F4EC8] transition-colors font-medium"
           >
