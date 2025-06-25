@@ -8,10 +8,7 @@ import com.google.genai.types.*;
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.ContentRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,44 +21,48 @@ public class ContentController {
     @Value("${gemini.api.key}")
     private String apiKey;
 
-    @GetMapping("/script")
-    public String getScript(@RequestBody ContentRequest request) {
+    @PostMapping("/script")
+    public String generateScript(@RequestBody ContentRequest request) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         Schema contentSchema = Schema.builder()
             .type(Type.Known.OBJECT)
             .properties(
                 ImmutableMap.of(
+                    "language", Schema.builder()
+                        .type(Type.Known.STRING)
+                        .description("The language of the content")
+                        .build(),
                     "context", Schema.builder()
                         .type(Type.Known.STRING)
                         .description("The context of the content")
                         .build(),
-                    "contents", Schema.builder()
+                    "scripts", Schema.builder()
                         .type(Type.Known.ARRAY)
-                        .items(Schema.builder().type(Type.Known.OBJECT)
-                            .properties(
-                                ImmutableMap.of(
-                                    "description", Schema.builder()
-                                            .type(Type.Known.STRING)
-                                            .description("A paragraph of the script")
-                                            .build(),
-                                    "subtitles", Schema.builder()
-                                            .type(Type.Known.ARRAY)
-                                            .items(Schema.builder()
-                                                    .type(Type.Known.STRING)
-                                                    .description("Subtitles for the paragraph")
-                                                    .build())
-                                            .build()
-                                )
-                            )
-                            .required("description", "subtitles")
-                            .build()
+                        .items(Schema.builder().type(Type.Known.STRING)
+//                            .properties(
+//                                ImmutableMap.of(
+//                                    "description", Schema.builder()
+//                                        .type(Type.Known.STRING)
+//                                        .description("A paragraph of the script")
+//                                        .build(),
+//                                    "subtitles", Schema.builder()
+//                                        .type(Type.Known.ARRAY)
+//                                        .items(Schema.builder()
+//                                            .type(Type.Known.STRING)
+//                                            .description("Subtitles for the paragraph")
+//                                            .build())
+//                                        .build()
+//                                )
+//                            )
+//                            .required("description", "subtitles")
+//                            .build()
                         )
                         .description("List of contents")
                         .build()
                 )
             )
-            .required("context", "contents")
+            .required("context", "scripts", "language")
             .build();
 
         GenerateContentConfig config = GenerateContentConfig.builder()
@@ -70,27 +71,42 @@ public class ContentController {
             .responseSchema(contentSchema)
             .build();
 
-        String prompt = "Create a video script about this topic: "
-            + request.prompt()
-            + """ 
-            . 
+        String prompt = "Create a video script about this topic: " + request.prompt()
+            + """
+            .
+            **Detect the language of the topic and generate all output (context, script) in the same language as the topic**.
+        
             The script should include an introduction, a discussion of key points, and a conclusion.
-            The context of the script should use the topic and describe a more specific, more informative context,
-            enough to describe the aspects of the video.
-            Each content contains an description and a list of subtitles. 
-            The number of contents should be long enough to cover the topic, but not too long to be overwhelming, 
-            depending on the topic, it normally be 4-10 items, could be more or less than if the topic is too broad or too narrow.
-            The description is a paragraph of the script
-            and they should be concise, informative, and short enough to describe an image.
-            The subtitles are a list of subtitles for the paragraph, they should be short and concise,
-            and have be the same as the description, but split into multiple string.
-            They need to have a reasonable length (18-25 words) to show as the subtitles of the video 
-            (That means if you have a long sentence, split it into multiple subtitles,
-            but when you split it, make sure that the subtitles still make sense and can be read easily).
             
-            You should detect the language of the topic and 
-            return everything in the response with the same language as the input topic.
+            Write from the perspective of a creative director who is designing a visual story.
+        
+            Think of the topic as a visual journey composed of sequential illustrated scenes, animations, or cinematic frames.
+            To ensure all scenes feel visually unified and coherent, define a **shared visual context** that persists across the video.
+            
+            Please specify:
+                - **Setting**: Where does this story take place? (location, time period, environment, weather, etc.)
+                - **Visual Style**: Choose a clear art or cinematic style (e.g., anime, 3D Pixar, digital painting, noir, cyberpunk).
+                - **Color Palette**: Dominant colors and emotional tone (e.g., warm tones, neon blues, muted pastels).
+                - **Characters**: Who are the recurring characters? Describe appearance, outfits, expressions, age, personality traits.
+                - **Tone/Atmosphere**: What is the mood and emotional journey? (e.g., playful, suspenseful, inspiring, nostalgic)
+                - **Rules of the World**: Are there any fantastical, sci-fi, or symbolic elements that should stay consistent?
+        
+            This section will serve as the unified **context** for generating a consistent image style throughout the video.
+        
+            Then, generate the **scripts**:
+            - Each script must contain a short paragraph that is vivid, informative, and concrete enough to describe a single scene.
+            - The scripts will be used to generate voiceover narration and subtitles, so they should be clear and concise.
+            - The context will be used to ensure that the scripts are visually coherent and consistent with the overall theme
+            so the scripts don't need to have too much detail about the visual elements.
+            
+            The length and number of scripts should be balanced: enough to explain the topic without overwhelming the viewer.
+            Adapt this based on topic complexity. Usually, 4-10 scripts are sufficient for a normal topic.
+            Could be more for complex topics, fewer for simpler ones.
+            
+            **Detect the language of the topic and generate all output
+            (context, scripts) in the same language as the topic**.
             """;
+
 
         GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, prompt, config);
         return response.text();
