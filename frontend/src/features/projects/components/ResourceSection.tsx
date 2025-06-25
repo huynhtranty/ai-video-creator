@@ -1,4 +1,3 @@
-import React from "react";
 import ResourceItem from "./ResourceItem";
 import ResourceSetting from "./ResourceSetting";
 import { GeneratedResource } from "@/types/script";
@@ -11,6 +10,7 @@ interface ResourceSectionProps {
 }
 
 export default function ResourceSection({ resources, onGenerateResources, onDeleteResource, isGenerating }: ResourceSectionProps) {
+
   return (
     <div className="flex gap-6">
       {/* ResourceSetting on the left */}
@@ -32,6 +32,7 @@ export default function ResourceSection({ resources, onGenerateResources, onDele
             </div>
           )}
         </div>
+
         <div
           style={{
             maxHeight: "calc(100vh - 200px)", 
@@ -60,7 +61,6 @@ export default function ResourceSection({ resources, onGenerateResources, onDele
                   textContent={resource.textContent}
                   audioSrc={resource.audioSrc}
                   onDelete={onDeleteResource}
-                  subtitles={resource.subtitles}
                 />
               ))
             )}

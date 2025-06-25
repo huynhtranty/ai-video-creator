@@ -8,6 +8,7 @@ import ResourceSection from "@/features/projects/components/ResourceSection";
 import { useGenerateScript } from "@/features/projects/api/script";
 import { GeneratedResource } from "@/types/script";
 import { ToastProvider, useToast } from "@/components/ui/toast";
+import { transformScriptResponse } from "@/utils/scriptHelpers";
 
 function CreateVideoPageContent() {
   const [inputText, setInputText] = useState("");
@@ -28,16 +29,12 @@ function CreateVideoPageContent() {
     try {
       const response = await generateScript.mutateAsync({ prompt: inputText });
       
-      // Convert API response to GeneratedResource format
-      const newResources: GeneratedResource[] = response.contents.map((content, index) => ({
-        id: `generated-${Date.now()}-${index}`,
-        imageSrc: getMockImage(index),
-        imageAlt: `Generated image for: ${content.description.substring(0, 50)}...`,
-        textContent: content.description,
-        audioSrc: getMockAudio(index),
-        subtitles: content.subtitles,
-        description: content.description
-      }));
+      // Convert new API response to GeneratedResource format using utility function
+      const newResources: GeneratedResource[] = transformScriptResponse(
+        response,
+        getMockImage,
+        getMockAudio
+      );
       
       setResources(newResources);
       setInputText(""); 
@@ -77,7 +74,6 @@ function CreateVideoPageContent() {
       imageAlt: `Mock image ${index + 1}`,
       textContent: `${sentence.trim()}. (Tạo với phong cách: ${scriptStyle}, ${imageStyle}, ${voiceStyle})`,
       audioSrc: getMockAudio(index),
-      subtitles: [sentence.trim()],
       description: sentence.trim()
     }));
   };

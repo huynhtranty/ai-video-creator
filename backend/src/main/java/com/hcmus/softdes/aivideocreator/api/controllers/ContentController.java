@@ -83,7 +83,8 @@ public class ContentController {
         
             The script should include an introduction, a discussion of key points, and a conclusion.
             
-            Write from the perspective of a creative director who is designing a visual story.
+            Write from the perspective of a creative director who is focused on creating a visually engaging video 
+            through the context, and the storytelling aspect through the scripts.
         
             Think of the topic as a visual journey composed of sequential illustrated scenes, animations, or cinematic frames.
             To ensure all scenes feel visually unified and coherent, define a **shared visual context** that persists across the video.

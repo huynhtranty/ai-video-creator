@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 
 interface ResourceItemProps {
@@ -8,11 +8,9 @@ interface ResourceItemProps {
   textContent: string | React.JSX.Element;
   audioSrc?: string;
   onDelete: (resourceId: string) => void;
-  subtitles?: string[];
 }
 
-export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audioSrc, onDelete, subtitles }: ResourceItemProps) {
-  const [showSubtitles, setShowSubtitles] = useState(false);
+export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audioSrc, onDelete }: ResourceItemProps) {
   const handleDelete = () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa mục này không?")) {
       onDelete(id);
@@ -46,35 +44,6 @@ export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audi
         </div>
         <div className="lg:w-11/19 lg:border-gray-200 lg:pl-4">
           <p className="text-gray-600 mb-3">{textContent}</p>
-          
-          {/* Subtitles section */}
-          {subtitles && subtitles.length > 0 && (
-            <div className="mb-4 p-3 bg-gray-50 rounded-lg border">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-1l-4 4z" />
-                  </svg>
-                  Phụ đề ({subtitles.length})
-                </h4>
-                <button
-                  onClick={() => setShowSubtitles(!showSubtitles)}
-                  className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  {showSubtitles ? "Ẩn" : "Hiện"}
-                </button>
-              </div>
-              {showSubtitles && (
-                <div className="space-y-1">
-                  {subtitles.map((subtitle, index) => (
-                    <p key={index} className="text-sm text-gray-600 py-1 px-2 bg-white rounded border-l-2 border-blue-200">
-                      {subtitle}
-                    </p>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
           
           <div className="w-full lg:pl-0">
             <div className="relative">

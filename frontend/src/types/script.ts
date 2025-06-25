@@ -1,3 +1,14 @@
+export interface ScriptResponse {
+  context: string;
+  language: string;
+  scripts: string[];
+}
+
+export interface ScriptRequest {
+  prompt: string;
+}
+
+// Legacy types for backward compatibility
 export interface ScriptSubtitle {
   text: string;
 }
@@ -7,21 +18,11 @@ export interface ScriptContent {
   subtitles: string[];
 }
 
-export interface ScriptResponse {
-  contents: ScriptContent[];
-  context: string;
-}
-
-export interface ScriptRequest {
-  prompt: string;
-}
-
 export interface GeneratedResource {
   id: string;
   imageSrc: string;
   imageAlt: string;
   textContent: string;
   audioSrc?: string;
-  subtitles: string[];
   description: string;
 }
