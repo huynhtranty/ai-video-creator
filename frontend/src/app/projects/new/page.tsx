@@ -5,21 +5,29 @@ import Sidebar from "@/features/dashboard/components/Sidebar";
 import HeaderSection from "@/features/projects/components/HeaderSection";
 import TextInput from "@/features/projects/components/TextInput";
 import ResourceSection from "@/features/projects/components/ResourceSection";
-import { extractDataToAPI, extractDataToAPIAdvanced } from "@/utils/dataExtractor";
-
-interface VideoStatus {
-  id: string;
-  status: 'PENDING' | 'COMPLETED' | 'FAILED';
-  progress: number;
-  url: string | null;
-  state?: string;
-}
+import TemplateChooserPopup, { VideoConfig } from "@/components/videoTemplates/TemplateChooserPopup";
+import { extractDataToAPI } from "@/utils/dataExtractor";
+import { useVideoRender } from "@/features/videoRender/hooks/useVideoRender";
+import { handleVideoComplete, handleVideoError } from "@/utils/videoActions";
 
 export default function CreateVideoPage() {
-  const [isRendering, setIsRendering] = useState(false);
-  const [renderProgress, setRenderProgress] = useState(0);
-  const [renderState, setRenderState] = useState<string>('');
-  const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
+  const [showTemplateChooser, setShowTemplateChooser] = useState(false);
+
+  const {
+    renderVideo,
+    status,
+    isRendering,
+    error,
+    progress,
+    currentVideoId,
+    cancelRender
+  } = useVideoRender({
+    onComplete: handleVideoComplete,
+    onError: handleVideoError,
+    onProgress: (status) => {
+      console.log(`Render progress: ${status.progress}%`);
+    }
+  });
 
   const data = {
     title: "Sức khỏe là vốn quý nhất của con người",
@@ -82,112 +90,109 @@ export default function CreateVideoPage() {
     ]
   };
 
-  // Polling function
-  const pollVideoStatus = async (videoId: string): Promise<void> => {
-    try {
-      const response = await fetch(`http://localhost:3100/api/render?id=${videoId}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      const status: VideoStatus = result.video;
-      
-      console.log(`Polling - Status: ${status.status}, Progress: ${status.progress}%${status.state ? `, State: ${status.state}` : ''}`);
-      
-      // Update UI
-      setRenderProgress(status.progress);
-      setRenderState(status.state || '');
-      
-      if (status.status === 'COMPLETED') {
-        setIsRendering(false);
-        setCurrentVideoId(null);
-        
-        // Show success alert with download link
-        const videoUrl = `http://localhost:3100${status.url}`;
-        const downloadConfirm = window.confirm(
-          `🎉 Video rendering completed successfully!\n\nClick OK to download the video, or Cancel to copy the URL to clipboard.`
-        );
-        
-        if (downloadConfirm) {
-          // Open video in new tab for download
-          window.open(videoUrl, '_blank');
-        } else {
-          // Copy URL to clipboard
-          navigator.clipboard.writeText(videoUrl).then(() => {
-            alert('Video URL copied to clipboard!');
-          });
-        }
-        
-      } else if (status.status === 'FAILED') {
-        setIsRendering(false);
-        setCurrentVideoId(null);
-        alert('❌ Video rendering failed! Please try again.');
-        
-      } else {
-        // Continue polling after 2 seconds
-        setTimeout(() => pollVideoStatus(videoId), 2000);
-      }
-      
-    } catch (error) {
-      console.error('Error polling status:', error);
-      setIsRendering(false);
-      setCurrentVideoId(null);
-      alert('Error checking render status. Please try again.');
-    }
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic extraction
-    const apiData = extractDataToAPI(data, {
-      width: 1920,
-      height: 1080,
-      fps: 30,
-      enableTransitions: true,
-      transitionDuration: 1000
-    });
-
-    console.log("API Data:", apiData);
-    
-    // Send to API and start polling
-    sendToAPI(apiData);
+    setShowTemplateChooser(true);
   };
 
-  const sendToAPI = async (apiData: any) => {
+  const handleEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
     try {
-      setIsRendering(true);
-      setRenderProgress(0);
-      setRenderState('Starting...');
-      
-      const response = await fetch('http://localhost:3100/render-from-assets', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(apiData),
+      // Extract data in API format with default settings
+      const apiData = extractDataToAPI(data, {
+        width: 1920,
+        height: 1080,
+        fps: 30,
+        enableTransitions: true,
+        transitionDuration: 1000,
+        defaultFitMode: 'cover',
+        defaultTransition: 'fade'
       });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+
+      // Add audio configuration
+      (apiData.config as any).audioConfig = 'background';
+
+      // Generate unique ID for this video
+      const videoId = `video_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Prepare video data
+      const videoData = {
+        id: videoId,
+        originalData: data,
+        apiData: apiData,
+        timestamp: new Date().toISOString()
+      };
+
+      console.log('📤 Preparing to send video data:', videoData);
+
+      // Open editor in new tab
+      const editorUrl = `http://localhost:5173/?videoId=${videoId}`;
+      const editorWindow = window.open(editorUrl, '_blank');
+
+      if (!editorWindow) {
+        alert('❌ Popup blocked! Please allow popups for this site.');
+        return;
       }
-      
-      const result = await response.json();
-      console.log('API Response:', result);
-      
-      const videoId = result.video.id;
-      setCurrentVideoId(videoId);
-      
-      // Start polling for status updates
-      setTimeout(() => pollVideoStatus(videoId), 1000);
-      
+
+      // Wait for editor window to load, then send data
+      const sendDataWhenReady = () => {
+        const maxAttempts = 50; // 10 seconds max
+        let attempts = 0;
+
+        const trySendData = () => {
+          attempts++;
+          
+          try {
+            editorWindow.postMessage({
+              type: 'VIDEO_DATA',
+              payload: videoData
+            }, 'http://localhost:5173');
+            
+          } catch (error) {
+            console.log(`Attempt ${attempts} failed, retrying...`);
+            
+            if (attempts < maxAttempts) {
+              setTimeout(trySendData, 200);
+            } else {
+              console.error('❌ Failed to send data after max attempts');
+              alert('❌ Failed to send data to editor. Please try again.');
+            }
+          }
+        };
+
+        // Start trying after a short delay
+        setTimeout(trySendData, 1000);
+      };
+
+      sendDataWhenReady();
+
     } catch (error) {
-      console.error('Error sending to API:', error);
-      setIsRendering(false);
-      alert('Failed to start video rendering. Please try again.');
+      console.error('❌ Error preparing video data:', error);
+      alert('Lỗi khi chuẩn bị dữ liệu!');
     }
+  }
+
+  const handleTemplateSelect = async (config: VideoConfig) => {
+    // Extract data with selected template configuration
+    const apiData = extractDataToAPI(data, {
+      width: config.width,
+      height: config.height,
+      fps: config.fps,
+      enableTransitions: config.enableTransitions,
+      transitionDuration: config.transitionDuration,
+      defaultFitMode: config.fitMode,
+      defaultTransition: config.transitionEffect
+    });
+
+    // Add audio configuration
+    (apiData.config as any).audioConfig = config.audioConfig;
+
+    console.log("Selected Template:", config.template.name);
+    console.log("API Data:", apiData);
+    
+    // Start rendering
+    await renderVideo(apiData);
   };
 
   return (
@@ -211,9 +216,16 @@ export default function CreateVideoPage() {
             paddingBottom: "10px",
           }}
         >
-          <HeaderSection onSubmit={handleSubmit} />
+          <HeaderSection onSubmit={handleSubmit} onEdit={handleEdit}/>
           <TextInput />
         </div>
+        
+        {/* Template Chooser Popup */}
+        <TemplateChooserPopup
+          isOpen={showTemplateChooser}
+          onClose={() => setShowTemplateChooser(false)}
+          onSelect={handleTemplateSelect}
+        />
         
         {/* Render Progress Display */}
         {isRendering && (
@@ -229,10 +241,25 @@ export default function CreateVideoPage() {
             zIndex: 1000,
             minWidth: '300px'
           }}>
-            <h3 style={{ margin: '0 0 8px 0', color: '#1f2937' }}>🎬 Rendering Video...</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <h3 style={{ margin: 0, color: '#1f2937' }}>🎬 Rendering Video...</h3>
+              <button
+                onClick={cancelRender}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '16px',
+                  cursor: 'pointer',
+                  color: '#6b7280'
+                }}
+                title="Cancel render"
+              >
+                ✕
+              </button>
+            </div>
             <div style={{ marginBottom: '8px', fontSize: '14px', color: '#6b7280' }}>
-              Progress: {renderProgress}%
-              {renderState && ` • ${renderState}`}
+              Progress: {progress}%
+              {status?.state && ` • ${status.state}`}
             </div>
             <div style={{
               width: '100%',
@@ -242,7 +269,7 @@ export default function CreateVideoPage() {
               overflow: 'hidden'
             }}>
               <div style={{
-                width: `${renderProgress}%`,
+                width: `${progress}%`,
                 height: '100%',
                 backgroundColor: '#3b82f6',
                 transition: 'width 0.3s ease'
@@ -251,6 +278,11 @@ export default function CreateVideoPage() {
             {currentVideoId && (
               <div style={{ marginTop: '8px', fontSize: '12px', color: '#9ca3af' }}>
                 ID: {currentVideoId}
+              </div>
+            )}
+            {error && (
+              <div style={{ marginTop: '8px', fontSize: '12px', color: '#ef4444' }}>
+                Error: {error}
               </div>
             )}
           </div>

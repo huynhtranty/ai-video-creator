@@ -3,9 +3,10 @@ import Image from "next/image";
 
 type HeaderSectionProps = {
   onSubmit: (e: React.FormEvent) => void;
+  onEdit:(e: React.FormEvent) => void;
 };
 
-export default function HeaderSection({ onSubmit }: HeaderSectionProps) {
+export default function HeaderSection({ onSubmit, onEdit }: HeaderSectionProps) {
   return (
     <div className="flex flex-col lg:flex-row gap-20 items-center mb-4">
       <div className="flex lg:w-6/8 items-center">
@@ -33,6 +34,7 @@ export default function HeaderSection({ onSubmit }: HeaderSectionProps) {
           Tạo video
         </button>
         <button 
+        onClick={onEdit}
           className="w-full text-white px-4 py-2 rounded-lg"
           style={{
             background: "linear-gradient(to right, #61FFF2, #300DF4)",
