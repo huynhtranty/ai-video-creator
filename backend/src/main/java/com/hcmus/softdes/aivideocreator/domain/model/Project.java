@@ -27,11 +27,11 @@ public class Project extends Entity {
 
     public static Project create(UUID userId, String name) {
         return new Project(
-                UUID.randomUUID(),
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                userId,
-                name
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            userId,
+            name
         );
     }
 }

@@ -12,4 +12,5 @@ public interface ProjectRepository {
     List<Project> findByUserId(UUID userId);
     void deleteById(UUID id);
     Optional<Project> findByProjectName(String name);
+    boolean existsById(UUID id);
 }

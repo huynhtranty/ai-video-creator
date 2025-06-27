@@ -50,4 +50,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         return jpaRepository.findByName(name)
                 .map(ProjectMapper::toDomainEntity);
     }
+    @Override
+    public boolean existsById(UUID id) {
+        return jpaRepository.existsById(id);
+    }
 }
