@@ -1,13 +1,90 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import Sidebar from "@/features/dashboard/components/Sidebar";
 import HeaderSection from "@/features/projects/components/HeaderSection";
 import TextInput from "@/features/projects/components/TextInput";
 import ResourceSection from "@/features/projects/components/ResourceSection";
+import { useGenerateScript } from "@/features/projects/api/script";
+import { GeneratedResource } from "@/types/script";
+import { ToastProvider, useToast } from "@/components/ui/toast";
+import { transformScriptResponse } from "@/utils/scriptHelpers";
 
+function CreateVideoPageContent() {
+  const [inputText, setInputText] = useState("");
+  const [resources, setResources] = useState<GeneratedResource[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { addToast } = useToast();
+  
+  const generateScript = useGenerateScript();
 
-export default function CreateVideoPage() {
+  const generateResources = async (scriptStyle: string, imageStyle: string, voiceStyle: string) => {
+    if (!inputText.trim()) {
+      addToast("Vui lòng nhập nội dung trước khi tạo tài nguyên!", "warning");
+      return;
+    }
+
+    setIsGenerating(true);
+    
+    try {
+      const response = await generateScript.mutateAsync({ prompt: inputText });
+      
+      // Convert new API response to GeneratedResource format using utility function
+      const newResources: GeneratedResource[] = transformScriptResponse(
+        response,
+        getMockImage,
+        getMockAudio
+      );
+      
+      setResources(newResources);
+      setInputText(""); 
+      addToast(`Đã tạo thành công ${newResources.length} tài nguyên!`, "success");
+    } catch (error) {
+      console.error("Error generating script:", error);
+      // Fallback to mock data if API fails
+      const mockResources = generateMockResources(inputText, scriptStyle, imageStyle, voiceStyle);
+      setResources(mockResources);
+      addToast("API không khả dụng, sử dụng dữ liệu mẫu!", "info");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const getMockImage = (index: number): string => {
+    const mockImages = ["/rand1.svg", "/rand2.svg", "/rand3.svg"];
+    return mockImages[index % mockImages.length];
+  };
+
+  const getMockAudio = (index: number): string => {
+    const mockAudios = [
+      "https://www.soundjay.com/misc/sounds/bell-ringing-01a.mp3",
+      "https://www.soundjay.com/misc/sounds/bell-ringing-01b.mp3", 
+      "https://www.soundjay.com/misc/sounds/bell-ringing-01c.mp3"
+    ];
+    return mockAudios[index % mockAudios.length];
+  };
+
+  const generateMockResources = (text: string, scriptStyle: string, imageStyle: string, voiceStyle: string): GeneratedResource[] => {
+    const mockImages = ["/rand1.svg", "/rand2.svg", "/rand3.svg"];
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    
+    return sentences.slice(0, 3).map((sentence, index) => ({
+      id: `mock-${Date.now()}-${index}`,
+      imageSrc: mockImages[index % mockImages.length],
+      imageAlt: `Mock image ${index + 1}`,
+      textContent: `${sentence.trim()}. (Tạo với phong cách: ${scriptStyle}, ${imageStyle}, ${voiceStyle})`,
+      audioSrc: getMockAudio(index),
+      description: sentence.trim()
+    }));
+  };
+
+// ...existing code...
+
+  const deleteResource = (resourceId: string) => {
+    setResources(prevResources => prevResources.filter(resource => resource.id !== resourceId));
+    addToast("Đã xóa tài nguyên thành công!", "success");
+  };
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <Sidebar />
@@ -30,10 +107,23 @@ export default function CreateVideoPage() {
           }}
         >
           <HeaderSection />
-          <TextInput />
+          <TextInput value={inputText} onChange={setInputText} />
         </div>
-        <ResourceSection />
+        <ResourceSection 
+          resources={resources}
+          onGenerateResources={generateResources}
+          onDeleteResource={deleteResource}
+          isGenerating={isGenerating}
+        />
       </main>
     </div>
+  );
+}
+
+export default function CreateVideoPage() {
+  return (
+    <ToastProvider>
+      <CreateVideoPageContent />
+    </ToastProvider>
   );
 }
