@@ -1,7 +1,7 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 
 import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.GoogleTokenRepository;
-import com.hcmus.softdes.aivideocreator.domain.user.GoogleInfo;
+import com.hcmus.softdes.aivideocreator.domain.model.GoogleInfo;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;

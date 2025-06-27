@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AzureSpeechConfig {
 
-    @Value("${azure.speech.subscription-key}")
+    @Value("${azure.speech.key}")
     private String subscriptionKey;
 
     @Value("${azure.speech.region}")
