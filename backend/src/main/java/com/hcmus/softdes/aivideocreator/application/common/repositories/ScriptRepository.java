@@ -7,8 +7,9 @@ import java.util.UUID;
 
 public interface ScriptRepository {
     // Define methods for script repository operations
-    // For example:
-     List<Script> findAllScripts();
-     void saveScript(Script script);
-     Script findScriptById(UUID script);
+    List<Script> findAllScripts();
+    void saveScript(Script script);
+    Script findScriptById(UUID script);
+    void deleteScriptById(UUID scriptId);
+    void updateScript(Script script);
 }

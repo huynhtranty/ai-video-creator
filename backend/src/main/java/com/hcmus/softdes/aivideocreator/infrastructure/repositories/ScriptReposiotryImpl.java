@@ -4,6 +4,7 @@ import com.hcmus.softdes.aivideocreator.application.common.repositories.ScriptRe
 import com.hcmus.softdes.aivideocreator.domain.model.Script;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ScriptEntity;
 import com.hcmus.softdes.aivideocreator.infrastructure.jpa.ScriptJpaRepository;
+import com.hcmus.softdes.aivideocreator.infrastructure.mapper.ScriptMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,23 +19,44 @@ public class ScriptReposiotryImpl implements ScriptRepository {
         this.scriptJpaRepository = scriptJpaRepository;
     }
 
-
-    // Implement methods from ScriptRepository interface
-    // For example:
-    // @Override
+     @Override
      public List<Script> findAllScripts() {
-         // Implementation logic here
-         return null;
+         List<ScriptEntity> scriptEntities = scriptJpaRepository.findAll();
+         if (scriptEntities != null && !scriptEntities.isEmpty()) {
+             return scriptEntities.stream()
+                     .map(ScriptMapper::toDomainEntity)
+                     .toList();
+         } else {
+             return List.of();
+         }
      }
 
      @Override
      public void saveScript(Script script) {
-         // Implementation logic here
+          ScriptEntity scriptEntity = ScriptMapper.toJpaEntity(script);
+          scriptJpaRepository.save(scriptEntity);
      }
 
      @Override
      public Script findScriptById(UUID scriptId) {
-         // Implementation logic here
-         return null;
+            return scriptJpaRepository.findById(scriptId)
+                    .map(ScriptMapper::toDomainEntity)
+                    .orElse(null);
      }
+
+    @Override
+    public void deleteScriptById(UUID scriptId) {
+        scriptJpaRepository.deleteById(scriptId);
+    }
+
+    @Override
+    public void updateScript(Script script) {
+        ScriptEntity scriptEntity = ScriptMapper.toJpaEntity(script);
+        UUID scriptId = scriptEntity.getId();
+        if (scriptJpaRepository.existsById(scriptId)) {
+            scriptJpaRepository.save(scriptEntity);
+        } else {
+            throw new IllegalArgumentException("Script with ID " + scriptId + " does not exist.");
+        }
+    }
 }

@@ -10,4 +10,5 @@ public interface MediaRepository {
      MediaAsset findMediaById(UUID mediaId);
      void updateMedia(UUID mediaId, MediaAsset media);
      void deleteMedia(UUID mediaId);
+     MediaAsset findMediaByScriptId(UUID scriptId);
 }
