@@ -12,6 +12,8 @@ public class MediaMapper {
                 .id(media.getId())
                 .projectId(media.getProjectId())
                 .assetType(media.getType())
+                .scriptId(media.getScriptId())
+                .orderIndex(media.getOrder())
                 .filePath(media.getUrl())
                 .creationDate(media.getCreatedAt())
                 .lastModified(media.getUpdatedAt())
@@ -27,6 +29,8 @@ public class MediaMapper {
                 .projectId(jpaEntity.getProjectId())
                 .type(jpaEntity.getAssetType())
                 .url(jpaEntity.getFilePath())
+                .scriptId(jpaEntity.getScriptId())
+                .order(jpaEntity.getOrderIndex())
                 .createdAt(jpaEntity.getCreationDate())
                 .updatedAt(jpaEntity.getLastModified())
                 .build();

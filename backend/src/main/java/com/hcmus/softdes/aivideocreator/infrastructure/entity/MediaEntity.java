@@ -32,6 +32,12 @@ public class MediaEntity {
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
+    @Column(name = "script_id", nullable = false)
+    private UUID scriptId;
+
+    @Column(name = "order_index", nullable = false)
+    private int orderIndex;
+
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 

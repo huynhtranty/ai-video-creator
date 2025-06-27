@@ -2,9 +2,12 @@ package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 
 import com.hcmus.softdes.aivideocreator.application.common.repositories.MediaRepository;
 import com.hcmus.softdes.aivideocreator.domain.model.MediaAsset;
+import lombok.Locked;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+@Repository
 public class MediaRepositoryImpl implements MediaRepository {
 
     // Implement methods from MediaRepository interface

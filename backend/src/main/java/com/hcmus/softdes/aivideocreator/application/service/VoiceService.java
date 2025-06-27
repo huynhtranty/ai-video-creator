@@ -5,7 +5,7 @@ import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsResponse;
 import com.hcmus.softdes.aivideocreator.domain.model.Voice;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.audio.TtsService;
-import com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage.R2ServiceImpl;
+import com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage.R2Service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class VoiceService {
     private final Map<String, TtsService> ttsProviders;
-    private final R2ServiceImpl r2StorageService;
+    private final R2Service r2StorageService;
     private final VoiceRepository repository;
 
     public VoiceService(List<TtsService> services,
-                                 R2ServiceImpl r2StorageService,
+                                 R2Service r2StorageService,
                                  VoiceRepository repository) {
         this.ttsProviders = services.stream().collect(Collectors.toMap(s -> s.getClass().getAnnotation(Service.class).value(), s -> s));
         this.r2StorageService = r2StorageService;

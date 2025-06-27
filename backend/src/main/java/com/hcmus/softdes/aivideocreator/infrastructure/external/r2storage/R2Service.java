@@ -9,14 +9,14 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.InputStream;
 
 @Service
-public class R2ServiceImpl implements R2Client {
+public class R2Service implements R2Client {
 
     @Value("${cloudflare.r2.bucket-name}")
     private String bucketName;
 
     private final S3Client s3Client;
 
-    public R2ServiceImpl(S3Client s3Client) {
+    public R2Service(S3Client s3Client) {
         this.s3Client = s3Client;
     }
 

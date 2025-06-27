@@ -4,10 +4,13 @@ import com.hcmus.softdes.aivideocreator.application.common.repositories.ScriptRe
 import com.hcmus.softdes.aivideocreator.domain.model.Script;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.ScriptEntity;
 import com.hcmus.softdes.aivideocreator.infrastructure.jpa.ScriptJpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
+
+@Repository
 public class ScriptReposiotryImpl implements ScriptRepository {
     ScriptJpaRepository scriptJpaRepository;
 

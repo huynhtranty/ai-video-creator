@@ -16,17 +16,21 @@ public class MediaAsset extends Entity {
     private String name;
     private String type; // e.g., "image", "video", "audio"
     private String url; // URL or path to the media asset
-    private UUID projectId; // Optional: if the media asset is associated with a project
+    private UUID projectId;
+    private UUID scriptId;
+    private int order;
 
-    public MediaAsset(UUID id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String type, String url, UUID projectId) {
+    public MediaAsset(UUID id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String type, String url, UUID projectId, UUID scriptId, int order) {
         super(id, createdAt, updatedAt);
         this.name = name;
         this.type = type;
         this.url = url;
-        this.projectId = projectId; // Default to null, can be set later if needed
+        this.projectId = projectId;// Default to null, can be set later if needed
+        this.scriptId = scriptId; // Default to null, can be set later if needed
+        this.order = order; // Default to 0, can be set later if needed
     }
 
-    public static MediaAsset create(String name, String type, String url, UUID projectId) {
+    public static MediaAsset create(String name, String type, String url, UUID projectId, UUID scriptId, int order) {
         return new MediaAsset(
             UUID.randomUUID(),
             LocalDateTime.now(),
@@ -34,7 +38,11 @@ public class MediaAsset extends Entity {
             name,
             type,
             url,
-            projectId
+            projectId,
+            scriptId,
+            order
+
+
         );
     }
 
