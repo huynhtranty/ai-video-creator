@@ -1,4 +1,5 @@
 import { ScriptResponse, GeneratedResource } from "@/types/script";
+import { generateImageForScript } from "@/features/projects/api/image";
 
 /**
  * Transforms the new API response format to GeneratedResource format
@@ -10,12 +11,36 @@ export const transformScriptResponse = (
 ): GeneratedResource[] => {
   return response.scripts.map((script, index) => ({
     id: `generated-${Date.now()}-${index}`,
-    imageSrc: getMockImage(index),
+    imageSrc: getMockImage(index), // This will be updated with real images later
     imageAlt: `Generated image for script ${index + 1}`,
     textContent: script,
     audioSrc: getMockAudio(index),
     description: script
   }));
+};
+
+/**
+ * Transforms script response with async image generation
+ */
+export const transformScriptResponseWithImages = async (
+  response: ScriptResponse,
+  getMockAudio: (index: number) => string
+): Promise<GeneratedResource[]> => {
+  const resourcesPromises = response.scripts.map(async (script, index) => {
+    // Generate image for each script using the context and script content
+    const imageUrl = await generateImageForScript(response.context, script);
+    
+    return {
+      id: `generated-${Date.now()}-${index}`,
+      imageSrc: imageUrl,
+      imageAlt: `Generated image for script ${index + 1}`,
+      textContent: script,
+      audioSrc: getMockAudio(index),
+      description: script
+    };
+  });
+
+  return Promise.all(resourcesPromises);
 };
 
 /**

@@ -6,10 +6,25 @@ interface ResourceSectionProps {
   resources: GeneratedResource[];
   onGenerateResources: (scriptStyle: string, imageStyle: string, voiceStyle: string) => Promise<void>;
   onDeleteResource: (resourceId: string) => void;
+  onUpdateResource?: (resourceId: string, updates: Partial<GeneratedResource>) => void;
   isGenerating: boolean;
+  context?: string;
 }
 
-export default function ResourceSection({ resources, onGenerateResources, onDeleteResource, isGenerating }: ResourceSectionProps) {
+export default function ResourceSection({ 
+  resources, 
+  onGenerateResources, 
+  onDeleteResource, 
+  onUpdateResource,
+  isGenerating,
+  context 
+}: ResourceSectionProps) {
+
+  const handleImageUpdate = (resourceId: string, newImageSrc: string) => {
+    if (onUpdateResource) {
+      onUpdateResource(resourceId, { imageSrc: newImageSrc });
+    }
+  };
 
   return (
     <div className="flex gap-6">
@@ -61,6 +76,8 @@ export default function ResourceSection({ resources, onGenerateResources, onDele
                   textContent={resource.textContent}
                   audioSrc={resource.audioSrc}
                   onDelete={onDeleteResource}
+                  onImageUpdate={handleImageUpdate}
+                  context={context}
                 />
               ))
             )}

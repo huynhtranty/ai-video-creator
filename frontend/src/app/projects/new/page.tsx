@@ -8,12 +8,13 @@ import ResourceSection from "@/features/projects/components/ResourceSection";
 import { useGenerateScript } from "@/features/projects/api/script";
 import { GeneratedResource } from "@/types/script";
 import { ToastProvider, useToast } from "@/components/ui/toast";
-import { transformScriptResponse } from "@/utils/scriptHelpers";
+import { transformScriptResponseWithImages } from "@/utils/scriptHelpers";
 
 function CreateVideoPageContent() {
   const [inputText, setInputText] = useState("");
   const [resources, setResources] = useState<GeneratedResource[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [context, setContext] = useState<string>("");
   const { addToast } = useToast();
   
   const generateScript = useGenerateScript();
@@ -29,10 +30,11 @@ function CreateVideoPageContent() {
     try {
       const response = await generateScript.mutateAsync({ prompt: inputText });
       
-      // Convert new API response to GeneratedResource format using utility function
-      const newResources: GeneratedResource[] = transformScriptResponse(
+      setContext(response.context);
+      
+      addToast("Đang tạo hình ảnh...", "info");
+      const newResources: GeneratedResource[] = await transformScriptResponseWithImages(
         response,
-        getMockImage,
         getMockAudio
       );
       
@@ -41,18 +43,12 @@ function CreateVideoPageContent() {
       addToast(`Đã tạo thành công ${newResources.length} tài nguyên!`, "success");
     } catch (error) {
       console.error("Error generating script:", error);
-      // Fallback to mock data if API fails
       const mockResources = generateMockResources(inputText, scriptStyle, imageStyle, voiceStyle);
       setResources(mockResources);
       addToast("API không khả dụng, sử dụng dữ liệu mẫu!", "info");
     } finally {
       setIsGenerating(false);
     }
-  };
-
-  const getMockImage = (index: number): string => {
-    const mockImages = ["/rand1.svg", "/rand2.svg", "/rand3.svg"];
-    return mockImages[index % mockImages.length];
   };
 
   const getMockAudio = (index: number): string => {
@@ -78,11 +74,17 @@ function CreateVideoPageContent() {
     }));
   };
 
-// ...existing code...
-
   const deleteResource = (resourceId: string) => {
     setResources(prevResources => prevResources.filter(resource => resource.id !== resourceId));
     addToast("Đã xóa tài nguyên thành công!", "success");
+  };
+
+  const updateResource = (resourceId: string, updates: Partial<GeneratedResource>) => {
+    setResources(prevResources => 
+      prevResources.map(resource => 
+        resource.id === resourceId ? { ...resource, ...updates } : resource
+      )
+    );
   };
 
   return (
@@ -113,7 +115,9 @@ function CreateVideoPageContent() {
           resources={resources}
           onGenerateResources={generateResources}
           onDeleteResource={deleteResource}
+          onUpdateResource={updateResource}
           isGenerating={isGenerating}
+          context={context}
         />
       </main>
     </div>
