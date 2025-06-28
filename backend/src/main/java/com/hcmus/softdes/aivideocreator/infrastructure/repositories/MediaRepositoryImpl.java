@@ -59,4 +59,12 @@ public class MediaRepositoryImpl implements MediaRepository {
         }
         return null;
     }
+    @Override
+    public MediaAsset findMediaByProjectId(UUID projectId) {
+        MediaEntity mediaEntity = mediaJpaRepository.findByProjectId(projectId);
+        if (mediaEntity != null) {
+            return MediaMapper.toDomainMedia(mediaEntity);
+        }
+        return null;
+    }
 }
