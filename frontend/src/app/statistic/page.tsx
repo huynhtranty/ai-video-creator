@@ -10,7 +10,7 @@ export default function StatisticPage() {
       <main
         style={{
           flex: 1,
-          padding: "2rem 0 0 0",
+          padding: "2.5rem 0 0 0",
           background: "url('/Bg.svg') no-repeat center top",
           backgroundSize: "cover",
           position: "relative",
@@ -18,18 +18,18 @@ export default function StatisticPage() {
         }}
       >
         <div style={{ padding: "0 1.25rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2.5rem" }}>
             <h1 style={{ color: "#000", fontSize: "2rem", fontWeight: "bold" }}>Thống kê</h1>
             <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{padding: "0.5rem", borderRadius: "20px", fontSize: "16px" }}>Từ ngày</span>
+                <span style={{ padding: "0.5rem", borderRadius: "20px", fontSize: "16px" }}>Từ ngày</span>
                 <input
                   id="startDate"
                   type="date"
                   defaultValue="2025-03-01"
                   style={{
                     padding: "0.5rem 1rem",
-                    width: "250px",
+                    width: "350px",
                     height: "50px",
                     border: "2px solid transparent",
                     borderRadius: "20px",
@@ -43,14 +43,14 @@ export default function StatisticPage() {
                 />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{padding: "0.5rem", borderRadius: "20px", fontSize: "16px"}}>Đến ngày</span>
+                <span style={{ padding: "0.5rem", borderRadius: "20px", fontSize: "16px" }}>Đến ngày</span>
                 <input
                   id="endDate"
                   type="date"
                   defaultValue="2025-06-01"
                   style={{
                     padding: "0.5rem 1rem",
-                    width: "250px",
+                    width: "350px",
                     height: "50px",
                     border: "2px solid transparent",
                     borderRadius: "20px",
@@ -65,44 +65,48 @@ export default function StatisticPage() {
               </div>
             </div>
           </div>
+
           <div style={{ display: "flex", gap: "2rem" }}>
-            <div style={{ flex: 1, background: "#fff", padding: "1rem", borderRadius: "10px" }}>
-              <h3>BANDWIDTH REPORTS</h3>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+            <div style={{ flex: 1, background: "#fff", padding: "1.5rem", borderRadius: "10px" }}>
+              <h3 style={{ fontWeight: "bold", paddingBottom: "10px" }}>CHART REPORTS</h3>
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem", gap: "200px" }}>
                 <div>
                   <p>63% Generated Leads</p>
-                  <div style={{ width: "100%", background: "#ddd", borderRadius: "5px" }}>
+                  <div style={{ width: "300px", background: "#ddd", borderRadius: "5px" }}>
                     <div style={{ width: "63%", height: "10px", background: "#ff4d4f", borderRadius: "5px" }}></div>
                   </div>
                 </div>
                 <div>
                   <p>32% Submitted Tickets</p>
-                  <div style={{ width: "100%", background: "#ddd", borderRadius: "5px" }}>
+                  <div style={{ width: "300px", background: "#ddd", borderRadius: "5px" }}>
                     <div style={{ width: "32%", height: "10px", background: "#52c41a", borderRadius: "5px" }}></div>
                   </div>
                 </div>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem", gap: "200px" }}>
                 <div>
                   <p>71% Server Allocation</p>
-                  <div style={{ width: "100%", background: "#ddd", borderRadius: "5px" }}>
+                  <div style={{ width: "300px", background: "#ddd", borderRadius: "5px" }}>
                     <div style={{ width: "71%", height: "10px", background: "#1890ff", borderRadius: "5px" }}></div>
                   </div>
                 </div>
                 <div>
                   <p>41% Generated Leads</p>
-                  <div style={{ width: "100%", background: "#ddd", borderRadius: "5px" }}>
+                  <div style={{ width: "300px", background: "#ddd", borderRadius: "5px" }}>
                     <div style={{ width: "41%", height: "10px", background: "#fa8c16", borderRadius: "5px" }}></div>
                   </div>
                 </div>
               </div>
+
               <p style={{ color: "#fa8c16" }}>+17.5% increased server resources</p>
-              <div style={{ position: "relative", height: "100px", width: "100%" }}>
-                <svg width="100%" height="100%" style={{ position: "absolute", top: 0, left: 0 }}>
-                  <path d="M0,80 Q50,20 100,80" stroke="#fa8c16" fill="transparent" strokeWidth="2"/>
-                </svg>
+              <div style={{height: "100px", width: "100%" }}>
+                <img
+                  src="/chart-temp 1.svg" alt="Chart" />
+
               </div>
             </div>
+
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem", flex: 1 }}>
               <div style={{ background: "#95de64", padding: "1rem", borderRadius: "10px", textAlign: "center" }}>
                 <p>Tổng lượt xem</p>
@@ -122,6 +126,7 @@ export default function StatisticPage() {
               </div>
             </div>
           </div>
+
           <div style={{ display: "flex", gap: "2rem", marginTop: "2rem" }}>
             <div style={{ flex: 1, background: "#bae0ff", padding: "1rem", borderRadius: "10px", textAlign: "center" }}>
               <p>Tổng số lượt thích trên các nền tảng</p>
