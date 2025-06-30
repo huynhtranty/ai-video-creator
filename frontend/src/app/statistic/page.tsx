@@ -67,7 +67,7 @@ export default function StatisticPage() {
           </div>
 
           <div style={{ display: "flex", gap: "2rem" }}>
-            <div style={{ flex: 1, background: "#fff", padding: "1.5rem", borderRadius: "10px" }}>
+            <div style={{ flex: 1, background: "#fff", padding: "1.5rem 1.5rem 0rem 1.5rem", borderRadius: "10px" }}>
               <h3 style={{ fontWeight: "bold", paddingBottom: "10px" }}>CHART REPORTS</h3>
               <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem", gap: "200px" }}>
                 <div>
@@ -100,10 +100,17 @@ export default function StatisticPage() {
               </div>
 
               <p style={{ color: "#fa8c16" }}>+17.5% increased server resources</p>
-              <div style={{height: "100px", width: "100%" }}>
+              <div style={{ height: "100%", width: "100%"}}>
                 <img
-                  src="/chart-temp 1.svg" alt="Chart" />
-
+                  src="/chart-temp 1.svg"
+                  alt="Chart"
+                  style={{
+                    maxHeight: "100%",
+                    width: "100%",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
               </div>
             </div>
 
