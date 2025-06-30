@@ -20,43 +20,49 @@ export default function StatisticPage() {
         <div style={{ padding: "0 1.25rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
             <h1 style={{ color: "#000", fontSize: "2rem", fontWeight: "bold" }}>Thống kê</h1>
-            <div style={{ display: "flex", gap: "1rem" }}>
-              <input
-                id="startDate"
-                type="date"
-                defaultValue="2025-03-01"
-                style={{
-                  padding: "0.5rem 1rem",
-                  width: "250px",
-                  height: "50px",
-                  border: "2px solid transparent",
-                  borderRadius: "20px",
-                  outline: "none",
-                  fontSize: "16px",
-                  transition: "box-shadow 0.2s ease-in-out",
-                  background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
-                }}
-                onFocus={(e) => { e.target.style.boxShadow = "0 0 5px rgba(255, 105, 180, 0.5)"; }}
-                onBlur={(e) => { e.target.style.boxShadow = "none"; }}
-              />
-              <input
-                id="endDate"
-                type="date"
-                defaultValue="2025-06-01"
-                style={{
-                  padding: "0.5rem 1rem",
-                  width: "250px",
-                  height: "50px",
-                  border: "2px solid transparent",
-                  borderRadius: "20px",
-                  outline: "none",
-                  fontSize: "16px",
-                  transition: "box-shadow 0.2s ease-in-out",
-                  background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
-                }}
-                onFocus={(e) => { e.target.style.boxShadow = "0 0 5px rgba(255, 105, 180, 0.5)"; }}
-                onBlur={(e) => { e.target.style.boxShadow = "none"; }}
-              />
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{padding: "0.5rem", borderRadius: "20px", fontSize: "16px" }}>Từ ngày</span>
+                <input
+                  id="startDate"
+                  type="date"
+                  defaultValue="2025-03-01"
+                  style={{
+                    padding: "0.5rem 1rem",
+                    width: "250px",
+                    height: "50px",
+                    border: "2px solid transparent",
+                    borderRadius: "20px",
+                    outline: "none",
+                    fontSize: "16px",
+                    transition: "box-shadow 0.2s ease-in-out",
+                    background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
+                  }}
+                  onFocus={(e) => { e.target.style.boxShadow = "0 0 5px rgba(255, 105, 180, 0.5)"; }}
+                  onBlur={(e) => { e.target.style.boxShadow = "none"; }}
+                />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{padding: "0.5rem", borderRadius: "20px", fontSize: "16px"}}>Đến ngày</span>
+                <input
+                  id="endDate"
+                  type="date"
+                  defaultValue="2025-06-01"
+                  style={{
+                    padding: "0.5rem 1rem",
+                    width: "250px",
+                    height: "50px",
+                    border: "2px solid transparent",
+                    borderRadius: "20px",
+                    outline: "none",
+                    fontSize: "16px",
+                    transition: "box-shadow 0.2s ease-in-out",
+                    background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
+                  }}
+                  onFocus={(e) => { e.target.style.boxShadow = "0 0 5px rgba(255, 105, 180, 0.5)"; }}
+                  onBlur={(e) => { e.target.style.boxShadow = "none"; }}
+                />
+              </div>
             </div>
           </div>
           <div style={{ display: "flex", gap: "2rem" }}>
