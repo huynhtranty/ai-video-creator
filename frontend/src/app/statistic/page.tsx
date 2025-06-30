@@ -25,7 +25,7 @@ export default function StatisticPage() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: "2.5rem",
+              marginBottom: "2rem",
             }}
           >
             <h1 style={{ color: "#000", fontSize: "2rem", fontWeight: "bold" }}>
@@ -153,7 +153,7 @@ export default function StatisticPage() {
                   title: "Tổng tất cả lượt xem",
                   value: "10K",
                   icon: "/View-Statistic.svg",
-                  bg: "linear-gradient(to bottom, #4FF900, #ffffff)",
+                  bg: "linear-gradient(to bottom, #4FF900 0%,#FAF3F3 60%, #FAF3F3 100%)",
                   border: "2px solid #1890ff",
                   iconWidth: "80px",
                   iconHeight: "80px",
@@ -163,7 +163,7 @@ export default function StatisticPage() {
                   title: "Số lượt xem trên Youtube",
                   value: "10K",
                   icon: "/Youtube-Statistic.svg",
-                  bg: "linear-gradient(to bottom, #ff4d4f, #ffffff)",
+                  bg: "linear-gradient(to bottom, #ff4d4f 0%, #FAF3F3 60%,#FAF3F3 100%)",
                   iconWidth: "55px",
                   iconHeight: "65px",
                   iconMargin: "15px 0 12px 0", // Custom margin for Youtube-Statistic
@@ -172,7 +172,7 @@ export default function StatisticPage() {
                   title: "Số lượt xem trên Facebook",
                   value: "10K",
                   icon: "/Fb-Statistic.svg",
-                  bg: "linear-gradient(to bottom, #3F00EA, #ffffff)",
+                  bg: "linear-gradient(to bottom, #3F00EA 0%,#FAF3F3 60%, #FAF3F3 100%)",
                   iconWidth: "70px",
                   iconHeight: "70px",
                   iconMargin: "10px 0 8px 0", // Custom margin for Fb-Statistic
@@ -181,7 +181,7 @@ export default function StatisticPage() {
                   title: "Số lượt xem trên Tiktok",
                   value: "10K",
                   icon: "/Tiktok-Statistic.svg",
-                  bg: "linear-gradient(to bottom, #434343, #ffffff)",
+                  bg: "linear-gradient(to bottom, #434343 0%, #FAF3F3 60%, #FAF3F3 100%)",
                   iconWidth: "70px",
                   iconHeight: "70px",
                   iconMargin: "12px 0 7px 0", // Custom margin for Tiktok-Statistic
@@ -216,17 +216,63 @@ export default function StatisticPage() {
             </div>
           </div>
 
-          {/* Likes and Video Count */}
-          <div style={{ display: "flex", gap: "2rem", marginTop: "2rem" }}>
-            <div style={{ flex: 1, background: "#bae0ff", padding: "1rem", borderRadius: "10px", textAlign: "center" }}>
-              <p>Tổng số lượt thích trên các nền tảng</p>
-              <p style={{ fontSize: "2rem", color: "#fff" }}>10K</p>
-            </div>
-            <div style={{ flex: 1, background: "#d9f7be", padding: "1rem", borderRadius: "10px", textAlign: "center" }}>
-              <p>Tổng số Video trên các nền tảng</p>
-              <p style={{ fontSize: "2rem", color: "#fff" }}>10K</p>
-            </div>
+
+          {/* Likes and Video Count (Mid-centered gradient effect) */}
+          <div style={{ display: "flex", gap: "2rem", marginTop: "1rem" }}>
+          {/* Likes Card */}
+          <div
+          style={{
+               flex: 1,
+               padding: "1.5rem",
+               borderRadius: "12px",
+               background: "linear-gradient(to bottom, #00CFFF 0%, #FAF3F3 70%, #FAF3F3 100%)",
+               display: "flex",
+               flexDirection: "column",
+               justifyContent: "center",
+               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+          >
+          <p style={{ fontWeight: "bold", fontSize: "1.15rem", marginBottom: "0.5rem" }}>
+               Tổng số lượt thích trên các nền tảng
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+               <img
+               src="/Like-Statistic.svg"
+               alt="Like icon"
+               style={{ width: "40px", height: "40px", objectFit: "contain" }}
+               />
+               <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#000" }}>10K</span>
           </div>
+          </div>
+
+          {/* Video Count Card */}
+          <div
+          style={{
+               flex: 1,
+               padding: "1.5rem",
+               borderRadius: "12px",
+               background: "linear-gradient(to bottom, #D9D9C8 0%, #FAF3F3 70%, #FAF3F3 100%)",
+               display: "flex",
+               flexDirection: "column",
+               justifyContent: "center",
+               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+          >
+          <p style={{ fontWeight: "bold", fontSize: "1.15rem", marginBottom: "0.5rem" }}>
+               Tổng số Video trên các nền tảng
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+               <img
+               src="/Video-Statistic.svg"
+               alt="Video icon"
+               style={{ width: "40px", height: "40px", objectFit: "contain" }}
+               />
+               <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#000" }}>10K</span>
+          </div>
+          </div>
+          </div>
+
+
         </div>
       </main>
     </div>
