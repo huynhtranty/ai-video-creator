@@ -3,7 +3,7 @@
 import React from "react";
 import Sidebar from "@/features/dashboard/components/Sidebar";
 
-export default function ListProjectPage() {
+export default function StatisticPage() {
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <Sidebar />
