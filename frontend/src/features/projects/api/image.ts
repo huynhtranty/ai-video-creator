@@ -16,20 +16,16 @@ export const useGenerateImage = () => {
       const response = await apiClient.post("/contents/image", data);
       return response.data;
     },
-    onError: (error) => {
-      console.error("Error generating image:", error);
-    },
+    onError: () => {},
   });
 };
 
 export const generateImageForScript = async (context: string, prompt: string): Promise<string> => {
-  try {
-    const response = await apiClient.post("/contents/image", { context, prompt });
-    return response.data.imageUrl || response.data;
-  } catch (error) {
-    console.error("Error generating image:", error);
-    // Return a fallback image on error
-    const mockImages = ["/rand1.svg", "/rand2.svg", "/rand3.svg"];
-    return mockImages[Math.floor(Math.random() * mockImages.length)];
+  const response = await apiClient.post("/contents/image", { context, prompt });
+  const imageUrl = response.data.imageUrl || response.data;
+  if (!imageUrl) {
+    throw new Error('No image URL received from API');
   }
+  
+  return imageUrl;
 };

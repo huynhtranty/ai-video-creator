@@ -7,40 +7,25 @@ import com.google.genai.ResponseStream;
 import com.google.genai.types.*;
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.ContentRequest;
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.ImageRequest;
+import com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage.R2Client;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/contents")
 public class ContentController {
+    private final R2Client r2StorageService;
+
     private final String SCRIPT_MODEL_ID = "gemini-2.0-flash";
     private final String IMAGE_MODEL_ID = "gemini-2.0-flash-preview-image-generation";
     
     @Value("${gemini.api.key}")
     private String apiKey;
-    
-    // Define path for temporary image storage
-    private static final String TEMP_IMAGE_DIR = "src/main/resources/static/images/tmp/";
-    
-    // Ensure the directory exists
-    private void ensureTempDirectoryExists() {
-        try {
-            Path path = Paths.get(TEMP_IMAGE_DIR);
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to create temporary directory for images", e);
-        }
+
+    public ContentController(R2Client r2StorageService) {
+        this.r2StorageService = r2StorageService;
     }
 
     @PostMapping("/script")
@@ -76,41 +61,44 @@ public class ContentController {
             .responseSchema(contentSchema)
             .build();
 
-        String prompt = "Create a video script about this topic: " + request.prompt()
-            + """
+        String prompt = "Create a video script about this topic: " + request.prompt() +
+            """
             .
-            **Detect the language of the topic and generate all output (context, script) in the same language as the topic**.
-        
-            The script should include an introduction, a discussion of key points, and a conclusion.
+            **Detect the language of the topic and use the same language throughout all output (context and scripts).**
             
-            Write from the perspective of a creative director who is focused on creating a visually engaging video 
-            through the context, and the storytelling aspect through the scripts.
-        
-            Think of the topic as a visual journey composed of sequential illustrated scenes, animations, or cinematic frames.
-            To ensure all scenes feel visually unified and coherent, define a **shared visual context** that persists across the video.
+            You are a **creative director** designing a visually cohesive and narratively compelling video. The final output should consist of two parts:
             
-            Please specify:
-                - **Setting**: Where does this story take place? (location, time period, environment, weather, etc.)
-                - **Visual Style**: Choose a clear art or cinematic style (e.g., anime, 3D Pixar, digital painting, noir, cyberpunk).
-                - **Color Palette**: Dominant colors and emotional tone (e.g., warm tones, neon blues, muted pastels).
-                - **Characters**: Who are the recurring characters? Describe appearance, outfits, expressions, age, personality traits.
-                - **Tone/Atmosphere**: What is the mood and emotional journey? (e.g., playful, suspenseful, inspiring, nostalgic)
-                - **Rules of the World**: Are there any fantastical, sci-fi, or symbolic elements that should stay consistent?
-        
-            This section will serve as the unified **context** for generating a consistent image style throughout the video.
-        
-            Then, generate the **scripts**:
-            - The scripts should only focus on the storytelling aspect, not the visual elements.
-            - Each script must contain a short paragraph that is vivid, informative, and concrete enough to describe a single scene,
-            and they should be written so that they can be narrated in a video.
-            - The scripts should be clear and concise.
+            ## Part 1: Visual Context (for consistent and unified illustrated visuals)
             
-            The length and number of scripts should be balanced: enough to explain the topic without overwhelming the viewer.
-            Adapt this based on topic complexity. Usually, 4-10 scripts are sufficient for a normal topic.
-            Could be more for complex topics, fewer for simpler ones.
+            Define a **shared visual context** to guide the style of all illustrations or video frames. This visual direction should remain consistent across the entire video.
             
-            **Detect the language of the topic and generate all output
-            (context, scripts) in the same language as the topic**.
+            Include the following:
+            
+            - **Setting**: Time, place, environment, and weather. (e.g., futuristic Tokyo during a rainstorm at night)
+            - **Visual Style**: Art or cinematic direction (e.g., Studio Ghibli, Pixar 3D, Cyberpunk anime, noir).
+            - **Color Palette**: Dominant tones and their emotional effects (e.g., cold neon, warm nostalgic pastels).
+            - **Characters**: Recurring figures with names (optional), appearances, age, outfit style, key personality traits, expressions.
+            - **Tone / Atmosphere**: Emotional journey and thematic tone (e.g., hopeful, tense, melancholic).
+            - **Rules of the World**: Any fantastical, sci-fi, or symbolic logic (e.g., flying whales, glowing tattoos as memory keys).
+            
+            **Important**:
+            - This section **must not contain markdown or embedded labels**.
+            - This context will be used as the basis for generating a consistent image style across scenes.
+            - Do **not** include any scene descriptions or narration here.
+            ## Part 2: Video Script (narration for each visual scene)
+            
+            Generate 4–10 script paragraphs (more if needed), where each describes **a single scene**.
+            
+            Each script paragraph should:
+            - Be written for **spoken narration**.
+            - Be **vivid, clear, concise**, and **scene-focused**.
+            - Avoid mentioning visuals — **do not describe the art style, camera moves, colors, or characters’ physical details**.
+            - Not include any markdown, titles, or bullet points.
+            - Not include or describe any text or labels in the scene visuals.
+            
+            The narrative should flow logically: include an introduction, key points, and a meaningful conclusion.
+            
+            **Language rule reminder**: All output (context and script) must match the detected language of the topic.
             """;
 
 
@@ -188,26 +176,21 @@ public class ContentController {
         }
 
         // Temp directory for images
-        String imageUrl = saveImageToTempDirectory(imageBytes);
+        String imageUrl = saveImageToCloud(imageBytes);
         return imageUrl;
     }
-    
+
     /**
      * Saves image bytes to a temporary file and returns the URL path
      * @param imageBytes The binary image data
      * @return URL path to the saved image
      */
-    private String saveImageToTempDirectory(byte[] imageBytes) {
-        ensureTempDirectoryExists();
-
-        String filename = UUID.randomUUID().toString() + ".jpg";
-        String filepath = TEMP_IMAGE_DIR + filename;
-        
-        try (FileOutputStream fos = new FileOutputStream(filepath)) {
-            fos.write(imageBytes);
-            return "http://localhost:8080/images/tmp/" + filename;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save image to temporary directory", e);
+    private String saveImageToCloud(byte[] imageBytes) {
+        String filename = "image-" + System.currentTimeMillis() + ".jpg";
+        try {
+            return r2StorageService.uploadFile(filename, imageBytes, "image/jpeg");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload image to cloud", e);
         }
     }
 }

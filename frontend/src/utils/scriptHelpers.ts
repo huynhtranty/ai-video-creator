@@ -2,20 +2,20 @@ import { ScriptResponse, GeneratedResource } from "@/types/script";
 import { generateImageForScript } from "@/features/projects/api/image";
 
 /**
- * Transforms the new API response format to GeneratedResource format
+ * Transforms script response with loading state (images and audio will be generated in background)
  */
-export const transformScriptResponse = (
-  response: ScriptResponse,
-  getMockImage: (index: number) => string,
-  getMockAudio: (index: number) => string
+export const transformScriptResponseWithLoading = (
+  response: ScriptResponse
 ): GeneratedResource[] => {
   return response.scripts.map((script, index) => ({
     id: `generated-${Date.now()}-${index}`,
-    imageSrc: getMockImage(index), // This will be updated with real images later
+    imageSrc: '', 
     imageAlt: `Generated image for script ${index + 1}`,
     textContent: script,
-    audioSrc: getMockAudio(index),
-    description: script
+    audioSrc: '',
+    description: script,
+    isImageLoading: true,
+    isAudioLoading: true
   }));
 };
 
@@ -27,7 +27,6 @@ export const transformScriptResponseWithImages = async (
   getMockAudio: (index: number) => string
 ): Promise<GeneratedResource[]> => {
   const resourcesPromises = response.scripts.map(async (script, index) => {
-    // Generate image for each script using the context and script content
     const imageUrl = await generateImageForScript(response.context, script);
     
     return {
@@ -36,19 +35,12 @@ export const transformScriptResponseWithImages = async (
       imageAlt: `Generated image for script ${index + 1}`,
       textContent: script,
       audioSrc: getMockAudio(index),
-      description: script
+      description: script,
+      isImageLoading: false
     };
   });
 
   return Promise.all(resourcesPromises);
-};
-
-/**
- * Creates a shortened version of context for display
- */
-export const getContextPreview = (context: string, maxLength: number = 200): string => {
-  if (context.length <= maxLength) return context;
-  return context.substring(0, maxLength) + "...";
 };
 
 /**

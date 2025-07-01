@@ -8,11 +8,6 @@ export interface ScriptRequest {
   prompt: string;
 }
 
-// Legacy types for backward compatibility
-export interface ScriptSubtitle {
-  text: string;
-}
-
 export interface ScriptContent {
   description: string;
   subtitles: string[];
@@ -25,4 +20,6 @@ export interface GeneratedResource {
   textContent: string;
   audioSrc?: string;
   description: string;
+  isImageLoading?: boolean;
+  isAudioLoading?: boolean;
 }

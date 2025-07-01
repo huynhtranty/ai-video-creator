@@ -8,7 +8,10 @@ import ResourceSection from "@/features/projects/components/ResourceSection";
 import { useGenerateScript } from "@/features/projects/api/script";
 import { GeneratedResource } from "@/types/script";
 import { ToastProvider, useToast } from "@/components/ui/toast";
-import { transformScriptResponseWithImages } from "@/utils/scriptHelpers";
+import { transformScriptResponseWithLoading } from "@/utils/scriptHelpers";
+import { generateImageForScript } from "@/features/projects/api/image";
+import { generateTtsForScript } from "@/features/projects/api/tts";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 function CreateVideoPageContent() {
   const [inputText, setInputText] = useState("");
@@ -28,50 +31,59 @@ function CreateVideoPageContent() {
     setIsGenerating(true);
     
     try {
-      const response = await generateScript.mutateAsync({ prompt: inputText });
-      
+      const response = await generateScript.mutateAsync({ prompt: inputText }); 
       setContext(response.context);
-      
-      addToast("Đang tạo hình ảnh...", "info");
-      const newResources: GeneratedResource[] = await transformScriptResponseWithImages(
-        response,
-        getMockAudio
+
+      const newResources: GeneratedResource[] = transformScriptResponseWithLoading(
+        response
       );
       
       setResources(newResources);
       setInputText(""); 
       addToast(`Đã tạo thành công ${newResources.length} tài nguyên!`, "success");
+      
+      addToast("Đang tạo hình ảnh và âm thanh...", "info");
+      
+      // Generate images and audio in parallel
+      const resourcePromises = newResources.map(async (resource) => {
+        if (typeof resource.textContent === 'string') {
+          // Generate image
+          const imagePromise = generateImageForScript(response.context, resource.textContent)
+            .then(imageUrl => {
+              updateResource(resource.id, { imageSrc: imageUrl, isImageLoading: false });
+            })
+            .catch(error => {
+              console.error(`Error generating image for resource ${resource.id}:`, error);
+            });
+
+          // Generate audio with TTS
+          const audioPromise = generateTtsForScript(
+            resource.textContent,
+            response.language || "vi",
+            1.0,
+            voiceStyle === "Nữ thanh niên" ? "FEMALE" : "MALE",
+            "", // projectId - can be added later if needed
+            "google"
+          )
+            .then(audioUrl => {
+              updateResource(resource.id, { audioSrc: audioUrl, isAudioLoading: false });
+            })
+            .catch(error => {
+              console.error(`Error generating audio for resource ${resource.id}:`, error);
+            });
+
+          return Promise.all([imagePromise, audioPromise]);
+        }
+      });
+      
+      await Promise.all(resourcePromises);
+      addToast("Đã hoàn thành tạo hình ảnh và âm thanh!", "success");
     } catch (error) {
       console.error("Error generating script:", error);
-      const mockResources = generateMockResources(inputText, scriptStyle, imageStyle, voiceStyle);
-      setResources(mockResources);
-      addToast("API không khả dụng, sử dụng dữ liệu mẫu!", "info");
+      addToast("API không khả dụng!", "info");
     } finally {
       setIsGenerating(false);
     }
-  };
-
-  const getMockAudio = (index: number): string => {
-    const mockAudios = [
-      "https://www.soundjay.com/misc/sounds/bell-ringing-01a.mp3",
-      "https://www.soundjay.com/misc/sounds/bell-ringing-01b.mp3", 
-      "https://www.soundjay.com/misc/sounds/bell-ringing-01c.mp3"
-    ];
-    return mockAudios[index % mockAudios.length];
-  };
-
-  const generateMockResources = (text: string, scriptStyle: string, imageStyle: string, voiceStyle: string): GeneratedResource[] => {
-    const mockImages = ["/rand1.svg", "/rand2.svg", "/rand3.svg"];
-    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-    
-    return sentences.slice(0, 3).map((sentence, index) => ({
-      id: `mock-${Date.now()}-${index}`,
-      imageSrc: mockImages[index % mockImages.length],
-      imageAlt: `Mock image ${index + 1}`,
-      textContent: `${sentence.trim()}. (Tạo với phong cách: ${scriptStyle}, ${imageStyle}, ${voiceStyle})`,
-      audioSrc: getMockAudio(index),
-      description: sentence.trim()
-    }));
   };
 
   const deleteResource = (resourceId: string) => {
@@ -80,11 +92,12 @@ function CreateVideoPageContent() {
   };
 
   const updateResource = (resourceId: string, updates: Partial<GeneratedResource>) => {
-    setResources(prevResources => 
-      prevResources.map(resource => 
+    setResources(prevResources => {
+      const updatedResources = prevResources.map(resource => 
         resource.id === resourceId ? { ...resource, ...updates } : resource
-      )
-    );
+      );
+      return updatedResources;
+    });
   };
 
   return (
@@ -126,8 +139,10 @@ function CreateVideoPageContent() {
 
 export default function CreateVideoPage() {
   return (
-    <ToastProvider>
-      <CreateVideoPageContent />
-    </ToastProvider>
+    <ProtectedRoute>
+      <ToastProvider>
+        <CreateVideoPageContent />
+      </ToastProvider>
+    </ProtectedRoute>
   );
 }

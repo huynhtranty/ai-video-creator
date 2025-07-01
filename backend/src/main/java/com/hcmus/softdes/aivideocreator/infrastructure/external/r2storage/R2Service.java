@@ -62,7 +62,7 @@ public class R2Service implements R2Client {
                 .build();
 
         s3Client.putObject(request, RequestBody.fromBytes(data));
-        return String.format("https://%s.r2.cloudflarestorage.com/%s", bucketName, filename);
+        return String.format("https://pub-647c59c8fa3c4daaae41ac0c0be27bf1.r2.dev/%s", filename);
     }
 
     @Override

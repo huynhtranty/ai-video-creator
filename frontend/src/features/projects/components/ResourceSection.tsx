@@ -26,6 +26,12 @@ export default function ResourceSection({
     }
   };
 
+  const handleAudioUpdate = (resourceId: string, newAudioSrc: string) => {
+    if (onUpdateResource) {
+      onUpdateResource(resourceId, { audioSrc: newAudioSrc });
+    }
+  };
+
   return (
     <div className="flex gap-6">
       {/* ResourceSetting on the left */}
@@ -77,7 +83,10 @@ export default function ResourceSection({
                   audioSrc={resource.audioSrc}
                   onDelete={onDeleteResource}
                   onImageUpdate={handleImageUpdate}
+                  onAudioUpdate={handleAudioUpdate}
                   context={context}
+                  isImageLoading={resource.isImageLoading}
+                  isAudioLoading={resource.isAudioLoading}
                 />
               ))
             )}
