@@ -15,6 +15,7 @@ import { useRegister } from "../api/auth";
 const registerSchema = z.object({
   username: z.string().min(1, "Tên đăng nhập là bắt buộc"),
   email: z.string().email("Email không hợp lệ"),
+  fullname: z.string().min(1, "Họ và tên là bắt buộc"),
   password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
   dateOfBirth: z.string().refine((val) => {
     if (!val) return false;
@@ -39,6 +40,7 @@ export function RegisterForm() {
     defaultValues: {
       username: "",
       email: "",
+      fullname: "",
       password: "",
       dateOfBirth: "",
     },
@@ -50,6 +52,7 @@ export function RegisterForm() {
     registerMutation.mutate({
       username: data.username,
       email: data.email,
+      fullname: data.fullname,
       password: data.password,
       dateOfBirth: data.dateOfBirth,
     }, {
@@ -91,6 +94,27 @@ export function RegisterForm() {
                     <FormControl>
                       <Input
                         placeholder="Nhập tên đăng nhập"
+                        className="h-11 rounded-xl border-0 bg-white px-4 text-gray-600 placeholder:text-gray-400 focus:shadow-md focus:shadow-pink-200"
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage className="mt-0.5 px-2 text-xs font-medium text-red-500" />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="relative group">
+            <FormField
+              control={form.control}
+              name="fullname"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <div className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 p-0.5 shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-200">
+                    <FormControl>
+                      <Input
+                        placeholder="Nhập họ và tên"
                         className="h-11 rounded-xl border-0 bg-white px-4 text-gray-600 placeholder:text-gray-400 focus:shadow-md focus:shadow-pink-200"
                         {...field}
                       />
