@@ -62,7 +62,7 @@ function CreateVideoPageContent() {
             response.language || "vi",
             1.0,
             voiceStyle === "Nữ thanh niên" ? "FEMALE" : "MALE",
-            "", // projectId - can be added later if needed
+            "3a442ec5-cdfa-4a4c-9f11-e43afa59ba05",
             "google"
           )
             .then(audioUrl => {

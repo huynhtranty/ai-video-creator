@@ -19,7 +19,7 @@ export interface TtsResponse {
 export const useGenerateTts = () => {
   return useMutation<TtsResponse, Error, TtsRequest>({
     mutationFn: async (data: TtsRequest) => {
-      const response = await apiClient.post("/tts", data);
+      const response = await apiClient.post("/api/tts", data);
       return response.data;
     },
     onError: () => {},
@@ -31,10 +31,10 @@ export const generateTtsForScript = async (
   languageCode: string = "vi",
   speakingRate: number = 1.0,
   gender: string = "MALE",
-  projectId: string = "",
+  projectId: string = "3a442ec5-cdfa-4a4c-9f11-e43afa59ba05",
   provider: string = "google"
 ): Promise<string> => {
-  const response = await apiClient.post("/tts", {
+  const response = await apiClient.post("/api/tts", {
     text,
     languageCode,
     speakingRate,
