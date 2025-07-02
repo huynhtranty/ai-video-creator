@@ -1,8 +1,10 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.external.script;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.genai.Client;
 import com.google.genai.types.*;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +12,13 @@ import org.springframework.stereotype.Service;
 public class GeminiScriptGenerationService implements ScriptGenerationService {
 
     private final String SCRIPT_MODEL_ID = "gemini-2.0-flash";
+    private final ObjectMapper objectMapper = new ObjectMapper();
     
     @Value("${gemini.api.key}")
     private String apiKey;
 
     @Override
-    public String generateScript(String prompt) {
+    public ScriptLayoutResponse generateScript(String prompt) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         Schema contentSchema = Schema.builder()
@@ -88,6 +91,11 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             """;
 
         GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, systemPrompt, config);
-        return response.text();
+
+        try {
+            return objectMapper.readValue(response.text(), ScriptLayoutResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse script generation response", e);
+        }
     }
 }

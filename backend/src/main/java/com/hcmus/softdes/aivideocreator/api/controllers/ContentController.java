@@ -2,8 +2,8 @@ package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageResponse;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutResponse;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptResponse;
 import com.hcmus.softdes.aivideocreator.application.service.ContentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class ContentController {
     }
 
     @PostMapping("/script")
-    public ResponseEntity<ScriptResponse> generateScript(@RequestBody ScriptRequest request) {
+    public ResponseEntity<ScriptLayoutResponse> generateScript(@RequestBody ScriptRequest request) {
         var response = contentService.generateScript(request);
         return ResponseEntity.ok(response);
     }
