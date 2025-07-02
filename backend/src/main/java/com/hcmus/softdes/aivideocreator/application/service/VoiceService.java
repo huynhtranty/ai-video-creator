@@ -34,6 +34,7 @@ public class VoiceService {
         if (provider == null) throw new RuntimeException("TTS provider not supported");
 
         byte[] audio = provider.synthesize(request);
+        int duration = repository.getMp3Duration(audio);
         String filename = UUID.randomUUID() + ".mp3";
         String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
 
@@ -43,10 +44,10 @@ public class VoiceService {
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
         }
-        Voice record = Voice.create(request.getText(), request.getLanguageCode() ,providerKey, url, projectId);
+        Voice record = Voice.create(request.getText(), request.getLanguageCode() ,providerKey,duration, request.getGender(), url, projectId);
         repository.saveVoice(record);
 
-        return new TtsResponse(url, "mp3", request.getProjectId());
+        return new TtsResponse(url, "mp3", duration, request.getProjectId());
     }
 
     public TtsResponse uploadMp3File(MultipartFile file, String projectId, String languageCode, String provider) {
@@ -55,6 +56,7 @@ public class VoiceService {
         }
         try {
             byte[] audio = file.getBytes();
+            int duration = repository.getMp3Duration(audio);
             String filename = java.util.UUID.randomUUID() + ".mp3";
             String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
 
@@ -64,10 +66,10 @@ public class VoiceService {
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
             }
-            Voice record = Voice.create(file.getOriginalFilename(), languageCode, provider.toLowerCase(), url, projectUuid);
+            Voice record = Voice.create(file.getOriginalFilename(), languageCode, provider.toLowerCase(),duration, "MALE", url, projectUuid);
             repository.saveVoice(record);
 
-            return new TtsResponse(url, "mp3", projectId);
+            return new TtsResponse(url, "mp3", duration, projectId);
         } catch (Exception e) {
             throw new RuntimeException("Failed to upload file", e);
         }
