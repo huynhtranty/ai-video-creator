@@ -18,6 +18,7 @@ public class VoiceMapper {
                 .duration(voice.getDuration())
                 .speakingRate(voice.getSpeakingRate())
                 .voiceGender(voice.getVoiceGender())
+                .scriptId(voice.getScriptId())
                 .projectId(voice.getProjectId())
                 .creationDate(voice.getCreatedAt())
                 .build();
@@ -36,6 +37,7 @@ public class VoiceMapper {
                 .text(jpaEntity.getText())
                 .voiceGender(jpaEntity.getVoiceGender())
                 .duration(jpaEntity.getDuration())
+                .scriptId(jpaEntity.getScriptId())
                 .languageCode(jpaEntity.getLanguageCode())
                 .url(jpaEntity.getUrl())
                 .speakingRate(jpaEntity.getSpeakingRate())

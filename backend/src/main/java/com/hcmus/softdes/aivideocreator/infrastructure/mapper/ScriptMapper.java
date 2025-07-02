@@ -12,6 +12,7 @@ public class ScriptMapper {
                  .id(script.getId())
                  .scriptContent(script.getContent())
                  .projectId(script.getProjectId())
+
                  .creationDate(script.getCreatedAt())
                  .lastModified(script.getUpdatedAt())
                  .build();

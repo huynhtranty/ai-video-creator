@@ -17,23 +17,25 @@ public class Voice extends Entity {
     String languageCode;
     String voiceGender;
     String provider;
-    String url;
-    int duration; // Duration in seconds
+    String url; // Order in the script
+    int duration;// Duration in seconds
     double speakingRate;
+    UUID scriptId;
     UUID projectId;
 
-    public Voice(UUID id, LocalDateTime createAt, LocalDateTime updateAt, String text, String languageCode, String provider,int duration, String url, String gender, UUID projectId) {
+    public Voice(UUID id, LocalDateTime createAt, LocalDateTime updateAt, String text, String languageCode, String provider,int duration, String url, String gender,UUID scriptId, UUID projectId) {
         super(id, createAt, updateAt);
         this.text = text;
         this.languageCode = languageCode;
         this.provider = provider;
         this.duration = duration;
         this.url = url;
+        this.scriptId = scriptId;
         this.voiceGender = gender;
         this.projectId = projectId;
     }
 
-    public static Voice create(String text, String languageCode, String provider,int duration, String url,String voiceGender, UUID projectId) {
+    public static Voice create(String text, String languageCode, String provider,int duration, String url,String voiceGender, UUID scriptId,UUID projectId) {
         return new Voice(
             UUID.randomUUID(),
             LocalDateTime.now(),
@@ -44,6 +46,7 @@ public class Voice extends Entity {
             duration,
             url,
             voiceGender,
+            scriptId,
             projectId);
     }
 }

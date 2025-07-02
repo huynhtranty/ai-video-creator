@@ -3,6 +3,7 @@ package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.VoiceRepository;
 import com.hcmus.softdes.aivideocreator.domain.model.Voice;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.VoiceEntity;
+import com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage.R2Client;
 import com.hcmus.softdes.aivideocreator.infrastructure.jpa.VoiceJpaRepository;
 import com.hcmus.softdes.aivideocreator.infrastructure.mapper.VoiceMapper;
 import org.springframework.stereotype.Repository;
@@ -19,9 +20,11 @@ import com.mpatric.mp3agic.Mp3File;
 public class VoiceRepositoryImpl implements VoiceRepository {
 
     private final VoiceJpaRepository voiceJpaRepository;
+    private final R2Client r2Client;
 
-    public VoiceRepositoryImpl(VoiceJpaRepository voiceJpaRepository) {
+    public VoiceRepositoryImpl(VoiceJpaRepository voiceJpaRepository, R2Client r2Client) {
         this.voiceJpaRepository = voiceJpaRepository;
+        this.r2Client = r2Client;
     }
 
     @Override
@@ -48,6 +51,7 @@ public class VoiceRepositoryImpl implements VoiceRepository {
 
     @Override
     public void deleteVoiceById(UUID id) {
+        r2Client.deleteFile(id.toString() + ".mp3");
         voiceJpaRepository.deleteById(id);
     }
 
@@ -65,6 +69,14 @@ public class VoiceRepositoryImpl implements VoiceRepository {
             voices.add(VoiceMapper.toDomainVoice(entity));
         }
         return voices;
+    }
+
+    public Voice findVoiceByScriptId(UUID scriptId) {
+        VoiceEntity voiceEntity = voiceJpaRepository.findByScriptId(scriptId);
+        if (voiceEntity != null) {
+            return VoiceMapper.toDomainVoice(voiceEntity);
+        }
+        return null;
     }
 
     @Override

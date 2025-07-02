@@ -32,10 +32,9 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getById(@PathVariable UUID id) {
-        return projectService.getProjectById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ProjectDto> getById(@PathVariable UUID id) {
+        ProjectDto dto = projectService.getProjectWithAssets(id);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping

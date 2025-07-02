@@ -59,11 +59,11 @@ public class ContentService {
                 throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
             }
             
-            Script script = Script.create(scriptContent, projectId);
+            Script script = Script.create(scriptContent, projectId, request.order());
             scriptRepository.saveScript(script);
         }
 
-        return new ScriptResponse(scriptContent, providerKey);
+        return new ScriptResponse(scriptContent, providerKey, request.order());
     }
 
     public ImageResponse generateImage(ImageRequest request) {

@@ -47,6 +47,9 @@ public class VoiceEntity {
     @Column(name = "project_id", nullable = false)
     private UUID projectId;
 
+    @Column(name = "script_id", nullable = false)
+    private UUID scriptId;
+
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 

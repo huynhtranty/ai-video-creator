@@ -3,6 +3,7 @@ package com.hcmus.softdes.aivideocreator.infrastructure.repositories;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.MediaRepository;
 import com.hcmus.softdes.aivideocreator.domain.model.MediaAsset;
 import com.hcmus.softdes.aivideocreator.infrastructure.entity.MediaEntity;
+import com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage.R2Client;
 import com.hcmus.softdes.aivideocreator.infrastructure.jpa.MediaJpaRepository;
 import com.hcmus.softdes.aivideocreator.infrastructure.mapper.MediaMapper;
 import lombok.Locked;
@@ -13,9 +14,11 @@ import java.util.UUID;
 @Repository
 public class MediaRepositoryImpl implements MediaRepository {
     MediaJpaRepository mediaJpaRepository;
+    R2Client r2Client;
 
-    public MediaRepositoryImpl(MediaJpaRepository mediaJpaRepository) {
+    public MediaRepositoryImpl(MediaJpaRepository mediaJpaRepository, R2Client r2Client) {
         this.mediaJpaRepository = mediaJpaRepository;
+        this.r2Client = r2Client;
     }
 
     @Override
@@ -46,6 +49,7 @@ public class MediaRepositoryImpl implements MediaRepository {
     public void deleteMedia(UUID mediaId) {
         if (mediaJpaRepository.existsById(mediaId)) {
             mediaJpaRepository.deleteById(mediaId);
+            r2Client.deleteFile(mediaId.toString() + ".jpg");
         } else {
             throw new IllegalArgumentException("Media with ID " + mediaId + " does not exist.");
         }

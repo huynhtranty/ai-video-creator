@@ -15,14 +15,16 @@ import java.util.UUID;
 public class Script extends Entity {
     private String content;
     private UUID projectId;
+    private int order;
 
-    public Script(UUID id, String content, UUID projectId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Script(UUID id, String content, UUID projectId, LocalDateTime createdAt, LocalDateTime updatedAt, int order) {
         super(id, createdAt, updatedAt);
         this.content = content;
         this.projectId = projectId;
+        this.order = order;
     }
 
-    public static Script create(String content, UUID projectId) {
-        return new Script(UUID.randomUUID(), content, projectId, LocalDateTime.now(), LocalDateTime.now());
+    public static Script create(String content, UUID projectId, int order) {
+        return new Script(UUID.randomUUID(), content, projectId, LocalDateTime.now(), LocalDateTime.now(), order);
     }
 }
