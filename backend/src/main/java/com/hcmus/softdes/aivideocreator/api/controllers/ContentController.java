@@ -1,7 +1,6 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.ContentRequest;
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.ImageRequest;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageResponse;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptResponse;
@@ -19,13 +18,15 @@ public class ContentController {
     }
 
     @PostMapping("/script")
-    public String generateScript(@RequestBody ContentRequest request) {
-        return contentService.generateScript(new ScriptRequest(request.prompt(), "gemini", "")).content();
+    public ResponseEntity<ScriptResponse> generateScript(@RequestBody ScriptRequest request) {
+        var response = contentService.generateScript(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "/image")
-    public String generateImage(@RequestBody ImageRequest request) {
-        return "";
+    public ResponseEntity<ImageResponse> generateImage(@RequestBody ImageRequest request) {
+        var response = contentService.generateImage(request);
+        return ResponseEntity.ok(response);
     }
 
 }
