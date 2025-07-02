@@ -3,8 +3,8 @@ package com.hcmus.softdes.aivideocreator.application.service;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.ScriptRepository;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageResponse;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutResponse;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptResponse;
 import com.hcmus.softdes.aivideocreator.domain.model.Script;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.image.ImageGenerationService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.script.ScriptGenerationService;
@@ -41,16 +41,15 @@ public class ContentService {
         this.scriptRepository = scriptRepository;
     }
 
-    public ScriptResponse generateScript(ScriptRequest request) {
+    public ScriptLayoutResponse generateScript(ScriptRequest request) {
         var providerKey = request.provider().toLowerCase();
         ScriptGenerationService provider = scriptProviders.get(providerKey);
         if (provider == null) {
             throw new RuntimeException("Script generation provider not supported: " + providerKey);
         }
-        
-        String scriptContent = provider.generateScript(request.prompt());
 
-        // Save script to repository if projectId is provided
+        ScriptLayoutResponse scriptContent = provider.generateScript(request.prompt());
+
         if (request.projectId() != null && !request.projectId().isEmpty()) {
             UUID projectId;
             try {
@@ -58,12 +57,15 @@ public class ContentService {
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
             }
-            
-            Script script = Script.create(scriptContent, projectId, request.order());
-            scriptRepository.saveScript(script);
+
+            int order = 0;
+            for (String scriptText : scriptContent.getScripts()) {
+                Script script = Script.create(scriptText, projectId, order++);
+                scriptRepository.saveScript(script);
+            }
         }
 
-        return new ScriptResponse(scriptContent, providerKey, request.order());
+        return scriptContent;
     }
 
     public ImageResponse generateImage(ImageRequest request) {
