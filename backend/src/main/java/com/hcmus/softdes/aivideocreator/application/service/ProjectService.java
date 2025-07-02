@@ -103,4 +103,19 @@ public class ProjectService {
             throw new RuntimeException("Failed to delete project");
         }
     }
+
+    public void deleteMediaByProjectId(UUID projectId) {
+        if (projectId == null) {
+            throw new IllegalArgumentException("Project ID cannot be null");
+        }
+        if (!projectRepository.existsById(projectId)) {
+            throw new IllegalArgumentException("Project with this ID does not exist.");
+        }
+        List<Script> scripts = scriptRepository.findScriptsByProjectId(projectId);
+        for (Script script : scripts) {
+            mediaRepository.deleteMediaByScriptId(script.getId());
+            voiceRepository.deleteVoiceByScriptId(script.getId());
+            scriptRepository.deleteScriptById(script.getId());
+        }
+    }
 }

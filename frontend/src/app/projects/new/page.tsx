@@ -18,9 +18,16 @@ function CreateVideoPageContent() {
   const [resources, setResources] = useState<GeneratedResource[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [context, setContext] = useState<string>("");
+  const [projectTitle, setProjectTitle] = useState("Untitled");
   const { addToast } = useToast();
   
   const generateScript = useGenerateScript();
+
+  const handleTitleChange = (newTitle: string) => {
+    setProjectTitle(newTitle);
+    console.log("Project title updated:", newTitle);
+    // Here you can add logic to save the title to backend or perform other actions
+  };
 
   const generateResources = async (scriptStyle: string, imageStyle: string, voiceStyle: string) => {
     if (!inputText.trim()) {
@@ -47,7 +54,6 @@ function CreateVideoPageContent() {
       // Generate images and audio in parallel
       const resourcePromises = newResources.map(async (resource) => {
         if (typeof resource.textContent === 'string') {
-          // Generate image
           const imagePromise = generateImageForScript(response.context, resource.textContent)
             .then(imageUrl => {
               updateResource(resource.id, { imageSrc: imageUrl, isImageLoading: false });
@@ -121,7 +127,10 @@ function CreateVideoPageContent() {
             paddingBottom: "10px", // Khoảng cách dưới cùng
           }}
         >
-          <HeaderSection />
+          <HeaderSection 
+            title={projectTitle}
+            onTitleChange={handleTitleChange}
+          />
           <TextInput value={inputText} onChange={setInputText} />
         </div>
         <ResourceSection 

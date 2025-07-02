@@ -1,13 +1,97 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
-export default function HeaderSection() {
+interface HeaderSectionProps {
+  title: string;
+  onTitleChange: (newTitle: string) => void;
+}
+
+export default function HeaderSection({ title, onTitleChange }: HeaderSectionProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [localTitle, setLocalTitle] = useState(title);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    setLocalTitle(newTitle);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      console.log("User stopped typing. Title changed to:", newTitle);
+      onTitleChange(newTitle);
+    }, 2000);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      onTitleChange(localTitle);
+      setIsEditing(false);
+    }
+  };
+
+  const handleBlur = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    onTitleChange(localTitle);
+    setIsEditing(false);
+  };
+
+  // Focus input when editing starts
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+
+  // Sync local title with prop title
+  useEffect(() => {
+    setLocalTitle(title);
+  }, [title]);
+
+  // Cleanup timeout on component unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="flex flex-col lg:flex-row gap-20 items-center mb-4">
       <div className="flex lg:w-7/8 items-center">
-        <h1 className="text-3xl font-bold mr-4">Việt tiếp câu chuyện hòa bình</h1>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={localTitle}
+            onChange={handleTitleChange}
+            onKeyPress={handleKeyPress}
+            onBlur={handleBlur}
+            className="text-3xl font-bold mr-4 bg-transparent border-b-2 border-blue-500 outline-none"
+          />
+        ) : (
+          <h1 className="text-3xl font-bold mr-4">{title}</h1>
+        )}
         <div className="lg:w-1/30">
-          <button className="w-full text-white px-2 py-2 rounded-full hover:bg-gradient-to-bl from-[#edfffe] to-[#482af0]">
-            <img src="/editBtn.svg" alt="" />
+          <button 
+            onClick={handleEditClick}
+            className="w-full text-white px-2 py-2 rounded-full hover:bg-gradient-to-bl from-[#edfffe] to-[#482af0]"
+          >
+            <Image src="/editBtn.svg" alt="Edit title" width={24} height={24} />
           </button>
         </div>
       </div>

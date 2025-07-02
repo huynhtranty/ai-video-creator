@@ -49,4 +49,10 @@ public class ProjectController {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("{id}/assets")
+    public ResponseEntity<Void> deleteAssets(@PathVariable UUID id) {
+        projectService.deleteMediaByProjectId(id);
+        return ResponseEntity.noContent().build();
+    }
 }

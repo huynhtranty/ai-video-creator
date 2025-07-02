@@ -96,6 +96,8 @@ public class VoiceRepositoryImpl implements VoiceRepository {
     }
     @Override
     public void deleteVoiceByScriptId(UUID scriptId) {
+        var entity = voiceJpaRepository.findByScriptId(scriptId);
+        if (entity == null) { return; }
         r2Client.deleteFile(scriptId.toString() + ".mp3");
         voiceJpaRepository.deleteByScriptId(scriptId);
     }
