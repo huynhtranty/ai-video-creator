@@ -3,7 +3,6 @@ package com.hcmus.softdes.aivideocreator.infrastructure.external.script;
 import com.google.common.collect.ImmutableMap;
 import com.google.genai.Client;
 import com.google.genai.types.*;
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.ContentRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
     private String apiKey;
 
     @Override
-    public String generateScript(ContentRequest request) {
+    public String generateScript(String prompt) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         Schema contentSchema = Schema.builder()
@@ -48,7 +47,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             .responseSchema(contentSchema)
             .build();
 
-        String prompt = "Create a video script about this topic: " + request.prompt() +
+        String systemPrompt = "Create a video script about this topic: " + prompt +
             """
             .
             **Detect the language of the topic and use the same language throughout all output (context and scripts).**
@@ -88,7 +87,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             **Language rule reminder**: All output (context and script) must match the detected language of the topic.
             """;
 
-        GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, prompt, config);
+        GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, systemPrompt, config);
         return response.text();
     }
 }

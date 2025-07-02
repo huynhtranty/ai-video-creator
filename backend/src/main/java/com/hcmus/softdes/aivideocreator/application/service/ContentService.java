@@ -47,13 +47,8 @@ public class ContentService {
         if (provider == null) {
             throw new RuntimeException("Script generation provider not supported: " + providerKey);
         }
-
-        // Convert to the contract request format expected by the service
-        var contractRequest = new com.hcmus.softdes.aivideocreator.api.contracts.contents.ContentRequest(
-            request.prompt()
-        );
         
-        String scriptContent = provider.generateScript(contractRequest);
+        String scriptContent = provider.generateScript(request.prompt());
 
         // Save script to repository if projectId is provided
         if (request.projectId() != null && !request.projectId().isEmpty()) {
@@ -78,13 +73,7 @@ public class ContentService {
             throw new RuntimeException("Image generation provider not supported: " + providerKey);
         }
 
-        // Convert to the contract request format expected by the service
-        var contractRequest = new com.hcmus.softdes.aivideocreator.api.contracts.contents.ImageRequest(
-            request.prompt(),
-            request.context()
-        );
-
-        byte[] imageBytes = provider.generateImage(contractRequest);
+        byte[] imageBytes = provider.generateImage(request);
         String filename = "image-" + System.currentTimeMillis() + ".jpg";
         String url = r2StorageService.uploadFile(filename, imageBytes, "image/jpeg");
 

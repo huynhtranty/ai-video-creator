@@ -1,7 +1,7 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.external.script;
 
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.ContentRequest;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
 
 public interface ScriptGenerationService {
-    String generateScript(ContentRequest request);
+    String generateScript(String prompt);
 }

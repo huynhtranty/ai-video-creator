@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.genai.Client;
 import com.google.genai.ResponseStream;
 import com.google.genai.types.*;
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.ImageRequest;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
