@@ -11,4 +11,5 @@ public interface VoiceJpaRepository extends JpaRepository<VoiceEntity, UUID> {
     // Custom query method to find voices by project ID
     List<VoiceEntity> findByProjectId(UUID projectId);
     VoiceEntity findByScriptId(UUID scriptId);
+    void deleteByScriptId(UUID scriptId);
 }

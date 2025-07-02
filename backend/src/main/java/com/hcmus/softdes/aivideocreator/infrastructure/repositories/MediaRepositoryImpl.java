@@ -71,4 +71,15 @@ public class MediaRepositoryImpl implements MediaRepository {
         }
         return null;
     }
+    @Override
+    public void deleteMediaByScriptId(UUID scriptId) {
+        MediaEntity mediaEntity = mediaJpaRepository.findByScriptId(scriptId);
+        String fileName = mediaEntity.getFilePath();
+        if (mediaJpaRepository.existsByScriptId(scriptId)) {
+            mediaJpaRepository.deleteByScriptId(scriptId);
+            r2Client.deleteFile(fileName);
+        } else {
+            throw new IllegalArgumentException("Media with script ID " + scriptId + " does not exist.");
+        }
+    }
 }

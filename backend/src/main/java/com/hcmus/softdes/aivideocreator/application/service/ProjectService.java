@@ -92,6 +92,13 @@ public class ProjectService {
             throw new IllegalArgumentException("Project with this ID does not exist.");
         }
         projectRepository.deleteById(id);
+        // delete associated scripts, media, and voices
+        List<Script> scripts = scriptRepository.findScriptsByProjectId(id);
+        for (Script script : scripts) {
+            mediaRepository.deleteMediaByScriptId(script.getId());
+            voiceRepository.deleteVoiceByScriptId(script.getId());
+            scriptRepository.deleteScriptById(script.getId());
+        }
         if (projectRepository.existsById(id)) {
             throw new RuntimeException("Failed to delete project");
         }
