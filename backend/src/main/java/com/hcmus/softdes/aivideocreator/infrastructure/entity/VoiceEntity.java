@@ -35,6 +35,12 @@ public class VoiceEntity {
     @Column(name = "url", nullable = false)
     private String url;
 
+    @Column(name = "duration", nullable = false)
+    private int duration; // Duration in seconds
+
+    @Column(name = "voiceGender", nullable = false)
+    String voiceGender;
+
     @Column(name ="speaking_rate", nullable = false, columnDefinition = "DOUBLE DEFAULT 1.0")
     private double speakingRate;
 

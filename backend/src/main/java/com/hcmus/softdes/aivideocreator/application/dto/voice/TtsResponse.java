@@ -8,5 +8,6 @@ import lombok.Data;
 public class TtsResponse {
     String audioUrl;
     String format;
+    int duration;
     String ProjectId;
 }

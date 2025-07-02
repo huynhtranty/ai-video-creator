@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import javax.sound.sampled.*;
+import java.io.*;
+import com.mpatric.mp3agic.Mp3File;
 
 @Repository
 public class VoiceRepositoryImpl implements VoiceRepository {
@@ -56,16 +59,27 @@ public class VoiceRepositoryImpl implements VoiceRepository {
 
     @Override
     public List<Voice> findVoicesByProjectId(UUID projectId) {
-    // Implementation for finding voices by project ID
         List<VoiceEntity> voiceEntities = voiceJpaRepository.findByProjectId(projectId);
-        // Convert the list of VoiceEntity to a list of Voice
         List<Voice> voices = new ArrayList<>();
         for (VoiceEntity entity : voiceEntities) {
             voices.add(VoiceMapper.toDomainVoice(entity));
         }
-        // Return the list of Voice objects
         return voices;
     }
 
-
+    @Override
+    public int getMp3Duration(byte[] audioBytes) {
+        try {
+            File tempFile = File.createTempFile("temp-audio", ".mp3");
+            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                fos.write(audioBytes);
+            }
+            Mp3File mp3File = new Mp3File(tempFile.getAbsolutePath());
+            int durationInSeconds = (int) mp3File.getLengthInSeconds();
+            tempFile.delete();
+            return durationInSeconds;
+        } catch (Exception e) {
+            return -1; // Handle errors appropriately
+        }
+    }
 }

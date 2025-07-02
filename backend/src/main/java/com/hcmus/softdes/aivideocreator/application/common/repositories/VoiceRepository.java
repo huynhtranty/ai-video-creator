@@ -13,4 +13,5 @@ public interface VoiceRepository {
      void deleteVoiceById(UUID id);
      boolean existsById(UUID id);
      List<Voice> findVoicesByProjectId(UUID projectId);
+     int getMp3Duration(byte[] audioBytes);
 }

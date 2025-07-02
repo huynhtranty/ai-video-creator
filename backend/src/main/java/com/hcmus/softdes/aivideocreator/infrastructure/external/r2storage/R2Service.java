@@ -30,7 +30,7 @@ public class R2Service implements R2Client {
 
         s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(videoStream, size));
 
-        return String.format("https://%s.r2.cloudflarestorage.com/%s", bucketName, key);
+        return String.format("https://pub-647c59c8fa3c4daaae41ac0c0be27bf1.r2.dev/%s", key);
     }
 
     @Override

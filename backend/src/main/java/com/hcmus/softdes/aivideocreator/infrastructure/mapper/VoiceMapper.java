@@ -15,7 +15,9 @@ public class VoiceMapper {
                 .languageCode(voice.getLanguageCode())
                 .text(voice.getText())
                 .url(voice.getUrl())
+                .duration(voice.getDuration())
                 .speakingRate(voice.getSpeakingRate())
+                .voiceGender(voice.getVoiceGender())
                 .projectId(voice.getProjectId())
                 .creationDate(voice.getCreatedAt())
                 .build();
@@ -32,6 +34,8 @@ public class VoiceMapper {
                 .projectId(jpaEntity.getProjectId())
                 .createdAt(jpaEntity.getCreationDate())
                 .text(jpaEntity.getText())
+                .voiceGender(jpaEntity.getVoiceGender())
+                .duration(jpaEntity.getDuration())
                 .languageCode(jpaEntity.getLanguageCode())
                 .url(jpaEntity.getUrl())
                 .speakingRate(jpaEntity.getSpeakingRate())
