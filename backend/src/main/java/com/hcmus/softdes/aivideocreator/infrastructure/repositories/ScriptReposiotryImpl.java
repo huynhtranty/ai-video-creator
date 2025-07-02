@@ -59,4 +59,16 @@ public class ScriptReposiotryImpl implements ScriptRepository {
             throw new IllegalArgumentException("Script with ID " + scriptId + " does not exist.");
         }
     }
+
+    @Override
+    public List<Script> findScriptsByProjectId(UUID projectId) {
+        List<ScriptEntity> scriptEntities = scriptJpaRepository.findByProjectId(projectId);
+        if (scriptEntities != null && !scriptEntities.isEmpty()) {
+            return scriptEntities.stream()
+                    .map(ScriptMapper::toDomainEntity)
+                    .toList();
+        } else {
+            return List.of();
+        }
+    }
 }

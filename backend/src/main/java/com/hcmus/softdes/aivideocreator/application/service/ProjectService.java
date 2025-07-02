@@ -1,15 +1,19 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
+import com.hcmus.softdes.aivideocreator.api.mappers.ProjectMapper;
+import com.hcmus.softdes.aivideocreator.api.mappers.ScriptMapper;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.MediaRepository;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.ScriptRepository;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.VoiceRepository;
 import com.hcmus.softdes.aivideocreator.application.dto.projects.ProjectDto;
+import com.hcmus.softdes.aivideocreator.application.dto.script.ScriptDto;
 import com.hcmus.softdes.aivideocreator.domain.model.MediaAsset;
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.ProjectRepository;
+import com.hcmus.softdes.aivideocreator.domain.model.Script;
+import com.hcmus.softdes.aivideocreator.domain.model.Voice;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,15 +52,22 @@ public class ProjectService {
     }
 
     public ProjectDto getProjectWithAssets(UUID projectId) {
-        Project project = projectRepository.findById(projectId).orElseThrow();
-        MediaAsset media = mediaRepository.findMediaByProjectId(projectId);
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Project with this ID does not exist."));
 
-//
-//        ProjectDto dto = mapToDto(project);
-//        dto.setMedia(media.stream().map(this::mapToMediaDto).toList());
-//        dto.setVoice(voice.stream().map(this::mapToVoiceDto).toList());
-//        dto.setScript(script.stream().map(this::mapToScriptDto).toList());
-        return null;
+        List<Script> scripts = scriptRepository.findScriptsByProjectId(projectId);
+
+        List<ScriptDto> scriptDtos = scripts.stream().map(script -> {
+            MediaAsset media = mediaRepository.findMediaByScriptId(script.getId());
+            Voice voice = voiceRepository.findVoiceByScriptId(script.getId());
+            ScriptDto scriptDto = ScriptMapper.toDto(script, media, voice);
+            if (scriptDto == null) {
+                throw new IllegalArgumentException("Script with ID " + script.getId() + " does not exist.");
+            }
+            return scriptDto;
+        }).toList();
+
+        return ProjectMapper.toDto(project, scriptDtos);
     }
 
     public Optional<Project> getProjectById(UUID id) {

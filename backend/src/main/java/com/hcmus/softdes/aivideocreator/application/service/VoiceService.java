@@ -39,12 +39,14 @@ public class VoiceService {
         String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
 
         UUID projectId;
+        UUID scriptId;
         try {
             projectId = UUID.fromString(request.getProjectId());
+            scriptId = request.getScriptId() != null ? UUID.fromString(request.getScriptId()) : null;
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
         }
-        Voice record = Voice.create(request.getText(), request.getLanguageCode() ,providerKey,duration, request.getGender(), url, projectId);
+        Voice record = Voice.create(request.getText(), request.getLanguageCode() ,providerKey,duration, request.getGender(), url, scriptId, projectId);
         repository.saveVoice(record);
 
         return new TtsResponse(url, "mp3", duration, request.getProjectId());
@@ -60,13 +62,15 @@ public class VoiceService {
             String filename = java.util.UUID.randomUUID() + ".mp3";
             String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
 
-            java.util.UUID projectUuid;
+            UUID projectUuid;
+            UUID scriptId;
             try {
                 projectUuid = java.util.UUID.fromString(projectId);
+                scriptId = null;
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
             }
-            Voice record = Voice.create(file.getOriginalFilename(), languageCode, provider.toLowerCase(),duration, "MALE", url, projectUuid);
+            Voice record = Voice.create(file.getOriginalFilename(), languageCode, provider.toLowerCase(),duration, "MALE", url,scriptId, projectUuid);
             repository.saveVoice(record);
 
             return new TtsResponse(url, "mp3", duration, projectId);
