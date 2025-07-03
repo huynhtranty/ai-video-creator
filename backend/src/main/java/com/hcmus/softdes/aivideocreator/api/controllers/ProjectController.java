@@ -37,6 +37,12 @@ public class ProjectController {
         return ResponseEntity.ok(dto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Project> update(@PathVariable UUID id, @RequestBody ProjectDto request) {
+        Project updated = projectService.updateProject(id, request);
+        return ResponseEntity.ok(updated);
+    }
+
     @GetMapping
     public ResponseEntity<List<Project>> getByUser() {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getDetails().toString());

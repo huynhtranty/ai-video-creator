@@ -9,7 +9,6 @@ interface HeaderSectionProps {
 export default function HeaderSection({ title, onTitleChange }: HeaderSectionProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [localTitle, setLocalTitle] = useState(title);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleEditClick = () => {
@@ -19,31 +18,16 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setLocalTitle(newTitle);
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      console.log("User stopped typing. Title changed to:", newTitle);
-      onTitleChange(newTitle);
-    }, 2000);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
       onTitleChange(localTitle);
       setIsEditing(false);
     }
   };
 
   const handleBlur = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
     onTitleChange(localTitle);
     setIsEditing(false);
   };
@@ -60,15 +44,6 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
   useEffect(() => {
     setLocalTitle(title);
   }, [title]);
-
-  // Cleanup timeout on component unmount
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
 
   return (
     <div className="flex flex-col lg:flex-row gap-20 items-center mb-4">

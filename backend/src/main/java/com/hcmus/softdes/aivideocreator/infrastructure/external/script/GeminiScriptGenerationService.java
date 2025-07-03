@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.genai.Client;
 import com.google.genai.types.*;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutResponse;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptGeneratedLayout;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
     private String apiKey;
 
     @Override
-    public ScriptLayoutResponse generateScript(String prompt) {
+    public ScriptGeneratedLayout generateScript(String prompt) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         Schema contentSchema = Schema.builder()
@@ -93,7 +93,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
         GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, systemPrompt, config);
 
         try {
-            return objectMapper.readValue(response.text(), ScriptLayoutResponse.class);
+            return objectMapper.readValue(response.text(), ScriptGeneratedLayout.class);
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse script generation response", e);
         }

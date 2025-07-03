@@ -1,22 +1,16 @@
 package com.hcmus.softdes.aivideocreator.application.dto.content;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hcmus.softdes.aivideocreator.domain.model.Script;
 import lombok.Builder;
 import lombok.Data;
-import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
 @Data
 @Builder
-@Jacksonized
-public class ScriptLayoutResponse {
-    @JsonProperty("context")
+public class ScriptLayout {
     String context;
-    
-    @JsonProperty("language")
     String language;
-    
-    @JsonProperty("scripts")
-    List<String> scripts;
+    List<Script> scripts;
 }

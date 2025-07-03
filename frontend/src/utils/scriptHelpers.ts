@@ -1,5 +1,4 @@
 import { ScriptResponse, GeneratedResource } from "@/types/script";
-import { generateImageForScript } from "@/features/projects/api/image";
 
 /**
  * Transforms script response with loading state (images and audio will be generated in background)
@@ -7,41 +6,41 @@ import { generateImageForScript } from "@/features/projects/api/image";
 export const transformScriptResponseWithLoading = (
   response: ScriptResponse
 ): GeneratedResource[] => {
-  return response.scripts.map((script, index) => ({
-    id: `generated-${Date.now()}-${index}`,
+  return response.scripts.map((script) => ({
+    id: script.id,
     imageSrc: '', 
-    imageAlt: `Generated image for script ${index + 1}`,
-    textContent: script,
+    imageAlt: `generated-${Date.now()}-${script.order}`,
+    textContent: script.content,
     audioSrc: '',
-    description: script,
+    description: script.content,
     isImageLoading: true,
     isAudioLoading: true
   }));
 };
 
-/**
- * Transforms script response with async image generation
- */
-export const transformScriptResponseWithImages = async (
-  response: ScriptResponse,
-  getMockAudio: (index: number) => string
-): Promise<GeneratedResource[]> => {
-  const resourcesPromises = response.scripts.map(async (script, index) => {
-    const imageUrl = await generateImageForScript(response.context, script);
+// /**
+//  * Transforms script response with async image generation
+//  */
+// export const transformScriptResponseWithImages = async (
+//   response: ScriptResponse,
+//   getMockAudio: (index: number) => string
+// ): Promise<GeneratedResource[]> => {
+//   const resourcesPromises = response.scripts.map(async (script, index) => {
+//     const imageUrl = await generateImageForScript(response.context, script);
     
-    return {
-      id: `generated-${Date.now()}-${index}`,
-      imageSrc: imageUrl,
-      imageAlt: `Generated image for script ${index + 1}`,
-      textContent: script,
-      audioSrc: getMockAudio(index),
-      description: script,
-      isImageLoading: false
-    };
-  });
+//     return {
+//       id: `generated-${Date.now()}-${index}`,
+//       imageSrc: imageUrl,
+//       imageAlt: `Generated image for script ${index + 1}`,
+//       textContent: script,
+//       audioSrc: getMockAudio(index),
+//       description: script,
+//       isImageLoading: false
+//     };
+//   });
 
-  return Promise.all(resourcesPromises);
-};
+//   return Promise.all(resourcesPromises);
+// };
 
 /**
  * Formats language code for display

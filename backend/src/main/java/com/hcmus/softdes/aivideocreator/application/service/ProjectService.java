@@ -39,15 +39,10 @@ public class ProjectService {
 
 
     public Project createProject(ProjectDto project) {
-        var existingProject = projectRepository.findByProjectName(project.getName());
-        if (existingProject.isPresent()) {
-            throw new IllegalArgumentException("Project with this ID already exists.");
-        }
         Project newProject = Project.create(
             project.getUserId(),
             project.getName()
         );
-
         return projectRepository.save(newProject);
     }
 
@@ -117,5 +112,17 @@ public class ProjectService {
             voiceRepository.deleteVoiceByScriptId(script.getId());
             scriptRepository.deleteScriptById(script.getId());
         }
+    }
+
+    public Project updateProject(UUID id, ProjectDto project) {
+        if (id == null || project == null) {
+            throw new IllegalArgumentException("Project ID and project data cannot be null");
+        }
+        Project existingProject = projectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Project with this ID does not exist."));
+
+        existingProject.setName(project.getName());
+
+        return projectRepository.save(existingProject);
     }
 }

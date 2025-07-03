@@ -8,7 +8,7 @@ export const useCreateProject = () => {
 
   return useMutation<Project, Error, CreateProjectRequest>({
     mutationFn: async (data: CreateProjectRequest) => {
-      const response = await apiClient.post("/projects", data);
+      const response = await apiClient.post("/api/projects", data);
       return response.data;
     },
     onSuccess: (project) => {
@@ -24,7 +24,7 @@ export const useListProjects = () => {
   return useQuery<Project[], Error>({
     queryKey: ['projects'],
     queryFn: async () => {
-      const response = await apiClient.get("/projects");
+      const response = await apiClient.get("/api/projects");
       return response.data;
     },
   });
@@ -34,7 +34,7 @@ export const useGetProject = (projectId?: string) => {
   return useQuery<Project, Error>({
     queryKey: ['project', projectId],
     queryFn: async () => {
-      const response = await apiClient.get(`/projects/${projectId}`);
+      const response = await apiClient.get(`/api/projects/${projectId}`);
       return response.data;
     },
     enabled: !!projectId,
@@ -44,7 +44,7 @@ export const useGetProject = (projectId?: string) => {
 export const useUpdateProject = () => {
   return useMutation<Project, Error, { id: string; data: UpdateProjectRequest }>({
     mutationFn: async ({ id, data }) => {
-      const response = await apiClient.put(`/projects/${id}`, data);
+      const response = await apiClient.put(`/api/projects/${id}`, data);
       return response.data;
     },
     onError: (error) => {
@@ -56,7 +56,7 @@ export const useUpdateProject = () => {
 export const useDeleteProject = () => {
   return useMutation<void, Error, string>({
     mutationFn: async (projectId: string) => {
-      await apiClient.delete(`/projects/${projectId}`);
+      await apiClient.delete(`/api/projects/${projectId}`);
     },
     onError: (error) => {
       console.error("Error deleting project:", error);

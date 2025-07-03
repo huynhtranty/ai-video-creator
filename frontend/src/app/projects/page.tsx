@@ -9,15 +9,15 @@ import ProjectGrid from "@/features/projects/components/ProjectGrid";
 
 export default function ListProjectPage() {
   const projects = [
-    { id: 1, alt: "Video 1" },
-    { id: 2, alt: "Video 2" },
-    { id: 3, alt: "Video 3" },
-    { id: 4, alt: "Video 4" },
-    { id: 5, alt: "Video 5" },
-    { id: 6, alt: "Video 6" },
-    { id: 7, alt: "Video 7" },
-    { id: 8, alt: "Video 8" },
-    { id: 9, alt: "Video 9" },
+    { id: "1-my-first-video", alt: "Video 1", title: "My First Video" },
+    { id: "2-tutorial-video", alt: "Video 2", title: "Tutorial Video" },
+    { id: "3-product-demo", alt: "Video 3", title: "Product Demo" },
+    { id: "4-marketing-video", alt: "Video 4", title: "Marketing Video" },
+    { id: "5-educational-content", alt: "Video 5", title: "Educational Content" },
+    { id: "6-presentation-video", alt: "Video 6", title: "Presentation Video" },
+    { id: "7-social-media-post", alt: "Video 7", title: "Social Media Post" },
+    { id: "8-explainer-video", alt: "Video 8", title: "Explainer Video" },
+    { id: "9-brand-story", alt: "Video 9", title: "Brand Story" },
   ];
   return (
     <div style={{ display: "flex", height: "100vh" }}>

@@ -1,22 +1,35 @@
 export interface Project {
   id: string;
-  title: string;
+  name?: string;
   description?: string;
-  createdAt: string;
-  updatedAt: string;
-  status?: 'draft' | 'processing' | 'completed' | 'failed';
-  thumbnailUrl?: string;
-  duration?: number;
+  createdAt?: string;
+  updatedAt?: string;
   userId: string;
+  scripts?: {
+    content: string;
+    metadata?: {
+      context?: string;
+      language?: string;
+      timestamp?: string;
+    };
+    resources?: Array<{
+      id: string;
+      imageSrc?: string;
+      audioSrc?: string;
+      textContent: string;
+      description?: string;
+    }>;
+  }[]; 
 }
 
 export interface CreateProjectRequest {
-  title: string;
+  name: string; 
   description?: string;
+  userId?: string;
 }
 
 export interface UpdateProjectRequest {
-  title?: string;
+  name?: string; 
   description?: string;
   status?: 'draft' | 'processing' | 'completed' | 'failed';
 }

@@ -1,16 +1,14 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
 import com.hcmus.softdes.aivideocreator.application.common.repositories.ScriptRepository;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ImageResponse;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutResponse;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
+import com.hcmus.softdes.aivideocreator.application.dto.content.*;
 import com.hcmus.softdes.aivideocreator.domain.model.Script;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.image.ImageGenerationService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.script.ScriptGenerationService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage.R2Service;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,31 +39,40 @@ public class ContentService {
         this.scriptRepository = scriptRepository;
     }
 
-    public ScriptLayoutResponse generateScript(ScriptRequest request) {
+    public ScriptLayout generateScript(ScriptRequest request) {
         var providerKey = request.provider().toLowerCase();
         ScriptGenerationService provider = scriptProviders.get(providerKey);
         if (provider == null) {
             throw new RuntimeException("Script generation provider not supported: " + providerKey);
         }
 
-        ScriptLayoutResponse scriptContent = provider.generateScript(request.prompt());
-
-        if (request.projectId() != null && !request.projectId().isEmpty()) {
-            UUID projectId;
-            try {
-                projectId = UUID.fromString(request.projectId());
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
-            }
-
-            int order = 0;
-            for (String scriptText : scriptContent.getScripts()) {
-                Script script = Script.create(scriptText, projectId, order++);
-                scriptRepository.saveScript(script);
-            }
+        if (request.projectId() == null || request.projectId().isEmpty()) {
+            throw new RuntimeException("projectId must be provided for script generation");
         }
 
-        return scriptContent;
+        UUID projectId;
+        try {
+            projectId = UUID.fromString(request.projectId());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
+        }
+
+        ScriptGeneratedLayout scriptContent = provider.generateScript(request.prompt());
+
+
+        var scripts = new ArrayList<Script>();
+        int order = 0;
+        for (String scriptText : scriptContent.getScripts()) {
+            Script script = Script.create(scriptText, projectId, order++);
+            scriptRepository.saveScript(script);
+            scripts.add(script);
+        }
+
+        return ScriptLayout.builder()
+                .context(scriptContent.getContext())
+                .language(scriptContent.getLanguage())
+                .scripts(scripts)
+                .build();
     }
 
     public ImageResponse generateImage(ImageRequest request) {
