@@ -1,26 +1,23 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
-import com.hcmus.softdes.aivideocreator.application.service.TrendingService;
-import com.hcmus.softdes.aivideocreator.domain.model.TrendingTopic;
+import com.hcmus.softdes.aivideocreator.application.service.TopicService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/trending")
-public class TrendingController {
+@RequestMapping("/api/topic")
+public class TopicController {
 
-    private final TrendingService trendingService;
+    private final TopicService trendingService;
 
-    public TrendingController(TrendingService trendingService) {
+    public TopicController(TopicService trendingService) {
         this.trendingService = trendingService;
     }
 
     @GetMapping
-    public ResponseEntity<List<TrendingTopic>> getTrending() {
+    public ResponseEntity<String> getTrending() {
         return ResponseEntity.ok(trendingService.execute());
     }
 }

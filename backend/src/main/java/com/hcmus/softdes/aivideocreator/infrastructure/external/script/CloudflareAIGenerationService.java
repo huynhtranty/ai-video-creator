@@ -11,8 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service("llama-script")
-public class CloudflareAIGenerationService implements ScriptGenerationService {
+//@Service("llama-script")
+/*implements ScriptGenerationService*/
+public class CloudflareAIGenerationService{
 
     @Value("${cloudflare.ai.api-key}")
     private String apiKey;
@@ -23,7 +24,7 @@ public class CloudflareAIGenerationService implements ScriptGenerationService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Override
+//    @Override
     public ScriptLayoutResponse generateScript(String prompt) {
         // Build request headers
         HttpHeaders headers = new HttpHeaders();

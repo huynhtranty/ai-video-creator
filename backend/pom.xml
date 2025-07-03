@@ -65,6 +65,12 @@
 			<version>12.30.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.github.pemistahl</groupId>
+			<artifactId>lingua</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
 		<!-- Google Cloud (Gemini AI) -->
 		<dependency>
 			<groupId>com.google.cloud</groupId>
