@@ -14,10 +14,12 @@ interface ResourceItemProps {
   onAudioUpdate?: (resourceId: string, newAudioSrc: string) => void;
   context?: string;
   isImageLoading?: boolean;
+  isImageError?: boolean;
   isAudioLoading?: boolean;
+  isAudioError?: boolean;
 }
 
-export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audioSrc, onDelete, onImageUpdate, onAudioUpdate, context, isImageLoading = false, isAudioLoading = false }: ResourceItemProps) {
+export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audioSrc, onDelete, onImageUpdate, onAudioUpdate, context, isImageLoading = false, isImageError = false, isAudioLoading = false, isAudioError = false }: ResourceItemProps) {
   const [isRegeneratingImage, setIsRegeneratingImage] = useState(false);
   const [isRegeneratingAudio, setIsRegeneratingAudio] = useState(false);
   const [currentImageSrc, setCurrentImageSrc] = useState(imageSrc);
@@ -45,7 +47,14 @@ export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audi
 
     setIsRegeneratingImage(true);
     try {
-      const newImageSrc = await generateImageForScript(context, textContent);
+      const response = await generateImageForScript({
+        prompt: textContent,
+        context: context,
+        provider: "gemini-image",
+        projectId: "",
+        scriptId: id,
+      });
+      const newImageSrc = response.url;
       setCurrentImageSrc(newImageSrc);
       if (onImageUpdate) {
         onImageUpdate(id, newImageSrc);
@@ -94,7 +103,11 @@ export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audi
       <div className="flex flex-col lg:flex-row gap-0 items-start">
         <div className="lg:w-5/19">
           <div className="relative w-full rounded-lg" style={{ paddingBottom: "66.67%" }}>
-            {(isRegeneratingImage || isImageLoading || !currentImageSrc) && (
+            {(isImageError || !currentImageSrc) ? (
+              <div className="absolute inset-0 bg-red-100 rounded-lg flex items-center justify-center z-10">
+                <span className="text-sm text-red-600">Không thể tải ảnh</span>
+              </div>
+            ) : (isRegeneratingImage || isImageLoading || !currentImageSrc) ? (
               <div className="absolute inset-0 bg-gray-100 rounded-lg flex items-center justify-center z-10">
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#8362E5] mx-auto mb-2"></div>
@@ -103,8 +116,7 @@ export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audi
                   </p>
                 </div>
               </div>
-            )}
-            {currentImageSrc && (
+            ) : (
               <Image
                 src={currentImageSrc}
                 alt={imageAlt}
@@ -121,7 +133,11 @@ export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audi
           
           <div className="w-full lg:pl-0">
             <div className="relative">
-              {(isRegeneratingAudio || isAudioLoading || !currentAudioSrc) ? (
+              {(isAudioError || !currentAudioSrc) ? (
+                <div className="w-full h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                  <span className="text-sm text-red-600">Không thể phát âm thanh</span>
+                </div>
+              ) : (isRegeneratingAudio || isAudioLoading || !currentAudioSrc) ? (
                 <div className="w-full h-10 bg-gray-100 rounded-lg flex items-center justify-center">
                   <div className="flex items-center gap-2">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#8362E5]"></div>

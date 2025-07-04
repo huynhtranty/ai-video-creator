@@ -48,6 +48,7 @@ public class MediaRepositoryImpl implements MediaRepository {
     @Override
     public void deleteMedia(UUID mediaId) {
         if (mediaJpaRepository.existsById(mediaId)) {
+            MediaEntity mediaEntity = mediaJpaRepository.findById(mediaId).orElseThrow();
             mediaJpaRepository.deleteById(mediaId);
             r2Client.deleteFile(mediaId.toString() + ".jpg");
         } else {
@@ -75,7 +76,7 @@ public class MediaRepositoryImpl implements MediaRepository {
     public void deleteMediaByScriptId(UUID scriptId) {
         MediaEntity mediaEntity = mediaJpaRepository.findByScriptId(scriptId);
         if (mediaEntity == null) { return; }
-        String fileName = mediaEntity.getFilePath();
+        String fileName = mediaEntity.getId().toString() + ".jpg";
         mediaJpaRepository.deleteByScriptId(scriptId);
         r2Client.deleteFile(fileName);
     }

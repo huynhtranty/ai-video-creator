@@ -10,7 +10,7 @@ import { useGenerateScript } from "@/features/projects/api/script";
 import { useGetProject, useUpdateProject } from "@/features/projects/api/project";
 import { GeneratedResource } from "@/types/script";
 import { ToastProvider, useToast } from "@/components/ui/toast";
-import { transformScriptResponseWithLoading } from "@/utils/scriptHelpers";
+import { transformScriptResponseWithLoading, transformProjectScriptsToResources } from "@/utils/scriptHelpers";
 import { generateImageForScript } from "@/features/projects/api/image";
 import { generateTtsForScript } from "@/features/projects/api/tts";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
@@ -34,12 +34,15 @@ function ProjectPageContent() {
 
   useEffect(() => {
     if (project) {
-      console.log("Project data loaded:", project);
       const projectName = project.name || "Untitled";
       setProjectTitle(projectName);
-    } else if (!isProjectLoading && projectError) {
-      console.log("Project fetch error:", projectError);
       
+      if (project.scripts && project.scripts.length > 0) {
+        const existingResources = transformProjectScriptsToResources(project.scripts);
+        setResources(existingResources);
+        setContext('');
+      }
+    } else if (!isProjectLoading && projectError) {
       const isNotFound = projectError.message?.includes('404') || 
                         projectError.message?.includes('Not Found') ||
                         projectError.message?.includes('not found');
@@ -68,7 +71,6 @@ function ProjectPageContent() {
 
   const handleTitleChange = (newTitle: string) => {
     setProjectTitle(newTitle);
-    console.log("Project title updated:", newTitle);
     
     if (project && newTitle.trim() && newTitle !== (project.name)) {
       updateProject.mutate(
@@ -80,8 +82,7 @@ function ProjectPageContent() {
           onSuccess: () => {
             addToast("Đã lưu tên dự án thành công!", "success");
           },
-          onError: (error) => {
-            console.error("Error updating project title:", error);
+          onError: () => {
             addToast("Không thể lưu tên dự án!", "error");
           }
         }
@@ -107,24 +108,32 @@ function ProjectPageContent() {
 
       const newResources: GeneratedResource[] = transformScriptResponseWithLoading(response);
       
-      setResources(newResources);
+      // Append new resources to existing ones
+      setResources(() => [...newResources]);
       setInputText(""); 
       addToast(`Đã tạo thành công ${newResources.length} tài nguyên!`, "success");
       
       addToast("Đang tạo hình ảnh và âm thanh...", "info"); 
       
-      // Generate images and audio in parallel
       const resourcePromises = newResources.map(async (resource) => {
         if (typeof resource.textContent === 'string') {
-          const imagePromise = generateImageForScript(response.context, resource.textContent)
-            .then(imageUrl => {
-              updateResource(resource.id, { imageSrc: imageUrl, isImageLoading: false });
-            })
-            .catch(error => {
-              console.error(`Error generating image for resource ${resource.id}:`, error);
-            });
+          const imagePromise = generateImageForScript({
+            prompt: resource.textContent,
+            context: response.context,
+            provider: "gemini-image",
+            projectId: projectId,
+            scriptId: resource.id,
+          })
+          .then(imageResponse => {
+            const imageUrl = imageResponse.url;
+            updateResource(resource.id, { imageSrc: imageUrl, isImageLoading: false });
+            return imageUrl;
+          })
+          .catch(error => {
+            console.error(`Error generating image for resource ${resource.id}:`, error);
+            updateResource(resource.id, { isImageError: true, isImageLoading: false });
+          });
 
-          // Generate audio with TTS
           const audioPromise = generateTtsForScript(
             resource.textContent,
             response.language || "vi",
@@ -133,12 +142,13 @@ function ProjectPageContent() {
             projectId,
             "google"
           )
-            .then(audioUrl => {
-              updateResource(resource.id, { audioSrc: audioUrl, isAudioLoading: false });
-            })
-            .catch(error => {
-              console.error(`Error generating audio for resource ${resource.id}:`, error);
-            });
+          .then(audioUrl => {
+            updateResource(resource.id, { audioSrc: audioUrl, isAudioLoading: false });
+          })
+          .catch(error => {
+            console.error(`Error generating audio for resource ${resource.id}:`, error);
+            updateResource(resource.id, { isAudioError: true, isAudioLoading: false });
+          });
 
           return Promise.all([imagePromise, audioPromise]);
         }

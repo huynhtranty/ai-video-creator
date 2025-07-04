@@ -1,31 +1,22 @@
-import { useMutation } from "@tanstack/react-query";
 import apiClient from "@/lib/api-client";
 
 export interface ImageRequest {
-  context: string;
   prompt: string;
+  context: string;
+  provider: string;
+  projectId: string;
+  scriptId: string;
 }
 
 export interface ImageResponse {
-  imageUrl: string;
+  id: string;
+  text: string;
+  provider: string;
+  url: string;
+  projectId: string;
+  scriptId: string;
 }
 
-export const useGenerateImage = () => {
-  return useMutation<ImageResponse, Error, ImageRequest>({
-    mutationFn: async (data: ImageRequest) => {
-      const response = await apiClient.post("/contents/image", data);
-      return response.data;
-    },
-    onError: () => {},
-  });
-};
-
-export const generateImageForScript = async (context: string, prompt: string): Promise<string> => {
-  const response = await apiClient.post("/contents/image", { context, prompt });
-  const imageUrl = response.data.imageUrl || response.data;
-  if (!imageUrl) {
-    throw new Error('No image URL received from API');
-  }
-  
-  return imageUrl;
+export const generateImageForScript = async (request: ImageRequest): Promise<ImageResponse> => {
+  return await apiClient.post("/contents/image/generate", request);
 };

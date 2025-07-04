@@ -11,7 +11,8 @@ public interface ScriptJpaRepository extends JpaRepository<ScriptEntity, UUID> {
     // Custom query methods can be defined here if needed
     // For example, to find scripts by project ID:
     // List<Script> findByProjectId(String projectId);
-    List<ScriptEntity> findByProjectId(UUID projectId);
+    List<ScriptEntity> findByProjectIdOrderByOrderAsc(UUID projectId);
+
 
     // Note: The actual implementation of the repository methods will be handled by Spring Data JPA
 }

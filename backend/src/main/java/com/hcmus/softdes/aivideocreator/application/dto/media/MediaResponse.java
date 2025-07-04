@@ -1,26 +1,19 @@
 package com.hcmus.softdes.aivideocreator.application.dto.media;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
+@Builder
 public class MediaResponse {
     private String id;
-    private String url;
-    private String format;
+    private String text;
     private String provider;
-    private String projectId;
-    private String createdAt;
-    private String updatedAt;
-
-    public MediaResponse(String id, String url, String format, String provider, String projectId,  String createdAt, String updatedAt) {
-        this.id = id;
-        this.url = url;
-        this.format = format;
-        this.provider = provider;
-        this.projectId = projectId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    private String url;
+    private UUID projectId;
+    private UUID scriptId;
 }

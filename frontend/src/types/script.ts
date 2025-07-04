@@ -4,6 +4,8 @@ export interface ScriptItemResponse {
   content: string;
   projectId: string;
   order: number;
+  media?: ImageResponse | null;
+  voice?: string | null;
 }
 
 export interface ScriptResponse {
@@ -23,6 +25,15 @@ export interface ScriptContent {
   subtitles: string[];
 }
 
+export interface ImageResponse {
+  id: string;
+  text: string;
+  provider: string;
+  url: string;
+  projectId: string;
+  scriptId: string;
+}
+
 export interface GeneratedResource {
   id: string;
   imageSrc: string;
@@ -31,5 +42,7 @@ export interface GeneratedResource {
   audioSrc?: string;
   description: string;
   isImageLoading?: boolean;
+  isImageError?: boolean;
   isAudioLoading?: boolean;
+  isAudioError?: boolean;
 }

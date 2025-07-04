@@ -12,7 +12,7 @@ public class ScriptMapper {
                  .id(script.getId())
                  .scriptContent(script.getContent())
                  .projectId(script.getProjectId())
-
+                 .order(script.getOrder())
                  .creationDate(script.getCreatedAt())
                  .lastModified(script.getUpdatedAt())
                  .build();
@@ -26,6 +26,7 @@ public class ScriptMapper {
                  .id(jpaEntity.getId())
                  .content(jpaEntity.getScriptContent())
                  .projectId(jpaEntity.getProjectId())
+                 .order(jpaEntity.getOrder())
                  .createdAt(jpaEntity.getCreationDate())
                  .updatedAt(jpaEntity.getLastModified())
                  .build();

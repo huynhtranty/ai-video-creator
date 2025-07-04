@@ -12,6 +12,7 @@ import java.util.UUID;
 public class ScriptDto {
     private UUID id;
     private String content;
+    int order;
     private MediaResponse media;
     private TtsResponse voice;
 }

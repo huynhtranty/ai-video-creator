@@ -22,7 +22,7 @@ public class ScriptReposiotryImpl implements ScriptRepository {
      @Override
      public List<Script> findAllScripts() {
          List<ScriptEntity> scriptEntities = scriptJpaRepository.findAll();
-         if (scriptEntities != null && !scriptEntities.isEmpty()) {
+         if (!scriptEntities.isEmpty()) {
              return scriptEntities.stream()
                      .map(ScriptMapper::toDomainEntity)
                      .toList();
@@ -61,14 +61,14 @@ public class ScriptReposiotryImpl implements ScriptRepository {
     }
 
     @Override
-    public List<Script> findScriptsByProjectId(UUID projectId) {
-        List<ScriptEntity> scriptEntities = scriptJpaRepository.findByProjectId(projectId);
-        if (scriptEntities != null && !scriptEntities.isEmpty()) {
-            return scriptEntities.stream()
-                    .map(ScriptMapper::toDomainEntity)
-                    .toList();
-        } else {
-            return List.of();
+        public List<Script> findScriptsByProjectId(UUID projectId) {
+            List<ScriptEntity> scriptEntities = scriptJpaRepository.findByProjectIdOrderByOrderAsc(projectId);
+            if (scriptEntities != null && !scriptEntities.isEmpty()) {
+                return scriptEntities.stream()
+                        .map(ScriptMapper::toDomainEntity)
+                        .toList();
+            } else {
+                return List.of();
+            }
         }
-    }
 }

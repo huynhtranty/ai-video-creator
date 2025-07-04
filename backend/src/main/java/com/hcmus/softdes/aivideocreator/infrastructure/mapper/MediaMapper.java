@@ -11,13 +11,15 @@ public class MediaMapper {
         return MediaEntity.builder()
                 .id(media.getId())
                 .projectId(media.getProjectId())
-                .assetType(media.getType())
+                .text(media.getText())
+                .url(media.getUrl())
+                .provider(media.getProvider())
+                .filename(media.getFilename())
                 .scriptId(media.getScriptId())
-                .orderIndex(media.getOrder())
-                .filePath(media.getUrl())
                 .creationDate(media.getCreatedAt())
                 .lastModified(media.getUpdatedAt())
                 .build();
+
     }
 
     public static MediaAsset toDomainMedia(MediaEntity jpaEntity) {
@@ -27,10 +29,11 @@ public class MediaMapper {
         return MediaAsset.builder()
                 .id(jpaEntity.getId())
                 .projectId(jpaEntity.getProjectId())
-                .type(jpaEntity.getAssetType())
-                .url(jpaEntity.getFilePath())
+                .text(jpaEntity.getText())
+                .url(jpaEntity.getUrl())
+                .provider(jpaEntity.getProvider())
+                .filename(jpaEntity.getFilename())
                 .scriptId(jpaEntity.getScriptId())
-                .order(jpaEntity.getOrderIndex())
                 .createdAt(jpaEntity.getCreationDate())
                 .updatedAt(jpaEntity.getLastModified())
                 .build();

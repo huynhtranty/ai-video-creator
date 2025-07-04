@@ -42,7 +42,14 @@ export default function ResourceSection({
       {/* Resource items on the right */}
       <div className="flex-1">
         <div className="flex items-center justify-between pb-2.5">
-          <h2 className="text-xl font-semibold">Tài nguyên</h2>
+          <h2 className="text-xl font-semibold">
+            Tài nguyên
+            {resources.length > 0 && (
+              <span className="text-sm font-normal text-gray-500 ml-2">
+                ({resources.length} mục)
+              </span>
+            )}
+          </h2>
           {isGenerating && (
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
@@ -86,7 +93,9 @@ export default function ResourceSection({
                   onAudioUpdate={handleAudioUpdate}
                   context={context}
                   isImageLoading={resource.isImageLoading}
+                  isImageError={resource.isImageError}
                   isAudioLoading={resource.isAudioLoading}
+                  isAudioError={resource.isAudioError}
                 />
               ))
             )}

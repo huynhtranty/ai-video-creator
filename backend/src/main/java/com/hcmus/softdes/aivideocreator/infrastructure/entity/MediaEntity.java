@@ -26,17 +26,20 @@ public class MediaEntity {
     @Column(name = "project_id", nullable = false)
     private UUID projectId;
 
-    @Column(name = "asset_type", nullable = false)
-    private String assetType;
-
-    @Column(name = "file_path", nullable = false)
-    private String filePath;
-
-    @Column(name = "script_id", nullable = false)
+    @Column(name = "script_id")
     private UUID scriptId;
 
-    @Column(name = "order_index", nullable = false)
-    private int orderIndex;
+    @Column(name = "text")
+    private String text;
+
+    @Column(name = "provider")
+    private String provider;
+
+    @Column(name = "url", nullable = false)
+    private String url;
+
+    @Column(name = "filename")
+    private String filename;
 
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;

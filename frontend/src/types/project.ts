@@ -1,25 +1,20 @@
+import { ImageResponse } from "./script";
+
+export interface ProjectScript {
+  id: string;
+  content: string;
+  media?: ImageResponse | null;
+  voice?: string | null;
+}
+
 export interface Project {
   id: string;
+  userId: string;
   name?: string;
   description?: string;
   createdAt?: string;
   updatedAt?: string;
-  userId: string;
-  scripts?: {
-    content: string;
-    metadata?: {
-      context?: string;
-      language?: string;
-      timestamp?: string;
-    };
-    resources?: Array<{
-      id: string;
-      imageSrc?: string;
-      audioSrc?: string;
-      textContent: string;
-      description?: string;
-    }>;
-  }[]; 
+  scripts?: ProjectScript[];
 }
 
 export interface CreateProjectRequest {

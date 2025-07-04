@@ -2,10 +2,10 @@ package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.ScriptLayoutResponse;
 import com.hcmus.softdes.aivideocreator.api.mappers.ContentMapper;
+import com.hcmus.softdes.aivideocreator.api.mappers.MediaMapper;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ImageResponse;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptGeneratedLayout;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
+import com.hcmus.softdes.aivideocreator.application.dto.media.MediaResponse;
 import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsResponse;
 import com.hcmus.softdes.aivideocreator.application.service.ContentService;
@@ -33,8 +33,9 @@ public class ContentController {
     }
 
     @PostMapping("/image/generate")
-    public ResponseEntity<ImageResponse> generateImage(@RequestBody ImageRequest request) {
-        var response = contentService.generateImage(request);
+    public ResponseEntity<MediaResponse> generateImage(@RequestBody ImageRequest request) {
+        var media = contentService.generateImage(request);
+        var response = MediaMapper.toDto(media);
         return ResponseEntity.ok(response);
     }
 

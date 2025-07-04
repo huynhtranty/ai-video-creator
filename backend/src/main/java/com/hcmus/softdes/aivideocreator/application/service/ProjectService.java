@@ -13,6 +13,7 @@ import com.hcmus.softdes.aivideocreator.application.common.repositories.ProjectR
 import com.hcmus.softdes.aivideocreator.domain.model.Script;
 import com.hcmus.softdes.aivideocreator.domain.model.Voice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -99,6 +100,7 @@ public class ProjectService {
         }
     }
 
+    @Transactional
     public void deleteMediaByProjectId(UUID projectId) {
         if (projectId == null) {
             throw new IllegalArgumentException("Project ID cannot be null");

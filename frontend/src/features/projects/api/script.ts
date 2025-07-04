@@ -5,6 +5,7 @@ import { ScriptRequest, ScriptResponse } from "@/types/script";
 export const useGenerateScript = () => {
   return useMutation<ScriptResponse, Error, ScriptRequest>({
     mutationFn: async (data: ScriptRequest) => {
+      await apiClient.delete(`/projects/${data.projectId}/assets`);
       const response = await apiClient.post("/contents/script/generate", data);
       return response.data;
     },
