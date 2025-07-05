@@ -44,6 +44,9 @@ public class VoiceEntity {
     @Column(name ="speaking_rate", columnDefinition = "DOUBLE DEFAULT 1.0")
     private double speakingRate;
 
+    @Column(name = "filename", nullable = false)
+    private String filename;
+
     @Column(name = "project_id", nullable = false)
     private UUID projectId;
 

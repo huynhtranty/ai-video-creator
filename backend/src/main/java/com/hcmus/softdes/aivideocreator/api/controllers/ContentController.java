@@ -1,10 +1,11 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.ScriptLayoutResponse;
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.UploadVoiceRequest;
+import com.hcmus.softdes.aivideocreator.api.contracts.contents.UploadFileRequest;
 import com.hcmus.softdes.aivideocreator.api.mappers.ContentMapper;
 import com.hcmus.softdes.aivideocreator.api.mappers.MediaMapper;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ImageResponse;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.media.MediaResponse;
 import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsRequest;
@@ -13,7 +14,6 @@ import com.hcmus.softdes.aivideocreator.application.service.ContentService;
 import com.hcmus.softdes.aivideocreator.application.service.VoiceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/contents")
@@ -40,6 +40,19 @@ public class ContentController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/image/upload")
+    public ResponseEntity<MediaResponse> uploadImage(
+        @ModelAttribute UploadFileRequest request
+    ) {
+        var media = contentService.uploadImageFile(
+            request.file(),
+            request.projectId(),
+            request.scriptId()
+        );
+        var response = MediaMapper.toDto(media);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/voice/generate")
     public ResponseEntity<TtsResponse> synthesizeVoice(@RequestBody TtsRequest request){
         TtsResponse response = voiceService.handle(request);
@@ -48,11 +61,7 @@ public class ContentController {
 
     @PostMapping("/voice/upload")
     public ResponseEntity<TtsResponse> uploadMp3(
-//            @RequestParam("file") MultipartFile file,
-//            @RequestParam("projectId") String projectId,
-//            @RequestParam("languageCode") String languageCode,
-//            @RequestParam("provider") String provider
-        @ModelAttribute UploadVoiceRequest request
+        @ModelAttribute UploadFileRequest request
     ) {
         TtsResponse response = voiceService.uploadMp3File(
             request.file(),

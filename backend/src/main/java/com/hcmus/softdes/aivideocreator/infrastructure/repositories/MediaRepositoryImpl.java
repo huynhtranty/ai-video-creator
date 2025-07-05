@@ -76,7 +76,7 @@ public class MediaRepositoryImpl implements MediaRepository {
     public void deleteMediaByScriptId(UUID scriptId) {
         MediaEntity mediaEntity = mediaJpaRepository.findByScriptId(scriptId);
         if (mediaEntity == null) { return; }
-        String fileName = mediaEntity.getId().toString() + ".jpg";
+        String fileName = mediaEntity.getFilename();
         mediaJpaRepository.deleteByScriptId(scriptId);
         r2Client.deleteFile(fileName);
     }

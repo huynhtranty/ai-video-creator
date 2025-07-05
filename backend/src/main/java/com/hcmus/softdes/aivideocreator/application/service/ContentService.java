@@ -10,6 +10,8 @@ import com.hcmus.softdes.aivideocreator.infrastructure.external.image.ImageGener
 import com.hcmus.softdes.aivideocreator.infrastructure.external.script.ScriptGenerationService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.r2storage.R2Service;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +118,51 @@ public class ContentService {
             filename,
             projectId,
             UUID.fromString(request.scriptId())
+        );
+        mediaRepository.saveMedia(mediaAsset);
+
+        return mediaAsset;
+    }
+
+    @Transactional
+    public MediaAsset uploadImageFile(MultipartFile file, String projectId, String scriptId) {
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("File must be provided for upload");
+        }
+
+        if (projectId == null || projectId.isEmpty()) {
+            throw new RuntimeException("projectId must be provided for image upload");
+        }
+
+        UUID projectUuid;
+        UUID scriptUuid;
+        try {
+            projectUuid = UUID.fromString(projectId);
+            scriptUuid = UUID.fromString(scriptId);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid id: must be a valid UUID", e);
+        }
+
+        byte[] imageBytes;
+        try {
+            imageBytes = file.getBytes();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to read the uploaded file", e);
+        }
+
+        mediaRepository.deleteMediaByScriptId(scriptUuid);
+        var existingScript = scriptRepository.findScriptById(scriptUuid);
+
+        String filename = "image-" + System.currentTimeMillis() + "-" + file.getOriginalFilename();
+        String url = r2StorageService.uploadFile(filename, imageBytes, "image/jpeg");
+
+        MediaAsset mediaAsset = MediaAsset.create(
+            existingScript.getContent(),
+            null,
+            url,
+            filename,
+            projectUuid,
+            scriptUuid
         );
         mediaRepository.saveMedia(mediaAsset);
 

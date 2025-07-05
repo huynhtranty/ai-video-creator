@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Upload, Edit3, Sparkles, RotateCcw, MoreVertical } from "lucide-react";
-import { generateImageForScript } from "@/features/projects/api/image";
+import { generateImageForScript, uploadImageFile } from "@/features/projects/api/image";
 import { uploadVoiceFile } from "@/features/projects/api/tts";
 import CustomAudioPlayer from "@/components/ui/custom-audio-player";
 
@@ -39,7 +39,9 @@ export default function ResourceItem({
   isAudioError = false 
 }: ResourceItemProps) {
   const [isRegeneratingImage, setIsRegeneratingImage] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isRegeneratingAudio, setIsRegeneratingAudio] = useState(false);
+  const [isUploadingAudio, setIsUploadingAudio] = useState(false);
   const [currentImageSrc, setCurrentImageSrc] = useState(imageSrc);
   const [currentAudioSrc, setCurrentAudioSrc] = useState(audioSrc);
   const [showImageOverlay, setShowImageOverlay] = useState(false);
@@ -106,18 +108,29 @@ export default function ResourceItem({
     imageFileInputRef.current?.click();
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const newImageSrc = e.target?.result as string;
+    if (file && projectId) {
+      setIsUploadingImage(true);
+      try {
+        const response = await uploadImageFile(file, projectId, id);
+        const newImageSrc = response.url;
         setCurrentImageSrc(newImageSrc);
         if (onImageUpdate) {
           onImageUpdate(id, newImageSrc);
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('Error uploading image file:', error);
+        alert("Không thể tải lên ảnh. Vui lòng thử lại sau!");
+      } finally {
+        setIsUploadingImage(false);
+        // Clear the input to allow uploading the same file again
+        if (imageFileInputRef.current) {
+          imageFileInputRef.current.value = '';
+        }
+      }
+    } else if (!projectId) {
+      alert("Thiếu thông tin dự án để tải lên ảnh!");
     }
   };
 
@@ -146,6 +159,7 @@ export default function ResourceItem({
   const handleAudioUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && projectId) {
+      setIsUploadingAudio(true);
       try {
         const response = await uploadVoiceFile(file, projectId, id);
         const newAudioSrc = response.audioUrl;
@@ -156,6 +170,12 @@ export default function ResourceItem({
       } catch (error) {
         console.error('Error uploading audio file:', error);
         alert("Không thể tải lên âm thanh. Vui lòng thử lại sau!");
+      } finally {
+        setIsUploadingAudio(false);
+        // Clear the input to allow uploading the same file again
+        if (audioFileInputRef.current) {
+          audioFileInputRef.current.value = '';
+        }
       }
     } else if (!projectId) {
       alert("Thiếu thông tin dự án để tải lên âm thanh!");
@@ -207,12 +227,12 @@ export default function ResourceItem({
               <div className="absolute inset-0 bg-red-50 flex items-center justify-center">
                 <span className="text-sm text-red-600">Không thể tải ảnh</span>
               </div>
-            ) : (isRegeneratingImage || isImageLoading || !currentImageSrc) ? (
+            ) : (isRegeneratingImage || isUploadingImage || isImageLoading || !currentImageSrc) ? (
               <div className="absolute inset-0 bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#8362E5] mx-auto mb-2"></div>
                   <p className="text-sm text-gray-600">
-                    {isRegeneratingImage ? "Đang tạo ảnh..." : "Đang tạo ảnh ban đầu..."}
+                    {isRegeneratingImage ? "Đang tạo ảnh..." : isUploadingImage ? "Đang tải ảnh lên..." : "Đang tạo ảnh ban đầu..."}
                   </p>
                 </div>
               </div>
@@ -231,7 +251,7 @@ export default function ResourceItem({
                   <div className="absolute inset-0 bg-white bg-opacity-60 backdrop-blur-[2px] flex items-center justify-center space-x-4 transition-all duration-300">
                     <button
                       onClick={handleRegenerateImage}
-                      disabled={isRegeneratingImage}
+                      disabled={isRegeneratingImage || isUploadingImage}
                       className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
                       title="Tạo lại ảnh"
                     >
@@ -239,7 +259,8 @@ export default function ResourceItem({
                     </button>
                     <button
                       onClick={handleUploadImage}
-                      className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
+                      disabled={isUploadingImage || isRegeneratingImage}
+                      className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
                       title="Tải ảnh lên"
                     >
                       <Upload className="w-5 h-5" />
@@ -330,12 +351,12 @@ export default function ResourceItem({
                     <div className="bg-red-50 rounded-lg p-4 border border-red-200 text-center">
                       <span className="text-sm text-red-600">Không thể phát âm thanh</span>
                     </div>
-                  ) : (isRegeneratingAudio || isAudioLoading || !currentAudioSrc) ? (
+                  ) : (isRegeneratingAudio || isUploadingAudio || isAudioLoading || !currentAudioSrc) ? (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 flex items-center justify-center">
                       <div className="flex items-center gap-3">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#8362E5]"></div>
                         <span className="text-sm text-gray-600 font-medium">
-                          {isRegeneratingAudio ? "Đang tạo âm thanh..." : "Đang tạo âm thanh ban đầu..."}
+                          {isRegeneratingAudio ? "Đang tạo âm thanh..." : isUploadingAudio ? "Đang tải âm thanh lên..." : "Đang tạo âm thanh ban đầu..."}
                         </span>
                       </div>
                     </div>
@@ -345,7 +366,7 @@ export default function ResourceItem({
                 </div>
                 
                 {/* Three-dots menu button positioned to the side */}
-                {currentAudioSrc && !isAudioLoading && !isAudioError && (
+                {currentAudioSrc && !isAudioLoading && !isAudioError && !isUploadingAudio && (
                   <div className="relative" ref={audioDropdownRef}>
                     <button
                       onClick={() => setShowAudioDropdown(!showAudioDropdown)}
@@ -363,7 +384,7 @@ export default function ResourceItem({
                             handleRegenerateAudio();
                             setShowAudioDropdown(false);
                           }}
-                          disabled={isRegeneratingAudio}
+                          disabled={isRegeneratingAudio || isUploadingAudio}
                           className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                           Tạo lại âm thanh
@@ -373,7 +394,8 @@ export default function ResourceItem({
                             handleUploadAudio();
                             setShowAudioDropdown(false);
                           }}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          disabled={isUploadingAudio || isRegeneratingAudio}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                           Tải âm thanh lên
                         </button>

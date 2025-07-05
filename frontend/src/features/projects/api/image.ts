@@ -6,3 +6,21 @@ export const generateImageForScript = async (request: ImageRequest): Promise<Ima
   const data = response.data;
   return data;
 };
+
+export const uploadImageFile = async (
+  file: File,
+  projectId: string,
+  scriptId: string
+): Promise<ImageResponse> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('projectId', projectId);
+  formData.append('scriptId', scriptId);
+
+  const response = await apiClient.post("/contents/image/upload", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};

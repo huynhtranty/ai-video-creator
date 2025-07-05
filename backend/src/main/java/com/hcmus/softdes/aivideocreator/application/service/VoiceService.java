@@ -39,7 +39,7 @@ public class VoiceService {
 
         byte[] audio = provider.synthesize(request);
         int duration = voiceRepository.getMp3Duration(audio);
-        String filename = UUID.randomUUID() + ".mp3";
+        String filename = "voice-" +  System.currentTimeMillis() + ".mp3";
         String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
 
         UUID projectId;
@@ -57,6 +57,7 @@ public class VoiceService {
             duration,
             url,
             request.getGender(),
+            filename,
             scriptId,
             projectId);
         voiceRepository.saveVoice(record);
@@ -74,8 +75,17 @@ public class VoiceService {
             throw new RuntimeException("Invalid file. Please upload an mp3 file.");
         }
 
-        voiceRepository.deleteVoiceByScriptId(UUID.fromString(scriptId));
-        var script = scriptRepository.findScriptById(UUID.fromString(scriptId));
+        UUID projectUuid;
+        UUID scriptUuid;
+        try {
+            projectUuid = java.util.UUID.fromString(projectId);
+            scriptUuid = java.util.UUID.fromString(scriptId);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
+        }
+
+        voiceRepository.deleteVoiceByScriptId(scriptUuid);
+        var script = scriptRepository.findScriptById(scriptUuid);
 
         byte[] audio;
         try {
@@ -86,17 +96,9 @@ public class VoiceService {
         }
 
         int duration = voiceRepository.getMp3Duration(audio);
-        String filename = scriptId + ".mp3";
+        String filename = "voice-" + System.currentTimeMillis() + "-" + file.getOriginalFilename();
         String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
 
-        UUID projectUuid;
-        UUID scriptUuid;
-        try {
-            projectUuid = java.util.UUID.fromString(projectId);
-            scriptUuid = java.util.UUID.fromString(scriptId);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
-        }
         Voice record = Voice.create(
                 script.getContent(),
                 null,
@@ -104,6 +106,7 @@ public class VoiceService {
                 duration,
                 url,
                 null,
+                filename,
                 scriptUuid,
                 projectUuid);
         voiceRepository.saveVoice(record);
