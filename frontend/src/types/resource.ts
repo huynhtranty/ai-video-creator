@@ -1,4 +1,3 @@
-
 export interface ScriptItemResponse {
   id: string;
   content: string;
@@ -70,4 +69,10 @@ export interface GeneratedResource {
   isImageError?: boolean;
   isAudioLoading?: boolean;
   isAudioError?: boolean;
+}
+
+export interface UploadVoiceRequest {
+  file: File;
+  projectId: string;
+  scriptId: string;
 }

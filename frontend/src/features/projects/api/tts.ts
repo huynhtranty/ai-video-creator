@@ -16,3 +16,21 @@ export const generateTtsForScript = async (request: TtsRequest): Promise<TtsResp
   const response = await apiClient.post("/contents/voice/generate", request);
   return response.data;
 };
+
+export const uploadVoiceFile = async (
+  file: File,
+  projectId: string,
+  scriptId: string
+): Promise<TtsResponse> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('projectId', projectId);
+  formData.append('scriptId', scriptId);
+
+  const response = await apiClient.post("/contents/voice/upload", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};

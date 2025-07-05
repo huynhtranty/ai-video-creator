@@ -1,6 +1,7 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.ScriptLayoutResponse;
+import com.hcmus.softdes.aivideocreator.api.contracts.contents.UploadVoiceRequest;
 import com.hcmus.softdes.aivideocreator.api.mappers.ContentMapper;
 import com.hcmus.softdes.aivideocreator.api.mappers.MediaMapper;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
@@ -47,12 +48,17 @@ public class ContentController {
 
     @PostMapping("/voice/upload")
     public ResponseEntity<TtsResponse> uploadMp3(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("projectId") String projectId,
-            @RequestParam("languageCode") String languageCode,
-            @RequestParam("provider") String provider
+//            @RequestParam("file") MultipartFile file,
+//            @RequestParam("projectId") String projectId,
+//            @RequestParam("languageCode") String languageCode,
+//            @RequestParam("provider") String provider
+        @ModelAttribute UploadVoiceRequest request
     ) {
-        TtsResponse response = voiceService.uploadMp3File(file, projectId, languageCode, provider);
+        TtsResponse response = voiceService.uploadMp3File(
+            request.file(),
+            request.projectId(),
+            request.scriptId()
+        );
         return ResponseEntity.ok(response);
     }
 }

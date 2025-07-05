@@ -8,6 +8,7 @@ interface ResourceSectionProps {
   onUpdateResource?: (resourceId: string, updates: Partial<GeneratedResource>) => void;
   isGenerating: boolean;
   context?: string;
+  projectId?: string;
 }
 
 export default function ResourceSection({ 
@@ -15,7 +16,8 @@ export default function ResourceSection({
   onGenerateResources, 
   onUpdateResource,
   isGenerating,
-  context 
+  context,
+  projectId
 }: ResourceSectionProps) {
 
   const handleImageUpdate = (resourceId: string, newImageSrc: string) => {
@@ -98,6 +100,7 @@ export default function ResourceSection({
                   onAudioUpdate={handleAudioUpdate}
                   onScriptUpdate={handleScriptUpdate}
                   context={context}
+                  projectId={projectId}
                   isImageLoading={resource.isImageLoading}
                   isImageError={resource.isImageError}
                   isAudioLoading={resource.isAudioLoading}

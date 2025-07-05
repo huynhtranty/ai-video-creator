@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Upload, Edit3, Sparkles, RotateCcw } from "lucide-react";
+import { Upload, Edit3, Sparkles, RotateCcw, MoreVertical } from "lucide-react";
 import { generateImageForScript } from "@/features/projects/api/image";
+import { uploadVoiceFile } from "@/features/projects/api/tts";
 import CustomAudioPlayer from "@/components/ui/custom-audio-player";
 
 interface ResourceItemProps {
@@ -14,6 +15,7 @@ interface ResourceItemProps {
   onAudioUpdate?: (resourceId: string, newAudioSrc: string) => void;
   onScriptUpdate?: (resourceId: string, newScript: string) => void;
   context?: string;
+  projectId?: string;
   isImageLoading?: boolean;
   isImageError?: boolean;
   isAudioLoading?: boolean;
@@ -30,6 +32,7 @@ export default function ResourceItem({
   onAudioUpdate, 
   onScriptUpdate, 
   context, 
+  projectId,
   isImageLoading = false, 
   isImageError = false, 
   isAudioLoading = false, 
@@ -41,11 +44,12 @@ export default function ResourceItem({
   const [currentAudioSrc, setCurrentAudioSrc] = useState(audioSrc);
   const [showImageOverlay, setShowImageOverlay] = useState(false);
   const [showContentOverlay, setShowContentOverlay] = useState(false);
-  const [showAudioOverlay, setShowAudioOverlay] = useState(false);
+  const [showAudioDropdown, setShowAudioDropdown] = useState(false);
   const [isEditingText, setIsEditingText] = useState(false);
   const [editedText, setEditedText] = useState(typeof textContent === 'string' ? textContent : '');
   const imageFileInputRef = useRef<HTMLInputElement>(null);
   const audioFileInputRef = useRef<HTMLInputElement>(null);
+  const audioDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCurrentImageSrc(imageSrc);
@@ -54,6 +58,20 @@ export default function ResourceItem({
   useEffect(() => {
     setCurrentAudioSrc(audioSrc);
   }, [audioSrc, id]);
+
+  // Handle click outside dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (audioDropdownRef.current && !audioDropdownRef.current.contains(event.target as Node)) {
+        setShowAudioDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleRegenerateImage = async () => {
     if (!context || typeof textContent !== 'string') {
@@ -121,22 +139,26 @@ export default function ResourceItem({
   };
 
   const handleUploadAudio = () => {
-    setShowAudioOverlay(false);
+    setShowAudioDropdown(false);
     audioFileInputRef.current?.click();
   };
 
-  const handleAudioUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAudioUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const newAudioSrc = e.target?.result as string;
+    if (file && projectId) {
+      try {
+        const response = await uploadVoiceFile(file, projectId, id);
+        const newAudioSrc = response.audioUrl;
         setCurrentAudioSrc(newAudioSrc);
         if (onAudioUpdate) {
           onAudioUpdate(id, newAudioSrc);
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('Error uploading audio file:', error);
+        alert("Không thể tải lên âm thanh. Vui lòng thử lại sau!");
+      }
+    } else if (!projectId) {
+      alert("Thiếu thông tin dự án để tải lên âm thanh!");
     }
   };
 
@@ -172,10 +194,10 @@ export default function ResourceItem({
     }
   };
   return (
-    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-200">
+    <div className="bg-white rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200">
       <div className="flex flex-col lg:flex-row h-auto lg:h-64">
         {/* Image Section - Fixed size */}
-        <div className="lg:w-2/5 relative h-48 lg:h-full flex-shrink-0">
+        <div className="lg:w-2/5 relative h-48 lg:h-full flex-shrink-0 overflow-hidden rounded-l-xl">
           <div 
             className="relative w-full h-full group cursor-pointer" 
             onMouseEnter={() => setShowImageOverlay(true)}
@@ -237,8 +259,8 @@ export default function ResourceItem({
         </div>
 
         {/* Content Section - Flexible height */}
-        <div className="lg:w-3/5 flex flex-col">
-          <div className="flex-1 p-6 flex flex-col justify-between min-h-0">
+        <div className="lg:w-3/5 flex flex-col overflow-visible">
+          <div className="flex-1 p-6 flex flex-col justify-between min-h-0 overflow-visible">
             {/* Text Content */}
             <div className="mb-4 relative">
               {isEditingText ? (
@@ -277,22 +299,22 @@ export default function ResourceItem({
                     maxHeight: '6rem'
                   }}>{textContent}</p>
                   
-                  {/* Content Hover Overlay */}
+                  {/* Content Hover Overlay - Same style as image */}
                   {showContentOverlay && (
-                    <div className="absolute inset-0 bg-white bg-opacity-70 backdrop-blur-[2px] rounded-lg flex items-center justify-center space-x-3 transition-all duration-300">
+                    <div className="absolute inset-0 bg-white bg-opacity-60 backdrop-blur-[2px] flex items-center justify-center space-x-4 transition-all duration-300">
                       <button
                         onClick={handleRegenerateContent}
-                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-2 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
+                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
                         title="Tạo lại nội dung"
                       >
-                        <Sparkles className="w-4 h-4" />
+                        <Sparkles className="w-5 h-5" />
                       </button>
                       <button
                         onClick={handleUploadScript}
-                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-2 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
+                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
                         title="Chỉnh sửa văn bản"
                       >
-                        <Edit3 className="w-4 h-4" />
+                        <Edit3 className="w-5 h-5" />
                       </button>
                     </div>
                   )}
@@ -302,46 +324,61 @@ export default function ResourceItem({
             
             {/* Audio Section */}
             <div className="mb-4 relative">
-              <div 
-                className="relative group cursor-pointer"
-                onMouseEnter={() => setShowAudioOverlay(true)}
-                onMouseLeave={() => setShowAudioOverlay(false)}
-              >
-                {(isAudioError) ? (
-                  <div className="bg-red-50 rounded-lg p-4 border border-red-200 text-center">
-                    <span className="text-sm text-red-600">Không thể phát âm thanh</span>
-                  </div>
-                ) : (isRegeneratingAudio || isAudioLoading || !currentAudioSrc) ? (
-                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 flex items-center justify-center">
-                    <div className="flex items-center gap-3">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#8362E5]"></div>
-                      <span className="text-sm text-gray-600 font-medium">
-                        {isRegeneratingAudio ? "Đang tạo âm thanh..." : "Đang tạo âm thanh ban đầu..."}
-                      </span>
+              <div className="relative flex items-center gap-3">
+                <div className="flex-1">
+                  {(isAudioError) ? (
+                    <div className="bg-red-50 rounded-lg p-4 border border-red-200 text-center">
+                      <span className="text-sm text-red-600">Không thể phát âm thanh</span>
                     </div>
-                  </div>
-                ) : (
-                  <CustomAudioPlayer src={currentAudioSrc} />
-                )}
+                  ) : (isRegeneratingAudio || isAudioLoading || !currentAudioSrc) ? (
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 flex items-center justify-center">
+                      <div className="flex items-center gap-3">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#8362E5]"></div>
+                        <span className="text-sm text-gray-600 font-medium">
+                          {isRegeneratingAudio ? "Đang tạo âm thanh..." : "Đang tạo âm thanh ban đầu..."}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <CustomAudioPlayer src={currentAudioSrc} />
+                  )}
+                </div>
                 
-                {/* Audio Hover Overlay */}
-                {showAudioOverlay && currentAudioSrc && !isAudioLoading && !isAudioError && (
-                  <div className="absolute inset-0 bg-white bg-opacity-60 backdrop-blur-[2px] rounded-lg flex items-center justify-center space-x-3 transition-all duration-300">
+                {/* Three-dots menu button positioned to the side */}
+                {currentAudioSrc && !isAudioLoading && !isAudioError && (
+                  <div className="relative" ref={audioDropdownRef}>
                     <button
-                      onClick={handleRegenerateAudio}
-                      disabled={isRegeneratingAudio}
-                      className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-2 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
-                      title="Tạo lại âm thanh"
+                      onClick={() => setShowAudioDropdown(!showAudioDropdown)}
+                      className="bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-800 p-2 rounded-lg shadow-sm transition-all duration-200 border border-gray-200"
+                      title="Tùy chọn âm thanh"
                     >
-                      <RotateCcw className="w-4 h-4" />
+                      <MoreVertical className="w-4 h-4" />
                     </button>
-                    <button
-                      onClick={handleUploadAudio}
-                      className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-2 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
-                      title="Tải âm thanh lên"
-                    >
-                      <Upload className="w-4 h-4" />
-                    </button>
+                    
+                    {/* Dropdown menu - positioned to avoid cut-off */}
+                    {showAudioDropdown && (
+                      <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[160px] z-30">
+                        <button
+                          onClick={() => {
+                            handleRegenerateAudio();
+                            setShowAudioDropdown(false);
+                          }}
+                          disabled={isRegeneratingAudio}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          Tạo lại âm thanh
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleUploadAudio();
+                            setShowAudioDropdown(false);
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          Tải âm thanh lên
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

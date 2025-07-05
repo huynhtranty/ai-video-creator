@@ -29,7 +29,7 @@ public class VoiceEntity {
     @Column(name = "provider")
     private String provider;
 
-    @Column(name = "language_code", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'en-US'")
+    @Column(name = "language_code", columnDefinition = "VARCHAR(10) DEFAULT 'en-US'")
     private String languageCode;
 
     @Column(name = "url", nullable = false)
@@ -38,10 +38,10 @@ public class VoiceEntity {
     @Column(name = "duration", nullable = false)
     private int duration; // Duration in seconds
 
-    @Column(name = "voice_gender", nullable = false)
+    @Column(name = "voice_gender")
     String voiceGender;
 
-    @Column(name ="speaking_rate", nullable = false, columnDefinition = "DOUBLE DEFAULT 1.0")
+    @Column(name ="speaking_rate", columnDefinition = "DOUBLE DEFAULT 1.0")
     private double speakingRate;
 
     @Column(name = "project_id", nullable = false)

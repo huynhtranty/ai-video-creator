@@ -277,6 +277,7 @@ function ProjectPageContent() {
             onUpdateResource={updateResource}
             isGenerating={isGenerating}
             context={context}
+            projectId={projectId}
           />
         </div>
       </main>
