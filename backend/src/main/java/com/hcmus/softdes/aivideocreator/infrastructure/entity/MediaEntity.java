@@ -29,7 +29,7 @@ public class MediaEntity {
     @Column(name = "script_id")
     private UUID scriptId;
 
-    @Column(name = "text")
+    @Column(name = "text", columnDefinition = "LONGTEXT")
     private String text;
 
     @Column(name = "provider")

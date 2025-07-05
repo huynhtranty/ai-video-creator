@@ -46,7 +46,15 @@ public class VoiceService {
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
         }
-        Voice record = Voice.create(request.getText(), request.getLanguageCode() ,providerKey,duration, request.getGender(), url, scriptId, projectId);
+        Voice record = Voice.create(
+            request.getText(),
+            request.getLanguageCode(),
+            providerKey,
+            duration,
+            url,
+            request.getGender(),
+            scriptId,
+            projectId);
         repository.saveVoice(record);
 
         return new TtsResponse(url, "mp3", duration, request.getProjectId());

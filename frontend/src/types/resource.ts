@@ -5,7 +5,7 @@ export interface ScriptItemResponse {
   projectId: string;
   order: number;
   media?: ImageResponse | null;
-  voice?: string | null;
+  voice?: TtsResponse | null;
 }
 
 export interface ScriptResponse {
@@ -25,6 +25,14 @@ export interface ScriptContent {
   subtitles: string[];
 }
 
+export interface ImageRequest {
+  prompt: string;
+  context: string;
+  provider: string;
+  projectId: string;
+  scriptId: string;
+}
+
 export interface ImageResponse {
   id: string;
   text: string;
@@ -32,6 +40,23 @@ export interface ImageResponse {
   url: string;
   projectId: string;
   scriptId: string;
+}
+
+export interface TtsRequest {
+  text: string;
+  languageCode: string;
+  speakingRate: number;
+  gender: string;
+  projectId: string;
+  scriptId: string;
+  provider: string;
+}
+
+export interface TtsResponse {
+  audioUrl: string;
+  format: string;
+  duration: number;
+  projectId: string;
 }
 
 export interface GeneratedResource {

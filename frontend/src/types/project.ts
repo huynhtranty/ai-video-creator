@@ -1,10 +1,10 @@
-import { ImageResponse } from "./script";
+import { ImageResponse, TtsResponse } from "./resource";
 
 export interface ProjectScript {
   id: string;
   content: string;
   media?: ImageResponse | null;
-  voice?: string | null;
+  voice?: TtsResponse | null;
 }
 
 export interface Project {

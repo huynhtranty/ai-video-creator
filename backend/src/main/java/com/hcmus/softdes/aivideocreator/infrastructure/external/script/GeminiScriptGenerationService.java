@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service("gemini-script")
 public class GeminiScriptGenerationService implements ScriptGenerationService {
-
-    private final String SCRIPT_MODEL_ID = "gemini-2.0-flash";
+    private final String SCRIPT_MODEL_ID = "gemini-2.5-flash";
     private final ObjectMapper objectMapper = new ObjectMapper();
     
     @Value("${gemini.api.key}")
@@ -25,9 +24,9 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             .type(Type.Known.OBJECT)
             .properties(
                 ImmutableMap.of(
-                    "language", Schema.builder()
+                    "language_code", Schema.builder()
                         .type(Type.Known.STRING)
-                        .description("The language of the content")
+                        .description("The language code of the content")
                         .build(),
                     "context", Schema.builder()
                         .type(Type.Known.STRING)
@@ -41,7 +40,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
                         .build()
                 )
             )
-            .required("context", "scripts", "language")
+            .required("context", "scripts", "language_code")
             .build();
 
         GenerateContentConfig config = GenerateContentConfig.builder()

@@ -1,4 +1,4 @@
-import { ScriptResponse, GeneratedResource } from "@/types/script";
+import { ScriptResponse, GeneratedResource } from "@/types/resource";
 import { ProjectScript } from "@/types/project";
 
 /**
@@ -12,7 +12,7 @@ export const transformScriptResponseWithLoading = (
     imageSrc: script.media?.url || '', 
     imageAlt: `generated-${Date.now()}-${script.order}`,
     textContent: script.content,
-    audioSrc: script.voice || '',
+    audioSrc: script.voice?.audioUrl,
     description: script.content,
     isImageLoading: !script.media,
     isAudioLoading: !script.voice
@@ -30,36 +30,12 @@ export const transformProjectScriptsToResources = (
     imageSrc: script.media?.url || '',
     imageAlt: `script-${script.id}`,
     textContent: script.content,
-    audioSrc: script.voice || '',
+    audioSrc: script.voice?.audioUrl,
     description: script.content,
     isImageLoading: !script.media,
     isAudioLoading: !script.voice
   }));
 };
-
-// /**
-//  * Transforms script response with async image generation
-//  */
-// export const transformScriptResponseWithImages = async (
-//   response: ScriptResponse,
-//   getMockAudio: (index: number) => string
-// ): Promise<GeneratedResource[]> => {
-//   const resourcesPromises = response.scripts.map(async (script) => {
-//     const imageUrl = await generateImageForScript(response.context, script);
-    
-//     return {
-//       id: `generated-${Date.now()}-${index}`,
-//       imageSrc: imageUrl,
-//       imageAlt: `Generated image for script ${index + 1}`,
-//       textContent: script,
-//       audioSrc: getMockAudio(index),
-//       description: script,
-//       isImageLoading: false
-//     };
-//   });
-
-//   return Promise.all(resourcesPromises);
-// };
 
 /**
  * Formats language code for display

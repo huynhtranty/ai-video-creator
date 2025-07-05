@@ -1,6 +1,6 @@
 import ResourceItem from "./ResourceItem";
 import ResourceSetting from "./ResourceSetting";
-import { GeneratedResource } from "@/types/script";
+import { GeneratedResource } from "@/types/resource";
 
 interface ResourceSectionProps {
   resources: GeneratedResource[];

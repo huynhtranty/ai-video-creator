@@ -8,7 +8,7 @@ import TextInput from "@/features/projects/components/TextInput";
 import ResourceSection from "@/features/projects/components/ResourceSection";
 import { useGenerateScript } from "@/features/projects/api/script";
 import { useGetProject, useUpdateProject } from "@/features/projects/api/project";
-import { GeneratedResource } from "@/types/script";
+import { GeneratedResource } from "@/types/resource";
 import { ToastProvider, useToast } from "@/components/ui/toast";
 import { transformScriptResponseWithLoading, transformProjectScriptsToResources } from "@/utils/scriptHelpers";
 import { generateImageForScript } from "@/features/projects/api/image";
@@ -108,7 +108,6 @@ function ProjectPageContent() {
 
       const newResources: GeneratedResource[] = transformScriptResponseWithLoading(response);
       
-      // Append new resources to existing ones
       setResources(() => [...newResources]);
       setInputText(""); 
       addToast(`Đã tạo thành công ${newResources.length} tài nguyên!`, "success");
@@ -134,16 +133,17 @@ function ProjectPageContent() {
             updateResource(resource.id, { isImageError: true, isImageLoading: false });
           });
 
-          const audioPromise = generateTtsForScript(
-            resource.textContent,
-            response.language || "vi",
-            1.0,
-            voiceStyle === "Nữ thanh niên" ? "FEMALE" : "MALE",
+          const audioPromise = generateTtsForScript({
+            text: resource.textContent,
+            languageCode: response.language || "en",
+            speakingRate: 1.0,
+            gender: voiceStyle === "Nữ thanh niên" ? "FEMALE" : "MALE",
             projectId,
-            "google"
-          )
-          .then(audioUrl => {
-            updateResource(resource.id, { audioSrc: audioUrl, isAudioLoading: false });
+            scriptId: resource.id,
+            provider: "google"
+          })
+          .then(audioResponse => {
+            updateResource(resource.id, { audioSrc: audioResponse.audioUrl, isAudioLoading: false });
           })
           .catch(error => {
             console.error(`Error generating audio for resource ${resource.id}:`, error);

@@ -79,18 +79,18 @@ export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audi
 
     setIsRegeneratingAudio(true);
     try {
-      const newAudioSrc = await generateTtsForScript(
-        textContent,
-        "vi",
-        1.0,
-        "MALE",
-        "",
-        "google"
-      );
-      setCurrentAudioSrc(newAudioSrc);
-      if (onAudioUpdate) {
-        onAudioUpdate(id, newAudioSrc);
-      }
+      // const newAudioSrc = await generateTtsForScript(
+      //   textContent,
+      //   "vi",
+      //   1.0,
+      //   "MALE",
+      //   "",
+      //   "google"
+      // );
+      // setCurrentAudioSrc(newAudioSrc);
+      // if (onAudioUpdate) {
+      //   onAudioUpdate(id, newAudioSrc);
+      // }
     } catch {
       alert("Không thể tạo lại âm thanh. Vui lòng thử lại sau!");
     } finally {
@@ -103,7 +103,7 @@ export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audi
       <div className="flex flex-col lg:flex-row gap-0 items-start">
         <div className="lg:w-5/19">
           <div className="relative w-full rounded-lg" style={{ paddingBottom: "66.67%" }}>
-            {(isImageError || !currentImageSrc) ? (
+            {(isImageError) ? (
               <div className="absolute inset-0 bg-red-100 rounded-lg flex items-center justify-center z-10">
                 <span className="text-sm text-red-600">Không thể tải ảnh</span>
               </div>
@@ -133,7 +133,7 @@ export default function ResourceItem({ id, imageSrc, imageAlt, textContent, audi
           
           <div className="w-full lg:pl-0">
             <div className="relative">
-              {(isAudioError || !currentAudioSrc) ? (
+              {(isAudioError) ? (
                 <div className="w-full h-10 bg-red-100 rounded-lg flex items-center justify-center">
                   <span className="text-sm text-red-600">Không thể phát âm thanh</span>
                 </div>

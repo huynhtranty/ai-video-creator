@@ -1,6 +1,5 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
-import com.hcmus.softdes.aivideocreator.api.contracts.auth.VideoResponse;
 import com.hcmus.softdes.aivideocreator.api.mappers.VideoMapper;
 import com.hcmus.softdes.aivideocreator.application.dto.video.VideoDto;
 import com.hcmus.softdes.aivideocreator.application.service.VideoService;

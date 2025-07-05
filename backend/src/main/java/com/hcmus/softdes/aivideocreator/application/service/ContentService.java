@@ -77,7 +77,7 @@ public class ContentService {
 
         return ScriptLayout.builder()
                 .context(scriptContent.getContext())
-                .language(scriptContent.getLanguage())
+                .language(scriptContent.getLanguageCode())
                 .scripts(scripts)
                 .build();
     }
