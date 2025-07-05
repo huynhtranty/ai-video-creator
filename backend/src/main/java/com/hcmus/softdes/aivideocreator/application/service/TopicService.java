@@ -14,7 +14,7 @@ public class TopicService {
         this.fetchTopics = wikipediaService;
     }
 
-    public String execute() {
-        return fetchTopics.getShortSummary("Bạch Tuyết", 5);
+    public String execute(String keyword, int lines) {
+        return fetchTopics.getShortSummary(keyword, lines);
     }
 }

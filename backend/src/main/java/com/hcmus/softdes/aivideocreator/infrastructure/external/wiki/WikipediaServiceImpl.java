@@ -12,8 +12,6 @@ import java.net.URLDecoder;
 public class WikipediaServiceImpl implements WikipediaService {
     private final RestTemplate restTemplate = new RestTemplate();
 
-
-
     @Override
     public String getShortSummary(String keyword, int lines) {
         String langCode = LanguageUtil.detectWikipediaDomain(keyword);

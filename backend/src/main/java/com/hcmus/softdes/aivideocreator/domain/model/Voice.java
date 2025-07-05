@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @SuperBuilder
-@Data
+@Getter
+@Setter
 public class Voice extends Entity {
     String text;
     String languageCode;
