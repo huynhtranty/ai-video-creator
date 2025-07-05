@@ -41,6 +41,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
+    public List<Project> findRecentProjectsByUserId(UUID userId) {
+        return jpaRepository.findByUserIdOrderByLastModifiedDesc(userId).stream()
+                .limit(5)
+                .map(ProjectMapper::toDomainEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteById(UUID id) {
         jpaRepository.deleteById(id);
     }

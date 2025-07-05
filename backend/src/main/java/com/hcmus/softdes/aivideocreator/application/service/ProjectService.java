@@ -6,6 +6,7 @@ import com.hcmus.softdes.aivideocreator.application.common.repositories.MediaRep
 import com.hcmus.softdes.aivideocreator.application.common.repositories.ScriptRepository;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.VoiceRepository;
 import com.hcmus.softdes.aivideocreator.application.dto.projects.ProjectDto;
+import com.hcmus.softdes.aivideocreator.application.dto.projects.ProjectItemDto;
 import com.hcmus.softdes.aivideocreator.application.dto.script.ScriptDto;
 import com.hcmus.softdes.aivideocreator.domain.model.MediaAsset;
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
@@ -73,11 +74,51 @@ public class ProjectService {
         return projectRepository.findById(id);
     }
 
-    public List<Project> getProjectsByUserId(UUID userId) {
+    public List<ProjectItemDto> getProjectsByUserId(UUID userId) {
         if (userId == null) {
             throw new IllegalArgumentException("User ID cannot be null");
         }
-        return projectRepository.findByUserId(userId);
+        var projects = projectRepository.findByUserId(userId);
+
+        // Find a media asset of the project and make the thumbnail URL
+        return projects.stream()
+             .map(project -> {
+                 List<Script> scripts = scriptRepository.findScriptsByProjectId(project.getId());
+                 String thumbnailUrl;
+                if (scripts.isEmpty()) { thumbnailUrl = null; } else {
+                    MediaAsset media = mediaRepository.findMediaByScriptId(scripts.get(0).getId());
+                    thumbnailUrl = media != null ? media.getUrl() : null;
+                }
+                 return ProjectItemDto.builder()
+                     .id(project.getId())
+                     .userId(project.getUserId())
+                     .name(project.getName())
+                     .thumbnailUrl(thumbnailUrl)
+                     .build();
+             }).toList();
+    }
+
+    public List<ProjectItemDto> getRecentProjectsByUserId(UUID userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID and date cannot be null");
+        }
+        var projects = projectRepository.findRecentProjectsByUserId(userId);
+
+        return projects.stream()
+             .map(project -> {
+                 List<Script> scripts = scriptRepository.findScriptsByProjectId(project.getId());
+                 String thumbnailUrl;
+                if (scripts.isEmpty()) { thumbnailUrl = null; } else {
+                    MediaAsset media = mediaRepository.findMediaByScriptId(scripts.get(0).getId());
+                    thumbnailUrl = media != null ? media.getUrl() : null;
+                }
+                 return ProjectItemDto.builder()
+                     .id(project.getId())
+                     .userId(project.getUserId())
+                     .name(project.getName())
+                     .thumbnailUrl(thumbnailUrl)
+                     .build();
+             }).toList();
     }
 
     public void deleteProject(UUID id) {
@@ -123,7 +164,7 @@ public class ProjectService {
         Project existingProject = projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Project with this ID does not exist."));
 
-        existingProject.setName(project.getName());
+        existingProject.update(project.getName());
 
         return projectRepository.save(existingProject);
     }

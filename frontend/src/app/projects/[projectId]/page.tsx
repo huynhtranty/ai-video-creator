@@ -43,9 +43,9 @@ function ProjectPageContent() {
         setContext('');
       }
     } else if (!isProjectLoading && projectError) {
-      const isNotFound = projectError.message?.includes('404') || 
-                        projectError.message?.includes('Not Found') ||
-                        projectError.message?.includes('not found');
+      const isNotFound = projectError.message?.includes('404') 
+        || projectError.message?.includes('Not Found') 
+        || projectError.message?.includes('not found');
       
       let redirectTimeout: NodeJS.Timeout;
       

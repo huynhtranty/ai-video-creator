@@ -6,19 +6,86 @@ import SearchBar from "@/features/projects/components/SearchBar";
 import Header from "@/features/projects/components/Header";
 import DateButton from "@/features/projects/components/DateButton";
 import ProjectGrid from "@/features/projects/components/ProjectGrid";
+import { useListProjects } from "@/features/projects/api/project";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
-export default function ListProjectPage() {
-  const projects = [
-    { id: "1-my-first-video", alt: "Video 1", title: "My First Video" },
-    { id: "2-tutorial-video", alt: "Video 2", title: "Tutorial Video" },
-    { id: "3-product-demo", alt: "Video 3", title: "Product Demo" },
-    { id: "4-marketing-video", alt: "Video 4", title: "Marketing Video" },
-    { id: "5-educational-content", alt: "Video 5", title: "Educational Content" },
-    { id: "6-presentation-video", alt: "Video 6", title: "Presentation Video" },
-    { id: "7-social-media-post", alt: "Video 7", title: "Social Media Post" },
-    { id: "8-explainer-video", alt: "Video 8", title: "Explainer Video" },
-    { id: "9-brand-story", alt: "Video 9", title: "Brand Story" },
-  ];
+function ListProjectPageContent() {
+  const { data: projects = [], isLoading, error } = useListProjects();
+
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", height: "100vh" }}>
+        <Sidebar />
+        <main
+          style={{
+            flex: 1,
+            padding: "2rem 2rem 4rem 50px",
+            background: "url('/Bg.svg') no-repeat center top",
+            backgroundSize: "cover",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ textAlign: "center", fontSize: "18px", color: "#666" }}>
+            <div 
+              className="spinner"
+              style={{ 
+                width: "50px", 
+                height: "50px", 
+                border: "4px solid #f3f3f3",
+                borderTop: "4px solid #8362E5",
+                borderRadius: "50%",
+                animation: "spin 1s linear infinite",
+                margin: "0 auto 20px"
+              }}
+            />
+            Đang tải danh sách dự án...
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ display: "flex", height: "100vh" }}>
+        <Sidebar />
+        <main
+          style={{
+            flex: 1,
+            padding: "2rem 2rem 4rem 50px",
+            background: "url('/Bg.svg') no-repeat center top",
+            backgroundSize: "cover",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ textAlign: "center", fontSize: "18px", color: "#666" }}>
+            <p style={{ color: "#e74c3c", marginBottom: "20px" }}>
+              Không thể tải danh sách dự án. Vui lòng thử lại.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#8362E5",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "16px"
+              }}
+            >
+              Thử lại
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <Sidebar />
@@ -47,5 +114,13 @@ export default function ListProjectPage() {
         <ProjectGrid projects={projects} />
       </main>
     </div>
+  );
+}
+
+export default function ListProjectPage() {
+  return (
+    <ProtectedRoute>
+      <ListProjectPageContent />
+    </ProtectedRoute>
   );
 }

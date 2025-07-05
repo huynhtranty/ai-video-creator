@@ -34,4 +34,9 @@ public class Project extends Entity {
             name
         );
     }
+
+    public void update(String name) {
+        this.name = name;
+        this.update();
+    }
 }

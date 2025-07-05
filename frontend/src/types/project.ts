@@ -14,6 +14,7 @@ export interface Project {
   description?: string;
   createdAt?: string;
   updatedAt?: string;
+  thumbnailUrl?: string | null;
   scripts?: ProjectScript[];
 }
 
