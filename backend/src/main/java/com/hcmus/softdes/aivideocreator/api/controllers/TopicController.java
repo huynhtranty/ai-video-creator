@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/topic")
 public class TopicController {
@@ -25,6 +27,12 @@ public class TopicController {
             @RequestParam(defaultValue = "3") int lines) {
         String summary = trendingService.execute(keyword, lines);
         return ResponseEntity.ok(new TopicResponse(summary));
+    }
+
+    @GetMapping("/trending")
+    public ResponseEntity<List<String>> getTrendingTopics() {
+        List<String> trendingTopics = trendingService.getTrendingTopics();
+        return ResponseEntity.ok(trendingTopics);
     }
 }
 
