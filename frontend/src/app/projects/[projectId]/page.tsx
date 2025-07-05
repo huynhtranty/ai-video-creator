@@ -164,12 +164,7 @@ function ProjectPageContent() {
     }
   };
 
-  const deleteResource = (resourceId: string) => {
-    setResources(prevResources => prevResources.filter(resource => resource.id !== resourceId));
-    addToast("Đã xóa tài nguyên thành công!", "success");
-  };
-
-  const updateResource = (resourceId: string, updates: Partial<GeneratedResource>) => {
+    const updateResource = (resourceId: string, updates: Partial<GeneratedResource>) => {
     setResources(prevResources => {
       const updatedResources = prevResources.map(resource => 
         resource.id === resourceId ? { ...resource, ...updates } : resource
@@ -249,24 +244,24 @@ function ProjectPageContent() {
 
   // MAIN CONTENT
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh", backgroundColor: "#fafafa" }}>
       <Sidebar />
       <main
         style={{
           flex: 1,
-          padding: "1rem 2rem",
-          backgroundSize: "cover",
-          marginLeft: "50px", // Đảm bảo main không bị che bởi Sidebar cố định
+          padding: "2rem 3rem",
+          marginLeft: "50px",
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
         }}
-        className="overflow-hidden" // Ngăn main cuộn toàn bộ
+        className="overflow-hidden"
       >
         <div
           style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-            backgroundColor: "white", // Đảm bảo phần cố định không bị trong suốt
-            paddingBottom: "10px", // Khoảng cách dưới cùng
+            flexShrink: 0,
+            backgroundColor: "#fafafa",
+            paddingBottom: "1.5rem",
           }}
         >
           <HeaderSection 
@@ -275,14 +270,15 @@ function ProjectPageContent() {
           />
           <TextInput value={inputText} onChange={setInputText} />
         </div>
-        <ResourceSection 
-          resources={resources}
-          onGenerateResources={generateResources}
-          onDeleteResource={deleteResource}
-          onUpdateResource={updateResource}
-          isGenerating={isGenerating}
-          context={context}
-        />
+        <div style={{ flex: 1, minHeight: 0 }}>
+          <ResourceSection 
+            resources={resources}
+            onGenerateResources={generateResources}
+            onUpdateResource={updateResource}
+            isGenerating={isGenerating}
+            context={context}
+          />
+        </div>
       </main>
     </div>
   );

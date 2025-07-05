@@ -72,18 +72,7 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
       </div>
       <div className="lg:w-1/8 lg:pl-4">
         <button
-          className="w-full text-white px-4 py-2 rounded-lg"
-          style={{
-            background: "linear-gradient(to right, #61FFF2, #300DF4)",
-            backgroundColor: "#61FFF2", // Fallback color
-            transition: "background 0.3s ease", // Smooth transition for hover
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "linear-gradient(to right, #4DE6D9, #260BC7)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "linear-gradient(to right, #61FFF2, #300DF4)";
-          }}
+          className="w-full bg-[#8362E5] hover:bg-[#6F4EC8] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
         >
           Tạo video
         </button>
