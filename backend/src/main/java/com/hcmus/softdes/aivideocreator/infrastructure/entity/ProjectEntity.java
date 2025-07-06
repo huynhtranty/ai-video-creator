@@ -24,6 +24,9 @@ public class ProjectEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "image_context", nullable = true, columnDefinition = "LONGTEXT")
+    private String imageContext;
+
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 

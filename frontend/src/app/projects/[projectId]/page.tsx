@@ -276,7 +276,7 @@ function ProjectPageContent() {
             onGenerateResources={generateResources}
             onUpdateResource={updateResource}
             isGenerating={isGenerating}
-            context={context}
+            context={project?.imageContext || context}
             projectId={projectId}
           />
         </div>

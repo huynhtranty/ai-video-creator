@@ -24,3 +24,13 @@ export const updateScriptContent = async (
   });
   return response.data;
 };
+
+export const regenerateScriptContent = async (
+  scriptId: string,
+  provider: string = "gemini-script"
+): Promise<ScriptItemResponse> => {
+  const response = await apiClient.post(`/contents/script/${scriptId}/regenerate`, {
+    provider: provider
+  });
+  return response.data;
+};

@@ -13,6 +13,7 @@ public class ProjectMapper {
         return ProjectDto.builder()
                 .userId(project.getUserId())
                 .name(project.getName())
+                .imageContext(project.getImageContext())
                 .scripts(scripts)
                 .build();
     }

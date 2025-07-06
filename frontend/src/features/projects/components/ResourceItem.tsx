@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Upload, Edit3, Sparkles, RotateCcw, MoreVertical } from "lucide-react";
-import { generateImageForScript, uploadImageFile } from "@/features/projects/api/image";
-import { uploadVoiceFile } from "@/features/projects/api/tts";
-import { updateScriptContent } from "@/features/projects/api/script";
+import { uploadImageFile, regenerateScriptImage } from "@/features/projects/api/image";
+import { uploadVoiceFile, regenerateScriptVoice } from "@/features/projects/api/tts";
+import { updateScriptContent, regenerateScriptContent } from "@/features/projects/api/script";
 import CustomAudioPlayer from "@/components/ui/custom-audio-player";
 
 interface ResourceItemProps {
@@ -32,6 +32,7 @@ export default function ResourceItem({
   onImageUpdate, 
   onAudioUpdate, 
   onScriptUpdate, 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   context, 
   projectId,
   isImageLoading = false, 
@@ -44,6 +45,7 @@ export default function ResourceItem({
   const [isRegeneratingAudio, setIsRegeneratingAudio] = useState(false);
   const [isUploadingAudio, setIsUploadingAudio] = useState(false);
   const [isUpdatingScript, setIsUpdatingScript] = useState(false);
+  const [isRegeneratingContent, setIsRegeneratingContent] = useState(false);
   const [currentImageSrc, setCurrentImageSrc] = useState(imageSrc);
   const [currentAudioSrc, setCurrentAudioSrc] = useState(audioSrc);
   const [showImageOverlay, setShowImageOverlay] = useState(false);
@@ -78,7 +80,7 @@ export default function ResourceItem({
   }, []);
 
   const handleRegenerateImage = async () => {
-    if (!context || typeof textContent !== 'string') {
+    if (!projectId) {
       alert("Không thể tạo lại ảnh cho mục này!");
       return;
     }
@@ -86,13 +88,8 @@ export default function ResourceItem({
     setIsRegeneratingImage(true);
     setShowImageOverlay(false);
     try {
-      const response = await generateImageForScript({
-        prompt: textContent,
-        context: context,
-        provider: "gemini-image",
-        projectId: "",
-        scriptId: id,
-      });
+      const response = await regenerateScriptImage(id, "gemini-image");
+      // The response is an ImageResponse, so we can directly get the URL
       const newImageSrc = response.url;
       setCurrentImageSrc(newImageSrc);
       if (onImageUpdate) {
@@ -213,31 +210,40 @@ export default function ResourceItem({
     }
   };
 
-  const handleRegenerateContent = () => {
-    // TODO: Implement content regeneration when API is available
-    alert("Tính năng tạo lại nội dung sẽ được triển khai sau!");
+  const handleRegenerateContent = async () => {
+    if (!projectId) {
+      alert("Không thể tạo lại nội dung cho mục này!");
+      return;
+    }
+
+    setIsRegeneratingContent(true);
+    setShowContentOverlay(false);
+    try {
+      const response = await regenerateScriptContent(id, "gemini-script");
+      if (onScriptUpdate) {
+        onScriptUpdate(id, response.content);
+      }
+    } catch {
+      alert("Không thể tạo lại nội dung. Vui lòng thử lại sau!");
+    } finally {
+      setIsRegeneratingContent(false);
+    }
   };
 
   const handleRegenerateAudio = async () => {
-    if (!context || typeof textContent !== 'string') {
+    if (!projectId) {
       alert("Không thể tạo lại âm thanh cho mục này!");
       return;
     }
 
     setIsRegeneratingAudio(true);
     try {
-      // const newAudioSrc = await generateTtsForScript(
-      //   textContent,
-      //   "vi",
-      //   1.0,
-      //   "MALE",
-      //   "",
-      //   "google"
-      // );
-      // setCurrentAudioSrc(newAudioSrc);
-      // if (onAudioUpdate) {
-      //   onAudioUpdate(id, newAudioSrc);
-      // }
+      const response = await regenerateScriptVoice(id, "google");
+      const newAudioSrc = response.audioUrl;
+      setCurrentAudioSrc(newAudioSrc);
+      if (onAudioUpdate) {
+        onAudioUpdate(id, newAudioSrc);
+      }
     } catch {
       alert("Không thể tạo lại âm thanh. Vui lòng thử lại sau!");
     } finally {
@@ -362,7 +368,8 @@ export default function ResourceItem({
                     <div className="absolute inset-0 bg-white bg-opacity-60 backdrop-blur-[2px] flex items-center justify-center space-x-4 transition-all duration-300">
                       <button
                         onClick={handleRegenerateContent}
-                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
+                        disabled={isRegeneratingContent}
+                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
                         title="Tạo lại nội dung"
                       >
                         <Sparkles className="w-5 h-5" />

@@ -164,7 +164,7 @@ public class ProjectService {
         Project existingProject = projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Project with this ID does not exist."));
 
-        existingProject.update(project.getName());
+        existingProject.rename(project.getName());
 
         return projectRepository.save(existingProject);
     }

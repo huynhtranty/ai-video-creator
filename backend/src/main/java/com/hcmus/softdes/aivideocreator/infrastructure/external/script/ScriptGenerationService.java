@@ -4,4 +4,5 @@ import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptGeneratedL
 
 public interface ScriptGenerationService {
     ScriptGeneratedLayout generateScript(String prompt);
+    String regenerateScript(String context, String content);
 }

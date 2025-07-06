@@ -97,4 +97,22 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             throw new RuntimeException("Failed to parse script generation response", e);
         }
     }
+
+    @Override
+    public String regenerateScript(String context, String content) {
+        Client client = Client.builder().apiKey(apiKey).build();
+
+        GenerateContentConfig config = GenerateContentConfig.builder()
+            .responseMimeType("text/plain")
+            .candidateCount(1)
+            .build();
+
+        String systemPrompt = "Regenerate the script based on the provided context and content.\n\n" +
+            "Context: " + context + "\n\n" +
+            "Content: " + content;
+
+        GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, systemPrompt, config);
+
+        return response.text();
+    }
 }

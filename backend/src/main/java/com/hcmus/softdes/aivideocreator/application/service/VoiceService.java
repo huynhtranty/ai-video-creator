@@ -121,4 +121,55 @@ public class VoiceService {
         r2StorageService.deleteFile(voice.getUrl());
         voiceRepository.deleteVoiceById(UUID.fromString(voiceId));
     }
+
+    @Transactional
+    public TtsResponse regenerateVoice(String scriptId, String provider) {
+        if (scriptId == null || provider == null) {
+            throw new RuntimeException("Script ID and provider cannot be null");
+        }
+
+        UUID scriptUuid;
+        try {
+            scriptUuid = UUID.fromString(scriptId);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid scriptId: must be a valid UUID", e);
+        }
+
+        Voice existingVoice = voiceRepository.findVoiceByScriptId(scriptUuid);
+
+        TtsRequest request = new TtsRequest(
+            existingVoice.getText(),
+            provider,
+            existingVoice.getLanguageCode(),
+            existingVoice.getSpeakingRate(),
+            existingVoice.getVoiceGender(),
+            existingVoice.getProjectId().toString(),
+            scriptId
+        );
+
+        voiceRepository.deleteVoiceByScriptId(scriptUuid);
+
+        TtsService providerService = ttsProviders.get(provider.toLowerCase());
+        if (providerService == null) {
+            throw new RuntimeException("TTS provider not supported");
+        }
+        byte[] audio = providerService.synthesize(request);
+        int duration = voiceRepository.getMp3Duration(audio);
+        String filename = "voice-" + System.currentTimeMillis() + ".mp3";
+        String url = r2StorageService.uploadFile(filename, audio, "audio/mpeg");
+
+        Voice newVoice = Voice.create(
+            request.getText(),
+            request.getLanguageCode(),
+            provider,
+            duration,
+            url,
+            request.getGender(),
+            filename,
+            scriptUuid,
+            UUID.fromString(request.getProjectId())
+        );
+        voiceRepository.saveVoice(newVoice);
+        return new TtsResponse(url, "mp3", duration, request.getProjectId());
+    }
 }

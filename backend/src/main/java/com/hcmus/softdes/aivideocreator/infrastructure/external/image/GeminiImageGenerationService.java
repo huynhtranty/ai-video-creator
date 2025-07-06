@@ -19,14 +19,14 @@ public class GeminiImageGenerationService implements ImageGenerationService {
     private String apiKey;
 
     @Override
-    public byte[] generateImage(ImageRequest request) {
+    public byte[] generateImage(String context, String requestPrompt) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         String prompt = """
             Generate a detailed, stylistically consistent image based on the following:
-            """ + request.context() + """
+            """ + context + """
                 Scene Description:
-            """ + request.prompt() + """
+            """ + requestPrompt + """
                 Use the context to ensure visual consistency across a series. Focus on the described moment,
                 and align all elements (style, tone, character design, environment) with the visual context.
                 The result should feel like one cinematic frame in a cohesive animated story.

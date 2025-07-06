@@ -59,4 +59,17 @@ public class MediaAsset extends Entity {
             scriptId
         );
     }
+
+    public void update(
+        String text,
+        String provider,
+        String url,
+        String filename
+    ) {
+        this.text = text;
+        this.provider = provider;
+        this.url = url;
+        this.filename = filename;
+        this.update();
+    }
 }

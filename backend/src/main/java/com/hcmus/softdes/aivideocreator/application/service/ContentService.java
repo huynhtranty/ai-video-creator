@@ -1,6 +1,7 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
 import com.hcmus.softdes.aivideocreator.application.common.repositories.MediaRepository;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.ProjectRepository;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.ScriptRepository;
 import com.hcmus.softdes.aivideocreator.application.dto.content.*;
 import com.hcmus.softdes.aivideocreator.domain.model.MediaAsset;
@@ -25,13 +26,15 @@ public class ContentService {
     private final R2Service r2StorageService;
     private final ScriptRepository scriptRepository;
     private final MediaRepository mediaRepository;
+    private final ProjectRepository projectRepository;
 
     public ContentService(
-        List<ScriptGenerationService> scriptServices,
-        List<ImageGenerationService> imageServices,
-        R2Service r2StorageService,
-        ScriptRepository scriptRepository,
-        MediaRepository mediaRepository
+            List<ScriptGenerationService> scriptServices,
+            List<ImageGenerationService> imageServices,
+            R2Service r2StorageService,
+            ScriptRepository scriptRepository,
+            MediaRepository mediaRepository,
+            ProjectRepository projectRepository
     ) {
         this.scriptProviders = scriptServices.stream()
             .collect(Collectors.toMap(
@@ -46,8 +49,10 @@ public class ContentService {
         this.r2StorageService = r2StorageService;
         this.scriptRepository = scriptRepository;
         this.mediaRepository = mediaRepository;
+        this.projectRepository = projectRepository;
     }
 
+    @Transactional
     public ScriptLayout generateScript(ScriptLayoutRequest request) {
         var providerKey = request.provider().toLowerCase();
         ScriptGenerationService provider = scriptProviders.get(providerKey);
@@ -68,6 +73,11 @@ public class ContentService {
 
         ScriptGeneratedLayout scriptContent = provider.generateScript(request.prompt());
 
+        var project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+        project.setContext(scriptContent.getContext());
+        projectRepository.save(project);
+
         var scripts = new ArrayList<Script>();
         int order = 0;
         for (String scriptText : scriptContent.getScripts()) {
@@ -81,6 +91,37 @@ public class ContentService {
                 .language(scriptContent.getLanguageCode())
                 .scripts(scripts)
                 .build();
+    }
+
+    @Transactional
+    public Script regenerateScript(String scriptId, String providerName) {
+        UUID scriptUuid;
+        try {
+            scriptUuid = UUID.fromString(scriptId);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid id: must be a valid UUID", e);
+        }
+
+        Script existingScript = scriptRepository.findScriptById(scriptUuid);
+        if (existingScript == null) {
+            throw new RuntimeException("Script not found with id: " + scriptId);
+        }
+
+        ScriptGenerationService provider = scriptProviders.get(providerName.toLowerCase());
+        if (provider == null) {
+            throw new RuntimeException("Script generation provider not supported: " + providerName);
+        }
+        var project = projectRepository.findById(existingScript.getProjectId())
+                .orElseThrow(() -> new RuntimeException("Project not found with id: " + existingScript.getProjectId()));
+
+        String regeneratedContent = provider.regenerateScript(
+            project.getImageContext(),
+            existingScript.getContent()
+        );
+        existingScript.update(regeneratedContent);
+        scriptRepository.saveScript(existingScript);
+
+        return existingScript;
     }
 
     public Script updateScript(String scriptId, String content) {
@@ -125,7 +166,7 @@ public class ContentService {
             throw new RuntimeException("Media already exists for scriptId: " + request.scriptId());
         }
 
-        byte[] imageBytes = provider.generateImage(request);
+        byte[] imageBytes = provider.generateImage(request.context(), request.prompt());
         String filename = "image-" + System.currentTimeMillis() + ".jpg";
         String url = r2StorageService.uploadFile(filename, imageBytes, "image/jpeg");
 
@@ -140,6 +181,40 @@ public class ContentService {
         mediaRepository.saveMedia(mediaAsset);
 
         return mediaAsset;
+    }
+
+    public MediaAsset regenerateImage(String scriptId, String providerName) {
+        UUID scriptUuid;
+        try {
+            scriptUuid = UUID.fromString(scriptId);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid id: must be a valid UUID", e);
+        }
+
+        MediaAsset existingMedia = mediaRepository.findMediaByScriptId(scriptUuid);
+        if (existingMedia == null) {
+            throw new RuntimeException("Media not found for scriptId: " + scriptId);
+        }
+
+        ImageGenerationService provider = imageProviders.get(providerName.toLowerCase());
+        if (provider == null) {
+            throw new RuntimeException("Image generation provider not supported: " + providerName);
+        }
+
+        var project = projectRepository.findById(existingMedia.getProjectId())
+                .orElseThrow(() -> new RuntimeException("Project not found with id: " + existingMedia.getProjectId()));
+
+        byte[] imageBytes = provider.generateImage(
+            project.getImageContext(),
+            existingMedia.getText()
+        );
+        String filename = "image-" + System.currentTimeMillis() + ".jpg";
+        String url = r2StorageService.uploadFile(filename, imageBytes, "image/jpeg");
+
+        existingMedia.update(existingMedia.getText(), providerName, url, filename);
+        mediaRepository.saveMedia(existingMedia);
+
+        return existingMedia;
     }
 
     @Transactional

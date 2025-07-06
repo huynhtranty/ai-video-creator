@@ -1,9 +1,6 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.ScriptLayoutResponse;
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.ScriptResponse;
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.UpdateScriptRequest;
-import com.hcmus.softdes.aivideocreator.api.contracts.contents.UploadFileRequest;
+import com.hcmus.softdes.aivideocreator.api.contracts.contents.*;
 import com.hcmus.softdes.aivideocreator.api.mappers.ContentMapper;
 import com.hcmus.softdes.aivideocreator.api.mappers.MediaMapper;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
@@ -31,6 +28,16 @@ public class ContentController {
     public ResponseEntity<ScriptLayoutResponse> generateScript(@RequestBody ScriptLayoutRequest request) {
         var scriptLayout = contentService.generateScript(request);
         var response = ContentMapper.toScriptLayoutResponse(scriptLayout);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/script/{scriptId}/regenerate")
+    public ResponseEntity<ScriptResponse> regenerateScript(
+        @PathVariable String scriptId,
+        @RequestBody RegenerateScriptRequest request
+    ) {
+        var script = contentService.regenerateScript(scriptId, request.provider());
+        var response = ContentMapper.toScriptResponse(script);
         return ResponseEntity.ok(response);
     }
 
@@ -67,6 +74,16 @@ public class ContentController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/image/{scriptId}/regenerate")
+    public ResponseEntity<MediaResponse> regenerateImage(
+        @PathVariable String scriptId,
+        @RequestBody RegenerateImageRequest request
+    ) {
+        var media = contentService.regenerateImage(scriptId, request.provider());
+        var response = MediaMapper.toDto(media);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/voice/generate")
     public ResponseEntity<TtsResponse> synthesizeVoice(@RequestBody TtsRequest request){
         TtsResponse response = voiceService.handle(request);
@@ -82,6 +99,15 @@ public class ContentController {
             request.projectId(),
             request.scriptId()
         );
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/voice/{scriptId}/regenerate")
+    public ResponseEntity<TtsResponse> regenerateVoice(
+        @PathVariable String scriptId,
+        @RequestBody RegenerateVoiceRequest request
+    ) {
+        TtsResponse response = voiceService.regenerateVoice(scriptId, request.provider());
         return ResponseEntity.ok(response);
     }
 }

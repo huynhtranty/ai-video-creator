@@ -34,3 +34,13 @@ export const uploadVoiceFile = async (
   });
   return response.data;
 };
+
+export const regenerateScriptVoice = async (
+  scriptId: string,
+  provider: string = "google"
+): Promise<TtsResponse> => {
+  const response = await apiClient.post(`/contents/voice/${scriptId}/regenerate`, {
+    provider: provider
+  });
+  return response.data;
+};
