@@ -27,4 +27,10 @@ public class Script extends Entity {
     public static Script create(String content, UUID projectId, int order) {
         return new Script(UUID.randomUUID(), content, projectId, LocalDateTime.now(), LocalDateTime.now(), order);
     }
+
+    public Script update(String content) {
+        this.content = content;
+        this.update();
+        return this;
+    }
 }

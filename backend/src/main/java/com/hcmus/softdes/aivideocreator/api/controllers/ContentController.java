@@ -1,12 +1,13 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.ScriptLayoutResponse;
+import com.hcmus.softdes.aivideocreator.api.contracts.contents.ScriptResponse;
+import com.hcmus.softdes.aivideocreator.api.contracts.contents.UpdateScriptRequest;
 import com.hcmus.softdes.aivideocreator.api.contracts.contents.UploadFileRequest;
 import com.hcmus.softdes.aivideocreator.api.mappers.ContentMapper;
 import com.hcmus.softdes.aivideocreator.api.mappers.MediaMapper;
 import com.hcmus.softdes.aivideocreator.application.dto.content.ImageRequest;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ImageResponse;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.media.MediaResponse;
 import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsRequest;
 import com.hcmus.softdes.aivideocreator.application.dto.voice.TtsResponse;
@@ -27,9 +28,22 @@ public class ContentController {
     }
 
     @PostMapping("/script/generate")
-    public ResponseEntity<ScriptLayoutResponse> generateScript(@RequestBody ScriptRequest request) {
+    public ResponseEntity<ScriptLayoutResponse> generateScript(@RequestBody ScriptLayoutRequest request) {
         var scriptLayout = contentService.generateScript(request);
         var response = ContentMapper.toScriptLayoutResponse(scriptLayout);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/script/{scriptId}")
+    public ResponseEntity<ScriptResponse> updateScript(
+        @PathVariable String scriptId,
+        @RequestBody UpdateScriptRequest request
+    ) {
+        var script = contentService.updateScript(
+            scriptId,
+            request.content()
+        );
+        var response = ContentMapper.toScriptResponse(script);
         return ResponseEntity.ok(response);
     }
 

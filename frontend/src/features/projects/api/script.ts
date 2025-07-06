@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import apiClient from "@/lib/api-client";
-import { ScriptRequest, ScriptResponse } from "@/types/resource";
+import { ScriptRequest, ScriptResponse, ScriptItemResponse } from "@/types/resource";
 
 export const useGenerateScript = () => {
   return useMutation<ScriptResponse, Error, ScriptRequest>({
@@ -13,4 +13,14 @@ export const useGenerateScript = () => {
       console.error("Error generating script:", error);
     },
   });
+};
+
+export const updateScriptContent = async (
+  scriptId: string,
+  content: string
+): Promise<ScriptItemResponse> => {
+  const response = await apiClient.put(`/contents/script/${scriptId}`, {
+    content: content
+  });
+  return response.data;
 };

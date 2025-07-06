@@ -3,7 +3,6 @@ package com.hcmus.softdes.aivideocreator.application.service;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.MediaRepository;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.ScriptRepository;
 import com.hcmus.softdes.aivideocreator.application.dto.content.*;
-import com.hcmus.softdes.aivideocreator.application.dto.media.MediaResponse;
 import com.hcmus.softdes.aivideocreator.domain.model.MediaAsset;
 import com.hcmus.softdes.aivideocreator.domain.model.Script;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.image.ImageGenerationService;
@@ -49,7 +48,7 @@ public class ContentService {
         this.mediaRepository = mediaRepository;
     }
 
-    public ScriptLayout generateScript(ScriptRequest request) {
+    public ScriptLayout generateScript(ScriptLayoutRequest request) {
         var providerKey = request.provider().toLowerCase();
         ScriptGenerationService provider = scriptProviders.get(providerKey);
         if (provider == null) {
@@ -82,6 +81,25 @@ public class ContentService {
                 .language(scriptContent.getLanguageCode())
                 .scripts(scripts)
                 .build();
+    }
+
+    public Script updateScript(String scriptId, String content) {
+        UUID scriptUuid;
+        try {
+            scriptUuid = UUID.fromString(scriptId);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid id: must be a valid UUID", e);
+        }
+
+        Script existingScript = scriptRepository.findScriptById(scriptUuid);
+        if (existingScript == null) {
+            throw new RuntimeException("Script not found with id: " + scriptId);
+        }
+
+        existingScript.update(content);
+        scriptRepository.saveScript(existingScript);
+
+        return existingScript;
     }
 
     public MediaAsset generateImage(ImageRequest request) {

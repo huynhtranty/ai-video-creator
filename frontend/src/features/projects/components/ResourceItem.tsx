@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Upload, Edit3, Sparkles, RotateCcw, MoreVertical } from "lucide-react";
 import { generateImageForScript, uploadImageFile } from "@/features/projects/api/image";
 import { uploadVoiceFile } from "@/features/projects/api/tts";
+import { updateScriptContent } from "@/features/projects/api/script";
 import CustomAudioPlayer from "@/components/ui/custom-audio-player";
 
 interface ResourceItemProps {
@@ -42,6 +43,7 @@ export default function ResourceItem({
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isRegeneratingAudio, setIsRegeneratingAudio] = useState(false);
   const [isUploadingAudio, setIsUploadingAudio] = useState(false);
+  const [isUpdatingScript, setIsUpdatingScript] = useState(false);
   const [currentImageSrc, setCurrentImageSrc] = useState(imageSrc);
   const [currentAudioSrc, setCurrentAudioSrc] = useState(audioSrc);
   const [showImageOverlay, setShowImageOverlay] = useState(false);
@@ -139,14 +141,43 @@ export default function ResourceItem({
     setIsEditingText(true);
   };
 
-  const handleSaveText = () => {
-    if (onScriptUpdate) {
-      onScriptUpdate(id, editedText);
+  const handleSaveText = async () => {
+    if (!projectId) {
+      alert("Thiếu thông tin dự án để cập nhật script!");
+      return;
     }
-    setIsEditingText(false);
+
+    // Check if content has actually changed
+    const originalText = typeof textContent === 'string' ? textContent : '';
+    if (editedText.trim() === originalText.trim()) {
+      setIsEditingText(false);
+      return;
+    }
+
+    // Check if content is not empty
+    if (!editedText.trim()) {
+      alert("Nội dung script không được để trống!");
+      return;
+    }
+
+    setIsUpdatingScript(true);
+    try {
+      const response = await updateScriptContent(id, editedText.trim());
+      // Update the local state with the response
+      if (onScriptUpdate) {
+        onScriptUpdate(id, response.content);
+      }
+      setIsEditingText(false);
+    } catch (error) {
+      console.error('Error updating script content:', error);
+      alert("Không thể cập nhật nội dung script. Vui lòng thử lại sau!");
+    } finally {
+      setIsUpdatingScript(false);
+    }
   };
 
   const handleCancelEdit = () => {
+    if (isUpdatingScript) return; // Prevent cancel during update
     setEditedText(typeof textContent === 'string' ? textContent : '');
     setIsEditingText(false);
   };
@@ -289,19 +320,25 @@ export default function ResourceItem({
                   <textarea
                     value={editedText}
                     onChange={(e) => setEditedText(e.target.value)}
-                    className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-[#8362E5] focus:border-transparent"
+                    disabled={isUpdatingScript}
+                    className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-[#8362E5] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Nhập nội dung script..."
                   />
                   <div className="flex gap-2">
                     <button
                       onClick={handleSaveText}
-                      className="px-3 py-1 bg-[#8362E5] text-white text-sm rounded-lg hover:bg-[#6F4EC8] transition-colors"
+                      disabled={isUpdatingScript}
+                      className="px-3 py-1 bg-[#8362E5] text-white text-sm rounded-lg hover:bg-[#6F4EC8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
                     >
-                      Lưu
+                      {isUpdatingScript && (
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                      )}
+                      {isUpdatingScript ? "Đang lưu..." : "Lưu"}
                     </button>
                     <button
                       onClick={handleCancelEdit}
-                      className="px-3 py-1 bg-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-400 transition-colors"
+                      disabled={isUpdatingScript}
+                      className="px-3 py-1 bg-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       Hủy
                     </button>
