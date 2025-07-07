@@ -15,6 +15,7 @@ interface ResourceItemProps {
   onImageUpdate?: (resourceId: string, newImageSrc: string) => void;
   onAudioUpdate?: (resourceId: string, newAudioSrc: string) => void;
   onScriptUpdate?: (resourceId: string, newScript: string) => void;
+  onLoadingStateChange?: (resourceId: string, updates: { isImageLoading?: boolean; isAudioLoading?: boolean }) => void;
   context?: string;
   projectId?: string;
   isImageLoading?: boolean;
@@ -32,6 +33,7 @@ export default function ResourceItem({
   onImageUpdate, 
   onAudioUpdate, 
   onScriptUpdate, 
+  onLoadingStateChange,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   context, 
   projectId,
@@ -56,6 +58,7 @@ export default function ResourceItem({
   const imageFileInputRef = useRef<HTMLInputElement>(null);
   const audioFileInputRef = useRef<HTMLInputElement>(null);
   const audioDropdownRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setCurrentImageSrc(imageSrc);
@@ -79,6 +82,15 @@ export default function ResourceItem({
     };
   }, []);
 
+  // Auto-resize textarea when entering edit mode
+  useEffect(() => {
+    if (isEditingText && textareaRef.current) {
+      const textarea = textareaRef.current;
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+  }, [isEditingText]);
+
   const handleRegenerateImage = async () => {
     if (!projectId) {
       alert("Không thể tạo lại ảnh cho mục này!");
@@ -87,6 +99,12 @@ export default function ResourceItem({
 
     setIsRegeneratingImage(true);
     setShowImageOverlay(false);
+    
+    // Notify parent component that image regeneration started
+    if (onLoadingStateChange) {
+      onLoadingStateChange(id, { isImageLoading: true });
+    }
+    
     try {
       const response = await regenerateScriptImage(id, "gemini-image");
       // The response is an ImageResponse, so we can directly get the URL
@@ -99,6 +117,11 @@ export default function ResourceItem({
       alert("Không thể tạo lại ảnh. Vui lòng thử lại sau!");
     } finally {
       setIsRegeneratingImage(false);
+      
+      // Notify parent component that image regeneration ended
+      if (onLoadingStateChange) {
+        onLoadingStateChange(id, { isImageLoading: false });
+      }
     }
   };
 
@@ -237,6 +260,12 @@ export default function ResourceItem({
     }
 
     setIsRegeneratingAudio(true);
+    
+    // Notify parent component that audio regeneration started
+    if (onLoadingStateChange) {
+      onLoadingStateChange(id, { isAudioLoading: true });
+    }
+    
     try {
       const response = await regenerateScriptVoice(id, "google");
       const newAudioSrc = response.audioUrl;
@@ -248,13 +277,18 @@ export default function ResourceItem({
       alert("Không thể tạo lại âm thanh. Vui lòng thử lại sau!");
     } finally {
       setIsRegeneratingAudio(false);
+      
+      // Notify parent component that audio regeneration ended
+      if (onLoadingStateChange) {
+        onLoadingStateChange(id, { isAudioLoading: false });
+      }
     }
   };
   return (
     <div className="bg-white rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200">
-      <div className="flex flex-col lg:flex-row h-auto lg:h-64">
+      <div className="flex flex-col lg:flex-row h-auto min-h-[16rem]">
         {/* Image Section - Fixed size */}
-        <div className="lg:w-2/5 relative h-48 lg:h-full flex-shrink-0 overflow-hidden rounded-l-xl">
+        <div className="lg:w-2/5 relative h-48 lg:h-64 flex-shrink-0 overflow-hidden rounded-l-xl">
           <div 
             className="relative w-full h-full group cursor-pointer" 
             onMouseEnter={() => setShowImageOverlay(true)}
@@ -269,7 +303,7 @@ export default function ResourceItem({
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#8362E5] mx-auto mb-2"></div>
                   <p className="text-sm text-gray-600">
-                    {isRegeneratingImage ? "Đang tạo ảnh..." : isUploadingImage ? "Đang tải ảnh lên..." : "Đang tạo ảnh ban đầu..."}
+                    {isRegeneratingImage ? "Đang tạo lại ảnh..." : isUploadingImage ? "Đang tải ảnh lên..." : "Đang tạo ảnh ban đầu..."}
                   </p>
                 </div>
               </div>
@@ -317,18 +351,25 @@ export default function ResourceItem({
         </div>
 
         {/* Content Section - Flexible height */}
-        <div className="lg:w-3/5 flex flex-col overflow-visible">
-          <div className="flex-1 p-6 flex flex-col justify-between min-h-0 overflow-visible">
+        <div className="lg:w-3/5 flex flex-col">
+          <div className="flex-1 p-6 flex flex-col justify-between">
             {/* Text Content */}
-            <div className="mb-4 relative">
+            <div className="mb-4 relative flex-grow">
               {isEditingText ? (
                 <div className="space-y-3">
                   <textarea
+                    ref={textareaRef}
                     value={editedText}
                     onChange={(e) => setEditedText(e.target.value)}
                     disabled={isUpdatingScript}
-                    className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-[#8362E5] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full min-h-[6rem] p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-[#8362E5] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Nhập nội dung script..."
+                    style={{ height: 'auto', minHeight: '6rem' }}
+                    onInput={(e) => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = 'auto';
+                      target.style.height = target.scrollHeight + 'px';
+                    }}
                   />
                   <div className="flex gap-2">
                     <button
@@ -356,39 +397,45 @@ export default function ResourceItem({
                   onMouseEnter={() => setShowContentOverlay(true)}
                   onMouseLeave={() => setShowContentOverlay(false)}
                 >
-                  <p className="text-gray-700 leading-relaxed text-base overflow-hidden" style={{ 
-                    display: '-webkit-box',
-                    WebkitLineClamp: 4,
-                    WebkitBoxOrient: 'vertical',
-                    maxHeight: '6rem'
-                  }}>{textContent}</p>
-                  
-                  {/* Content Hover Overlay - Same style as image */}
-                  {showContentOverlay && (
-                    <div className="absolute inset-0 bg-white bg-opacity-60 backdrop-blur-[2px] flex items-center justify-center space-x-4 transition-all duration-300">
-                      <button
-                        onClick={handleRegenerateContent}
-                        disabled={isRegeneratingContent}
-                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
-                        title="Tạo lại nội dung"
-                      >
-                        <Sparkles className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={handleUploadScript}
-                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
-                        title="Chỉnh sửa văn bản"
-                      >
-                        <Edit3 className="w-5 h-5" />
-                      </button>
+                  {isRegeneratingContent ? (
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 flex items-center justify-center min-h-[4rem]">
+                      <div className="flex items-center gap-3">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#8362E5]"></div>
+                        <span className="text-sm text-gray-600 font-medium">Đang tạo nội dung mới...</span>
+                      </div>
                     </div>
+                  ) : (
+                    <>
+                      <p className="text-gray-700 leading-relaxed text-base whitespace-pre-wrap">{textContent}</p>
+                      
+                      {/* Content Hover Overlay - Same style as image */}
+                      {showContentOverlay && (
+                        <div className="absolute inset-0 bg-white bg-opacity-60 backdrop-blur-[2px] flex items-center justify-center space-x-4 transition-all duration-300">
+                          <button
+                            onClick={handleRegenerateContent}
+                            disabled={isRegeneratingContent}
+                            className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
+                            title="Tạo lại nội dung"
+                          >
+                            <Sparkles className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={handleUploadScript}
+                            className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
+                            title="Chỉnh sửa văn bản"
+                          >
+                            <Edit3 className="w-5 h-5" />
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}
             </div>
             
-            {/* Audio Section */}
-            <div className="mb-4 relative">
+            {/* Audio Section - Fixed at bottom */}
+            <div className="relative flex-shrink-0">
               <div className="relative flex items-center gap-3">
                 <div className="flex-1">
                   {(isAudioError) ? (

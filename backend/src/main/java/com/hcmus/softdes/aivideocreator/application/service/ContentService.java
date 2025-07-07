@@ -111,13 +111,8 @@ public class ContentService {
         if (provider == null) {
             throw new RuntimeException("Script generation provider not supported: " + providerName);
         }
-        var project = projectRepository.findById(existingScript.getProjectId())
-                .orElseThrow(() -> new RuntimeException("Project not found with id: " + existingScript.getProjectId()));
 
-        String regeneratedContent = provider.regenerateScript(
-            project.getImageContext(),
-            existingScript.getContent()
-        );
+        String regeneratedContent = provider.regenerateScript(existingScript.getContent());
         existingScript.update(regeneratedContent);
         scriptRepository.saveScript(existingScript);
 

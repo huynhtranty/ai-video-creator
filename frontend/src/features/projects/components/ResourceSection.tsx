@@ -32,6 +32,12 @@ export default function ResourceSection({
     }
   };
 
+  const handleLoadingStateChange = (resourceId: string, updates: { isImageLoading?: boolean; isAudioLoading?: boolean }) => {
+    if (onUpdateResource) {
+      onUpdateResource(resourceId, updates);
+    }
+  };
+
   const handleScriptUpdate = (resourceId: string, newScript: string) => {
     if (onUpdateResource) {
       onUpdateResource(resourceId, { textContent: newScript });
@@ -99,6 +105,7 @@ export default function ResourceSection({
                   onImageUpdate={handleImageUpdate}
                   onAudioUpdate={handleAudioUpdate}
                   onScriptUpdate={handleScriptUpdate}
+                  onLoadingStateChange={handleLoadingStateChange}
                   context={context}
                   projectId={projectId}
                   isImageLoading={resource.isImageLoading}
