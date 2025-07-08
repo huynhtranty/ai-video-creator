@@ -17,5 +17,6 @@ import java.util.UUID;
 public class ProjectDto {
     UUID userId;
     String name;
+    String imageContext;
     List<ScriptDto> scripts;
 }

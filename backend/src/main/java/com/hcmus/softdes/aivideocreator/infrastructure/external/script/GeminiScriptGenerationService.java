@@ -4,30 +4,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.genai.Client;
 import com.google.genai.types.*;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutResponse;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptGeneratedLayout;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service("gemini-script")
 public class GeminiScriptGenerationService implements ScriptGenerationService {
-
-    private final String SCRIPT_MODEL_ID = "gemini-2.0-flash";
+    private final String SCRIPT_MODEL_ID = "gemini-2.5-flash";
     private final ObjectMapper objectMapper = new ObjectMapper();
     
     @Value("${gemini.api.key}")
     private String apiKey;
 
     @Override
-    public ScriptLayoutResponse generateScript(String prompt) {
+    public ScriptGeneratedLayout generateScript(String prompt) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         Schema contentSchema = Schema.builder()
             .type(Type.Known.OBJECT)
             .properties(
                 ImmutableMap.of(
-                    "language", Schema.builder()
+                    "language_code", Schema.builder()
                         .type(Type.Known.STRING)
-                        .description("The language of the content")
+                        .description("The language code of the content")
                         .build(),
                     "context", Schema.builder()
                         .type(Type.Known.STRING)
@@ -41,61 +40,77 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
                         .build()
                 )
             )
-            .required("context", "scripts", "language")
+            .required("context", "scripts", "language_code")
             .build();
 
         GenerateContentConfig config = GenerateContentConfig.builder()
+            .temperature(1.6f)
             .responseMimeType("application/json")
             .candidateCount(1)
             .responseSchema(contentSchema)
             .build();
 
-        String systemPrompt = "Create a video script about this topic: " + prompt +
+        String systemPrompt =
             """
-            .
-            **Detect the language of the topic and use the same language throughout all output (context and scripts).**
+            Create a context, a list of scripts and a language code from a topic.
             
-            You are a **creative director** designing a visually cohesive and narratively compelling video. The final output should consist of two parts:
+            ###
             
-            ## Part 1: Visual Context (for consistent and unified illustrated visuals)
+            Detect the language code of the topic.
             
-            Define a **shared visual context** to guide the style of all illustrations or video frames. This visual direction should remain consistent across the entire video.
+            ###
             
-            Include the following:
+            Generate a vivid, reusable visual context for a short cinematic sequence. 
+            The setting should include a distinct location, time period, mood, and aesthetic style. 
+            Ensure the scene includes persistent environmental details (e.g., lighting, architecture, weather), 
+            character types, and visual motifs that can remain consistent across multiple frames. 
+            The context should be concise (under 300 words) 
+            and suitable for guiding image generation for a storyboard or animated video.
+            The context should include any description of any characters that are relevant to the topic.
             
-            - **Setting**: Time, place, environment, and weather. (e.g., futuristic Tokyo during a rainstorm at night)
-            - **Visual Style**: Art or cinematic direction (e.g., Studio Ghibli, Pixar 3D, Cyberpunk anime, noir).
-            - **Color Palette**: Dominant tones and their emotional effects (e.g., cold neon, warm nostalgic pastels).
-            - **Characters**: Recurring figures with names (optional), appearances, age, outfit style, key personality traits, expressions.
-            - **Tone / Atmosphere**: Emotional journey and thematic tone (e.g., hopeful, tense, melancholic).
-            - **Rules of the World**: Any fantastical, sci-fi, or symbolic logic (e.g., flying whales, glowing tattoos as memory keys).
-            
-            **Important**:
-            - This section **must not contain markdown or embedded labels**.
-            - This context will be used as the basis for generating a consistent image style across scenes.
-            - Do **not** include any scene descriptions or narration here.
-            ## Part 2: Video Script (narration for each visual scene)
+            ###
             
             Generate 4–10 script paragraphs (more if needed), where each describes **a single scene**.
             
             Each script paragraph should:
-            - Be written for **spoken narration**.
-            - Be **vivid, clear, concise**, and **scene-focused**.
-            - Avoid mentioning visuals — **do not describe the art style, camera moves, colors, or characters' physical details**.
-            - Not include any markdown, titles, or bullet points.
-            - Not include or describe any text or labels in the scene visuals.
+            - Be written for spoken narration.
+            - Be vivid, clear, concise, and scene-focused.
+            - Avoid mentioning visuals do not describe the art style, camera moves, colors, or characters' physical details.
+             The narrative should flow logically: include an introduction, key points, and a meaningful conclusion.
             
-            The narrative should flow logically: include an introduction, key points, and a meaningful conclusion.
-            
-            **Language rule reminder**: All output (context and script) must match the detected language of the topic.
-            """;
+            Topic:
+            """ + prompt;
 
         GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, systemPrompt, config);
 
         try {
-            return objectMapper.readValue(response.text(), ScriptLayoutResponse.class);
+            return objectMapper.readValue(response.text(), ScriptGeneratedLayout.class);
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse script generation response", e);
         }
+    }
+
+    @Override
+    public String regenerateScript(String content) {
+        Client client = Client.builder().apiKey(apiKey).build();
+
+        GenerateContentConfig config = GenerateContentConfig.builder()
+            .responseMimeType("text/plain")
+            .candidateCount(1)
+            .build();
+
+        String systemPrompt = """
+            Rewrite the paragraph in another way but still have the same meaning.
+            Only response the rewritten version of the paragraph.
+            The written version should be concise, clear, and vivid and shouldn't be much longer than the original one.
+            
+            Paragraph:
+            """
+            + content
+            + "The rewritten version:";
+
+        GenerateContentResponse response = client.models.generateContent(SCRIPT_MODEL_ID, systemPrompt, config);
+
+        return response.text();
     }
 }

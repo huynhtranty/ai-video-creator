@@ -1,20 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import apiClient from "@/lib/api-client";
-
-export interface TtsRequest {
-  text: string;
-  languageCode: string;
-  speakingRate: number;
-  gender: string;
-  projectId: string;
-  provider: string;
-}
-
-export interface TtsResponse {
-  audioUrl: string;
-  format: string;
-  projectId: string;
-}
+import { TtsRequest, TtsResponse } from "@/types/resource";
 
 export const useGenerateTts = () => {
   return useMutation<TtsResponse, Error, TtsRequest>({
@@ -26,26 +12,35 @@ export const useGenerateTts = () => {
   });
 };
 
-export const generateTtsForScript = async (
-  text: string,
-  languageCode: string = "vi",
-  speakingRate: number = 1.0,
-  gender: string = "MALE",
-  projectId: string = "3a442ec5-cdfa-4a4c-9f11-e43afa59ba05",
-  provider: string = "google"
-): Promise<string> => {
-  const response = await apiClient.post("/api/tts", {
-    text,
-    languageCode,
-    speakingRate,
-    gender,
-    projectId,
-    provider,
+export const generateTtsForScript = async (request: TtsRequest): Promise<TtsResponse> => {
+  const response = await apiClient.post("/contents/voice/generate", request);
+  return response.data;
+};
+
+export const uploadVoiceFile = async (
+  file: File,
+  projectId: string,
+  scriptId: string
+): Promise<TtsResponse> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('projectId', projectId);
+  formData.append('scriptId', scriptId);
+
+  const response = await apiClient.post("/contents/voice/upload", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
-  const audioUrl = response.data.audioUrl || response.data;
-  if (!audioUrl) {
-    throw new Error('No audio URL received from API');
-  }
-  
-  return audioUrl;
+  return response.data;
+};
+
+export const regenerateScriptVoice = async (
+  scriptId: string,
+  provider: string = "google"
+): Promise<TtsResponse> => {
+  const response = await apiClient.post(`/contents/voice/${scriptId}/regenerate`, {
+    provider: provider
+  });
+  return response.data;
 };

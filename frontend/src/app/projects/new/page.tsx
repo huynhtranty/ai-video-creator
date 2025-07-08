@@ -1,157 +1,81 @@
 "use client";
 
-import { useState } from "react";
-import Sidebar from "@/features/dashboard/components/Sidebar";
-import HeaderSection from "@/features/projects/components/HeaderSection";
-import TextInput from "@/features/projects/components/TextInput";
-import ResourceSection from "@/features/projects/components/ResourceSection";
-import { useGenerateScript } from "@/features/projects/api/script";
-import { GeneratedResource } from "@/types/script";
-import { ToastProvider, useToast } from "@/components/ui/toast";
-import { transformScriptResponseWithLoading } from "@/utils/scriptHelpers";
-import { generateImageForScript } from "@/features/projects/api/image";
-import { generateTtsForScript } from "@/features/projects/api/tts";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useCreateProject } from "@/features/projects/api/project";
+import { CreateProjectRequest } from "@/types/project";
 
-function CreateVideoPageContent() {
-  const [inputText, setInputText] = useState("");
-  const [resources, setResources] = useState<GeneratedResource[]>([]);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [context, setContext] = useState<string>("");
-  const [projectTitle, setProjectTitle] = useState("Untitled");
-  const { addToast } = useToast();
-  
-  const generateScript = useGenerateScript();
+export default function NewProjectPage() {
+  const router = useRouter();
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const createProjectMutation = useCreateProject();
+  const projectCreationStarted = useRef(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleTitleChange = (newTitle: string) => {
-    setProjectTitle(newTitle);
-    console.log("Project title updated:", newTitle);
-    // Here you can add logic to save the title to backend or perform other actions
-  };
+  const createNewProject = useCallback(() => {
+    if (!user || projectCreationStarted.current) return;
 
-  const generateResources = async (scriptStyle: string, imageStyle: string, voiceStyle: string) => {
-    if (!inputText.trim()) {
-      addToast("Vui lòng nhập nội dung trước khi tạo tài nguyên!", "warning");
-      return;
-    }
+    projectCreationStarted.current = true;
+    setError(null);
 
-    setIsGenerating(true);
-    
-    try {
-      const response = await generateScript.mutateAsync({ prompt: inputText }); 
-      setContext(response.context);
+    const newProjectData: CreateProjectRequest = {
+      name: "Untitled",
+      userId: user.id,
+    };
 
-      const newResources: GeneratedResource[] = transformScriptResponseWithLoading(
-        response
-      );
-      
-      setResources(newResources);
-      setInputText(""); 
-      addToast(`Đã tạo thành công ${newResources.length} tài nguyên!`, "success");
-      
-      addToast("Đang tạo hình ảnh và âm thanh...", "info");
-      
-      // Generate images and audio in parallel
-      const resourcePromises = newResources.map(async (resource) => {
-        if (typeof resource.textContent === 'string') {
-          const imagePromise = generateImageForScript(response.context, resource.textContent)
-            .then(imageUrl => {
-              updateResource(resource.id, { imageSrc: imageUrl, isImageLoading: false });
-            })
-            .catch(error => {
-              console.error(`Error generating image for resource ${resource.id}:`, error);
-            });
-
-          // Generate audio with TTS
-          const audioPromise = generateTtsForScript(
-            resource.textContent,
-            response.language || "vi",
-            1.0,
-            voiceStyle === "Nữ thanh niên" ? "FEMALE" : "MALE",
-            "3a442ec5-cdfa-4a4c-9f11-e43afa59ba05",
-            "google"
-          )
-            .then(audioUrl => {
-              updateResource(resource.id, { audioSrc: audioUrl, isAudioLoading: false });
-            })
-            .catch(error => {
-              console.error(`Error generating audio for resource ${resource.id}:`, error);
-            });
-
-          return Promise.all([imagePromise, audioPromise]);
-        }
-      });
-      
-      await Promise.all(resourcePromises);
-      addToast("Đã hoàn thành tạo hình ảnh và âm thanh!", "success");
-    } catch (error) {
-      console.error("Error generating script:", error);
-      addToast("API không khả dụng!", "info");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const deleteResource = (resourceId: string) => {
-    setResources(prevResources => prevResources.filter(resource => resource.id !== resourceId));
-    addToast("Đã xóa tài nguyên thành công!", "success");
-  };
-
-  const updateResource = (resourceId: string, updates: Partial<GeneratedResource>) => {
-    setResources(prevResources => {
-      const updatedResources = prevResources.map(resource => 
-        resource.id === resourceId ? { ...resource, ...updates } : resource
-      );
-      return updatedResources;
+    createProjectMutation.mutate(newProjectData, {
+      onError: (err) => {
+        setError("Failed to create project. Please try again.");
+        console.error("Error creating project:", err);
+      },
     });
-  };
+  }, [user, createProjectMutation]);
 
-  return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Sidebar />
-      <main
-        style={{
-          flex: 1,
-          padding: "1rem 2rem",
-          backgroundSize: "cover",
-          marginLeft: "50px", // Đảm bảo main không bị che bởi Sidebar cố định
-        }}
-        className="overflow-hidden" // Ngăn main cuộn toàn bộ
-      >
-        <div
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-            backgroundColor: "white", // Đảm bảo phần cố định không bị trong suốt
-            paddingBottom: "10px", // Khoảng cách dưới cùng
-          }}
-        >
-          <HeaderSection 
-            title={projectTitle}
-            onTitleChange={handleTitleChange}
-          />
-          <TextInput value={inputText} onChange={setInputText} />
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && user && !projectCreationStarted.current) {
+      createNewProject();
+    } else if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isLoading, isAuthenticated, user, router, createNewProject]);
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-md">
+          <h1 className="text-xl font-bold mb-2 text-red-600">Error</h1>
+          <p className="mb-4">{error}</p>
+          <div className="flex justify-center space-x-3">
+            <button
+              onClick={() => createNewProject()}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            >
+              Try Again
+            </button>
+            <button
+              onClick={() => router.push("/projects")}
+              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition-colors"
+            >
+              Back to Projects
+            </button>
+          </div>
         </div>
-        <ResourceSection 
-          resources={resources}
-          onGenerateResources={generateResources}
-          onDeleteResource={deleteResource}
-          onUpdateResource={updateResource}
-          isGenerating={isGenerating}
-          context={context}
-        />
-      </main>
-    </div>
-  );
-}
+      </div>
+    );
+  }
 
-export default function CreateVideoPage() {
   return (
-    <ProtectedRoute>
-      <ToastProvider>
-        <CreateVideoPageContent />
-      </ToastProvider>
-    </ProtectedRoute>
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-center">
+        <h1 className="text-xl font-bold mb-2">Creating new project...</h1>
+        <p>Please wait while we set up your project.</p>
+        {createProjectMutation.isPending && (
+          <div className="mt-4 flex justify-center">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

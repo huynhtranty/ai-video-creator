@@ -27,14 +27,13 @@ export default function TextInput({ value, onChange }: TextInputProps) {
     <textarea
       ref={textareaRef}
       value={value}
-      className="rounded-lg p-4 mb-3 w-full text-gray-700"
+      className="rounded-xl p-4 mb-6 w-full text-gray-700 border-2 border-gray-200 focus:border-[#8362E5] focus:ring-2 focus:ring-[#8362E5]/20 transition-colors shadow-sm hover:border-gray-300"
       style={{
-        border: "2px solid transparent",
-        background: "linear-gradient(white, white) padding-box, linear-gradient(to right, #61FFF2, #300DF4) border-box",
         resize: "vertical",
-        minHeight: "60px",
+        minHeight: "80px",
+        backgroundColor: "#ffffff",
       }}
-      placeholder="Nhập từ khóa hoặc nội dung"
+      placeholder="Nhập từ khóa hoặc nội dung để tạo video..."
       rows={1}
       onChange={handleInput}
     ></textarea>

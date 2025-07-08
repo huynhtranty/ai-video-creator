@@ -10,12 +10,12 @@ import java.util.List;
 @Data
 @Builder
 @Jacksonized
-public class ScriptLayoutResponse {
+public class ScriptGeneratedLayout {
     @JsonProperty("context")
     String context;
     
-    @JsonProperty("language")
-    String language;
+    @JsonProperty("language_code")
+    String languageCode;
     
     @JsonProperty("scripts")
     List<String> scripts;

@@ -1,12 +1,12 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
 import com.hcmus.softdes.aivideocreator.application.dto.projects.ProjectDto;
+import com.hcmus.softdes.aivideocreator.application.dto.projects.ProjectItemDto;
 import com.hcmus.softdes.aivideocreator.domain.model.Project;
 import com.hcmus.softdes.aivideocreator.application.service.ProjectService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/projects")
+@RequestMapping("/projects")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -37,10 +37,20 @@ public class ProjectController {
         return ResponseEntity.ok(dto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Project> update(@PathVariable UUID id, @RequestBody ProjectDto request) {
+        Project updated = projectService.updateProject(id, request);
+        return ResponseEntity.ok(updated);
+    }
+
     @GetMapping
-    public ResponseEntity<List<Project>> getByUser() {
+    public ResponseEntity<List<ProjectItemDto>> getByUser(@RequestParam (name = "v", required = false) String varient) {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getDetails().toString());
-        List<Project> projects = projectService.getProjectsByUserId(userId);
+        if (varient != null && varient.equals("recent")) {
+            List<ProjectItemDto> recentProjects = projectService.getRecentProjectsByUserId(userId);
+            return ResponseEntity.ok(recentProjects);
+        }
+        List<ProjectItemDto> projects = projectService.getProjectsByUserId(userId);
         return ResponseEntity.ok(projects);
     }
 

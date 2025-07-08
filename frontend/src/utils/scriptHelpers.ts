@@ -1,5 +1,5 @@
-import { ScriptResponse, GeneratedResource } from "@/types/script";
-import { generateImageForScript } from "@/features/projects/api/image";
+import { ScriptResponse, GeneratedResource } from "@/types/resource";
+import { ProjectScript } from "@/types/project";
 
 /**
  * Transforms script response with loading state (images and audio will be generated in background)
@@ -7,40 +7,34 @@ import { generateImageForScript } from "@/features/projects/api/image";
 export const transformScriptResponseWithLoading = (
   response: ScriptResponse
 ): GeneratedResource[] => {
-  return response.scripts.map((script, index) => ({
-    id: `generated-${Date.now()}-${index}`,
-    imageSrc: '', 
-    imageAlt: `Generated image for script ${index + 1}`,
-    textContent: script,
-    audioSrc: '',
-    description: script,
-    isImageLoading: true,
-    isAudioLoading: true
+  return response.scripts.map((script) => ({
+    id: script.id,
+    imageSrc: script.media?.url || '', 
+    imageAlt: `generated-${Date.now()}-${script.order}`,
+    textContent: script.content,
+    audioSrc: script.voice?.audioUrl,
+    description: script.content,
+    isImageLoading: !script.media,
+    isAudioLoading: !script.voice
   }));
 };
 
 /**
- * Transforms script response with async image generation
+ * Transforms project scripts to GeneratedResource format
  */
-export const transformScriptResponseWithImages = async (
-  response: ScriptResponse,
-  getMockAudio: (index: number) => string
-): Promise<GeneratedResource[]> => {
-  const resourcesPromises = response.scripts.map(async (script, index) => {
-    const imageUrl = await generateImageForScript(response.context, script);
-    
-    return {
-      id: `generated-${Date.now()}-${index}`,
-      imageSrc: imageUrl,
-      imageAlt: `Generated image for script ${index + 1}`,
-      textContent: script,
-      audioSrc: getMockAudio(index),
-      description: script,
-      isImageLoading: false
-    };
-  });
-
-  return Promise.all(resourcesPromises);
+export const transformProjectScriptsToResources = (
+  scripts: ProjectScript[]
+): GeneratedResource[] => {
+  return scripts.map((script) => ({
+    id: script.id,
+    imageSrc: script.media?.url || '',
+    imageAlt: `script-${script.id}`,
+    textContent: script.content,
+    audioSrc: script.voice?.audioUrl,
+    description: script.content,
+    isImageLoading: !script.media,
+    isAudioLoading: !script.voice
+  }));
 };
 
 /**

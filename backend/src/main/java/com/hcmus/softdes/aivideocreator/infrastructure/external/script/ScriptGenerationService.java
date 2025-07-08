@@ -1,8 +1,8 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.external.script;
 
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutResponse;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptRequest;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptGeneratedLayout;
 
 public interface ScriptGenerationService {
-    ScriptLayoutResponse generateScript(String prompt);
+    ScriptGeneratedLayout generateScript(String prompt);
+    String regenerateScript(String content);
 }

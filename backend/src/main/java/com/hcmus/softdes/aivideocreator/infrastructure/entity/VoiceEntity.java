@@ -23,13 +23,13 @@ public class VoiceEntity {
     @Column(nullable = false)
     private UUID id;
 
-    @Column(name = "text", nullable = false)
+    @Column(name = "text", nullable = false, columnDefinition = "LONGTEXT")
     private String text;
 
     @Column(name = "provider")
     private String provider;
 
-    @Column(name = "language_code", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'en-US'")
+    @Column(name = "language_code", columnDefinition = "VARCHAR(10) DEFAULT 'en-US'")
     private String languageCode;
 
     @Column(name = "url", nullable = false)
@@ -38,11 +38,14 @@ public class VoiceEntity {
     @Column(name = "duration", nullable = false)
     private int duration; // Duration in seconds
 
-    @Column(name = "voiceGender", nullable = false)
+    @Column(name = "voice_gender")
     String voiceGender;
 
-    @Column(name ="speaking_rate", nullable = false, columnDefinition = "DOUBLE DEFAULT 1.0")
+    @Column(name ="speaking_rate", columnDefinition = "DOUBLE DEFAULT 1.0")
     private double speakingRate;
+
+    @Column(name = "filename", nullable = false)
+    private String filename;
 
     @Column(name = "project_id", nullable = false)
     private UUID projectId;

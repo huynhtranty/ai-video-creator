@@ -13,6 +13,7 @@ public class ProjectMapper {
                 .id(domainProject.getId())
                 .userId(domainProject.getUserId())
                 .name(domainProject.getName())
+                .imageContext(domainProject.getImageContext())
                 .creationDate(domainProject.getCreatedAt())
                 .lastModified(domainProject.getUpdatedAt())
                 .build();
@@ -29,6 +30,7 @@ public class ProjectMapper {
                 .updatedAt(jpaEntity.getLastModified())
                 .userId(jpaEntity.getUserId())
                 .name(jpaEntity.getName())
+                .imageContext(jpaEntity.getImageContext())
                 .createdAt(jpaEntity.getCreationDate())
                 .updatedAt(jpaEntity.getLastModified())
                 .build();

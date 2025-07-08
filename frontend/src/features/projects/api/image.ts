@@ -1,31 +1,36 @@
-import { useMutation } from "@tanstack/react-query";
 import apiClient from "@/lib/api-client";
+import { ImageRequest, ImageResponse } from "@/types/resource";
 
-export interface ImageRequest {
-  context: string;
-  prompt: string;
-}
-
-export interface ImageResponse {
-  imageUrl: string;
-}
-
-export const useGenerateImage = () => {
-  return useMutation<ImageResponse, Error, ImageRequest>({
-    mutationFn: async (data: ImageRequest) => {
-      const response = await apiClient.post("/contents/image", data);
-      return response.data;
-    },
-    onError: () => {},
-  });
+export const generateImageForScript = async (request: ImageRequest): Promise<ImageResponse> => {
+  const response = await apiClient.post("/contents/image/generate", request);
+  const data = response.data;
+  return data;
 };
 
-export const generateImageForScript = async (context: string, prompt: string): Promise<string> => {
-  const response = await apiClient.post("/contents/image", { context, prompt });
-  const imageUrl = response.data.imageUrl || response.data;
-  if (!imageUrl) {
-    throw new Error('No image URL received from API');
-  }
-  
-  return imageUrl;
+export const regenerateScriptImage = async (
+  scriptId: string,
+  provider: string = "gemini-image"
+): Promise<ImageResponse> => {
+  const response = await apiClient.post(`/contents/image/${scriptId}/regenerate`, {
+    provider: provider
+  });
+  return response.data;
+};
+
+export const uploadImageFile = async (
+  file: File,
+  projectId: string,
+  scriptId: string
+): Promise<ImageResponse> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('projectId', projectId);
+  formData.append('scriptId', scriptId);
+
+  const response = await apiClient.post("/contents/image/upload", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
 };

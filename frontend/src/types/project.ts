@@ -1,22 +1,32 @@
+import { ImageResponse, TtsResponse } from "./resource";
+
+export interface ProjectScript {
+  id: string;
+  content: string;
+  media?: ImageResponse | null;
+  voice?: TtsResponse | null;
+}
+
 export interface Project {
   id: string;
-  title: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-  status?: 'draft' | 'processing' | 'completed' | 'failed';
-  thumbnailUrl?: string;
-  duration?: number;
   userId: string;
+  name?: string;
+  description?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  thumbnailUrl?: string | null;
+  imageContext?: string | null;
+  scripts?: ProjectScript[];
 }
 
 export interface CreateProjectRequest {
-  title: string;
+  name: string; 
   description?: string;
+  userId?: string;
 }
 
 export interface UpdateProjectRequest {
-  title?: string;
+  name?: string; 
   description?: string;
   status?: 'draft' | 'processing' | 'completed' | 'failed';
 }

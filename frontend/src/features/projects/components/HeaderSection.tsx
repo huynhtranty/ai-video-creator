@@ -9,7 +9,6 @@ interface HeaderSectionProps {
 export default function HeaderSection({ title, onTitleChange }: HeaderSectionProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [localTitle, setLocalTitle] = useState(title);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleEditClick = () => {
@@ -19,31 +18,16 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setLocalTitle(newTitle);
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      console.log("User stopped typing. Title changed to:", newTitle);
-      onTitleChange(newTitle);
-    }, 2000);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
       onTitleChange(localTitle);
       setIsEditing(false);
     }
   };
 
   const handleBlur = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
     onTitleChange(localTitle);
     setIsEditing(false);
   };
@@ -60,15 +44,6 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
   useEffect(() => {
     setLocalTitle(title);
   }, [title]);
-
-  // Cleanup timeout on component unmount
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
 
   return (
     <div className="flex flex-col lg:flex-row gap-20 items-center mb-4">
@@ -97,18 +72,7 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
       </div>
       <div className="lg:w-1/8 lg:pl-4">
         <button
-          className="w-full text-white px-4 py-2 rounded-lg"
-          style={{
-            background: "linear-gradient(to right, #61FFF2, #300DF4)",
-            backgroundColor: "#61FFF2", // Fallback color
-            transition: "background 0.3s ease", // Smooth transition for hover
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "linear-gradient(to right, #4DE6D9, #260BC7)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "linear-gradient(to right, #61FFF2, #300DF4)";
-          }}
+          className="w-full bg-[#8362E5] hover:bg-[#6F4EC8] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
         >
           Tạo video
         </button>

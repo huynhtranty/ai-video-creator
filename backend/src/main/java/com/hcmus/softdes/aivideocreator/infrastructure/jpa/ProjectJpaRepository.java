@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface ProjectJpaRepository extends JpaRepository<ProjectEntity, UUID> {
     List<ProjectEntity> findByUserId(UUID userId);
+    List<ProjectEntity> findByUserIdOrderByLastModifiedDesc(UUID userId);
     Optional<ProjectEntity> findByName(String projectName);
     Optional<ProjectEntity> findById(UUID projectId);
     boolean existsById(UUID id);

@@ -11,6 +11,7 @@ public class ScriptMapper {
         if (script == null) return null;
         ScriptDto dto = new ScriptDto();
         dto.setId(script.getId());
+        dto.setOrder(script.getOrder());
         dto.setContent(script.getContent());
         dto.setMedia(MediaMapper.toDto(media));
         dto.setVoice(VoiceMapper.toDto(voice));

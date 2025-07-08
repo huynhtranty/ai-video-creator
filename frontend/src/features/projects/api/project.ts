@@ -30,6 +30,16 @@ export const useListProjects = () => {
   });
 };
 
+export const useListRecentProjects = () => {
+  return useQuery<Project[], Error>({
+    queryKey: ['projects', 'recent'],
+    queryFn: async () => {
+      const response = await apiClient.get("/projects?v=recent");
+      return response.data;
+    },
+  });
+};
+
 export const useGetProject = (projectId?: string) => {
   return useQuery<Project, Error>({
     queryKey: ['project', projectId],

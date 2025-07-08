@@ -24,8 +24,11 @@ public class ScriptEntity {
     @Column(name = "project_id", nullable = false)
     private UUID projectId;
 
-    @Column(name = "script_content", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "script_content", nullable = false, columnDefinition = "LONGTEXT")
     private String scriptContent;
+
+    @Column(name = "script_order", nullable = false)
+    private int order;
 
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;

@@ -4,5 +4,6 @@ public record ImageRequest(
     String prompt,
     String context,
     String provider,
-    String projectId
+    String projectId,
+    String scriptId
 ) {}
