@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
-import Modal from "./Modal"; // Adjust the import path as needed
 
 interface Project {
   id: string | number;
@@ -14,19 +13,6 @@ interface ProjectGridProps {
 }
 
 const ProjectGrid: React.FC<ProjectGridProps> = ({ projects }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
-  const openModal = (project: Project) => {
-    setSelectedProject(project);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedProject(null);
-  };
-
   return (
     <div
       style={{
@@ -38,7 +24,7 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects }) => {
       }}
     >
       {projects.map((project) => (
-        <div key={project.id} onClick={() => openModal(project)} style={{ cursor: "pointer" }}>
+        <div key={project.id}>
           <div
             style={{
               padding: "1rem",
@@ -64,8 +50,6 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects }) => {
           </div>
         </div>
       ))}
-
-      <Modal isOpen={isModalOpen} project={selectedProject} onClose={closeModal} />
     </div>
   );
 };

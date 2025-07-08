@@ -53,7 +53,12 @@ export default function Sidebar() {
           </Link>
           <span className="HomeSpan">Tạo</span>
         </div>
-
+        <div className="pt-1 flex flex-col items-center justify-center">
+          <Link href="/statistic" className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
+            <Image className="StatisticsType" src="/chart-icon.svg" alt="Statistics Button" width={30} height={30} />
+          </Link>
+          <span className="HomeSpan">Thống kê</span>
+        </div>
         <div className="pt-1 flex flex-col items-center justify-center">
           <Link href="/projects" className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
             <Image className="ProjectType" src="/ProjectBtn.svg" alt="Project Button" width={20} height={20} />
