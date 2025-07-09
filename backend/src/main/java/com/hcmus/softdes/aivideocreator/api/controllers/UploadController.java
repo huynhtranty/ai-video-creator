@@ -43,7 +43,7 @@ public class UploadController {
         // Obtain Credential (adjust as needed for your auth flow)
 //        Credential credential = authService.getCredential();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        String email = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
+        String email = authService.findUserByUsername(username).getEmail();
         var accessToken = authService.getGoogleAccessToken(email);
 
         String result = youtubeService.uploadVideo(tempFile, accessToken, title, description);
