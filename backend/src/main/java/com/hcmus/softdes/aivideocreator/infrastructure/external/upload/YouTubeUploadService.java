@@ -21,7 +21,7 @@ public class YouTubeUploadService {
         this.youtube = youtube;
     }
 
-    public String uploadVideo(File videoFile, Credential credential, String title, String description) throws Exception {
+    public String uploadVideo(File videoFile, String credential, String title, String description) throws Exception {
         // Set video metadata
         Video videoObject = new Video();
         VideoStatus status = new VideoStatus();
@@ -47,7 +47,8 @@ public class YouTubeUploadService {
                 videoObject,
                 mediaContent
         );
-        videoInsert.setOauthToken(credential.getAccessToken());
+//        videoInsert.setOauthToken(credential.getAccessToken());
+        videoInsert.setOauthToken(credential);
 
         Video returnedVideo = videoInsert.execute();
         return "Video Uploaded Successfully. Video ID is " + returnedVideo.getId();

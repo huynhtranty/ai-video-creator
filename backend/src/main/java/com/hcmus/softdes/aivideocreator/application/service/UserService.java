@@ -69,4 +69,8 @@ public class UserService {
         }
         googleTokenRepository.saveToken(user.getEmail(), accessToken, refreshToken, expiresAt);
     }
+
+    public String getGoogleAccessToken(String email) {
+        return googleTokenRepository.getAccessToken(email);
+    }
 }

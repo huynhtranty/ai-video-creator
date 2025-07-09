@@ -25,4 +25,13 @@ public class InMemoryGoogleTokenRepository implements GoogleTokenRepository {
                 .build();
         tokenStore.put(email, googleInfo);
     }
+
+    @Override
+    public String getAccessToken(String email) {
+        GoogleInfo googleInfo = tokenStore.get(email);
+        if (googleInfo != null && googleInfo.getExpiresAt() > Instant.now().toEpochMilli()) {
+            return googleInfo.getAccessToken();
+        }
+        return null; // Token is either not found or expired
+    }
 }

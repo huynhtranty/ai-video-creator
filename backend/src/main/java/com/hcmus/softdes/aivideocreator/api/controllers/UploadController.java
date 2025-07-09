@@ -6,6 +6,7 @@ import com.hcmus.softdes.aivideocreator.infrastructure.external.upload.YouTubeUp
 import com.google.api.client.auth.oauth2.Credential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/upload")
@@ -39,9 +41,12 @@ public class UploadController {
         file.transferTo(tempFile);
 
         // Obtain Credential (adjust as needed for your auth flow)
-        Credential credential = authService.getCredential();
+//        Credential credential = authService.getCredential();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
+        var accessToken = authService.getGoogleAccessToken(email);
 
-        String result = youtubeService.uploadVideo(tempFile, credential, title, description);
+        String result = youtubeService.uploadVideo(tempFile, email, title, description);
 
         tempFile.delete();
 
