@@ -48,6 +48,7 @@ public class YouTubeUploadService {
                 mediaContent
         );
 //        videoInsert.setOauthToken(credential.getAccessToken());
+        System.out.println("credential video: " + credential);
         videoInsert.setOauthToken(credential);
 
         Video returnedVideo = videoInsert.execute();

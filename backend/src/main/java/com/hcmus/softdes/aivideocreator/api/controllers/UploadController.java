@@ -46,7 +46,7 @@ public class UploadController {
         String email = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
         var accessToken = authService.getGoogleAccessToken(email);
 
-        String result = youtubeService.uploadVideo(tempFile, email, title, description);
+        String result = youtubeService.uploadVideo(tempFile, accessToken, title, description);
 
         tempFile.delete();
 
