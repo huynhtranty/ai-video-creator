@@ -1,7 +1,7 @@
 package com.hcmus.softdes.aivideocreator.infrastructure.external.script;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptLayoutResponse;
+import com.hcmus.softdes.aivideocreator.application.dto.content.ScriptResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class CloudflareAIGenerationService{
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 //    @Override
-    public ScriptLayoutResponse generateScript(String prompt) {
+    public ScriptResponse generateScript(String prompt) {
         // Build request headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -59,7 +59,7 @@ public class CloudflareAIGenerationService{
         }
 
         try {
-            return objectMapper.readValue(content, ScriptLayoutResponse.class);
+            return objectMapper.readValue(content, ScriptResponse.class);
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse script generation response", e);
         }

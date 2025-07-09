@@ -1,9 +1,9 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
-import com.hcmus.softdes.aivideocreator.api.contracts.auth.AuthResponse;
 import com.hcmus.softdes.aivideocreator.application.service.UserService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.upload.TikTokUploadService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.upload.YouTubeUploadService;
+import com.google.api.client.auth.oauth2.Credential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,16 +20,15 @@ public class UploadController {
 
     private final YouTubeUploadService youtubeService;
     private final TikTokUploadService tiktokService;
+    private final UserService authService;
 
     @Autowired
-    private UserService authService;
-
-    private String accessToken;
-
-    public UploadController(YouTubeUploadService youtubeService, TikTokUploadService tiktokService) {
+    public UploadController(YouTubeUploadService youtubeService,
+                            TikTokUploadService tiktokService,
+                            UserService authService) {
         this.youtubeService = youtubeService;
         this.tiktokService = tiktokService;
-//        this.accessToken = UserService.getAccessToken(); // Assuming UserService has a method to get access token
+        this.authService = authService;
     }
 
     @PostMapping("/youtube")
@@ -38,7 +37,14 @@ public class UploadController {
                                                   @RequestParam String description) throws Exception {
         File tempFile = File.createTempFile("video", ".mp4");
         file.transferTo(tempFile);
-        String result = youtubeService.uploadVideo(tempFile, title, description, accessToken);
+
+        // Obtain Credential (adjust as needed for your auth flow)
+        Credential credential = authService.getCredential();
+
+        String result = youtubeService.uploadVideo(tempFile, credential, title, description);
+
+        tempFile.delete();
+
         return ResponseEntity.ok(result);
     }
 
@@ -48,6 +54,7 @@ public class UploadController {
         File tempFile = File.createTempFile("video", ".mp4");
         file.transferTo(tempFile);
         String result = tiktokService.uploadVideo(tempFile, title);
+        tempFile.delete();
         return ResponseEntity.ok(result);
     }
 }
