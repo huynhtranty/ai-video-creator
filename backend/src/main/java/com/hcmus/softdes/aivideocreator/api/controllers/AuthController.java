@@ -104,26 +104,36 @@ public class AuthController {
 
     @GetMapping("/google/token")
     public ResponseEntity<String> getGoogleAccessToken() {
-        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var applicationUser = userService.findUserByUsername(user.getUsername());
-        String accessToken = userService.getGoogleAccessToken(applicationUser.getEmail());
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = userService.findUserByUsername(username).getEmail();
+        var accessToken = userService.getGoogleAccessToken(email);
 
         if (accessToken == null) {
             return ResponseEntity.status(401).body("No valid access token found");
         }
         return ResponseEntity.ok(accessToken);
     }
+    @GetMapping("/google/refresh")
+    public ResponseEntity<String> getGoogleRefreshToken() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = userService.findUserByUsername(username).getEmail();
+        var refreshToken = userService.getGoogleRefreshToken(email);
 
+        if (refreshToken == null) {
+            return ResponseEntity.status(401).body("No valid refresh token found");
+        }
+        return ResponseEntity.ok(refreshToken);
+    }
     @GetMapping("/google/refresh-access-token")
     public ResponseEntity<String> refreshGoogleAccessToken() {
-        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var applicationUser = userService.findUserByUsername(user.getUsername());
-        String newAccessToken = userService.refreshGoogleAccessToken(applicationUser.getEmail());
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = userService.findUserByUsername(username).getEmail();
+        String refreshToken = userService.getGoogleRefreshToken(email);
+        var newAccessToken = userService.refreshGoogleAccessToken(refreshToken);
 
         if (newAccessToken == null) {
             return ResponseEntity.status(401).body("Failed to refresh access token");
         }
         return ResponseEntity.ok(newAccessToken);
     }
-
 }

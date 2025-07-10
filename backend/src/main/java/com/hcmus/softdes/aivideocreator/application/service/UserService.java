@@ -76,11 +76,10 @@ public class UserService {
     public String getGoogleAccessToken(String email) {
         return googleTokenRepository.getAccessToken(email);
     }
+    public String getGoogleRefreshToken(String email) {
+        return googleTokenRepository.getRefreshToken(email);
+    }
     public String refreshGoogleAccessToken(String email) {
-        String accessToken = googleTokenRepository.refreshAccessToken(email);
-        if (accessToken == null) {
-            throw new RuntimeException("Failed to refresh access token");
-        }
-        return accessToken;
+        return googleTokenRepository.refreshAccessToken(email);
     }
 }

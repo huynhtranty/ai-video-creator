@@ -6,5 +6,5 @@ public interface GoogleTokenRepository {
     void saveToken(String email, String accessToken, String refreshToken, Instant expiresAt);
     String getAccessToken(String email);
     String getRefreshToken(String email);
-    public String refreshAccessToken(String email);
+    String refreshAccessToken(String refreshToken);
 }
