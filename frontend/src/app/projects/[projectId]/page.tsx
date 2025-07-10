@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Sidebar from "@/features/dashboard/components/Sidebar";
 import HeaderSection from "@/features/projects/components/HeaderSection";
 import TextInput from "@/features/projects/components/TextInput";
@@ -49,6 +49,7 @@ interface VideoConfig {
 function ProjectPageContent() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const projectId = params.projectId as string;
   
   const [inputText, setInputText] = useState("");
@@ -79,6 +80,18 @@ function ProjectPageContent() {
   });
   
   const { data: project, isLoading: isProjectLoading, error: projectError } = useGetProject(projectId);
+
+  // Set input text from URL parameter when component mounts
+  useEffect(() => {
+    const inputFromUrl = searchParams.get('input');
+    if (inputFromUrl) {
+      setInputText(decodeURIComponent(inputFromUrl));
+      // Remove the input parameter from URL to clean it up
+      const url = new URL(window.location.href);
+      url.searchParams.delete('input');
+      window.history.replaceState({}, '', url.toString());
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (project) {

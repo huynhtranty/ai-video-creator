@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useCreateProject } from "@/features/projects/api/project";
 import { CreateProjectRequest } from "@/types/project";
 
 export default function NewProjectPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, isAuthenticated, isLoading } = useAuth();
   const createProjectMutation = useCreateProject();
   const projectCreationStarted = useRef(false);
@@ -19,8 +20,11 @@ export default function NewProjectPage() {
     projectCreationStarted.current = true;
     setError(null);
 
+    const inputFromUrl = searchParams.get('input');
+    const projectName = inputFromUrl ? decodeURIComponent(inputFromUrl) : "Untitled";
+
     const newProjectData: CreateProjectRequest = {
-      name: "Untitled",
+      name: projectName,
       userId: user.id,
     };
 
@@ -29,8 +33,16 @@ export default function NewProjectPage() {
         setError("Failed to create project. Please try again.");
         console.error("Error creating project:", err);
       },
+      onSuccess: (project) => {
+        // Navigate to the project page with the input text as a query parameter if it exists
+        if (inputFromUrl) {
+          router.push(`/projects/${project.id}?input=${inputFromUrl}`);
+        } else {
+          router.push(`/projects/${project.id}`);
+        }
+      },
     });
-  }, [user, createProjectMutation]);
+  }, [user, createProjectMutation, searchParams, router]);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && user && !projectCreationStarted.current) {

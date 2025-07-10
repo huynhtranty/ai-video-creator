@@ -1,18 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import apiClient from "@/lib/api-client";
 import { Project, CreateProjectRequest, UpdateProjectRequest } from "@/types/project";
 
 export const useCreateProject = () => {
-  const router = useRouter();
-
   return useMutation<Project, Error, CreateProjectRequest>({
     mutationFn: async (data: CreateProjectRequest) => {
       const response = await apiClient.post("/projects", data);
       return response.data;
-    },
-    onSuccess: (project) => {
-      router.push(`/projects/${project.id}`);
     },
     onError: (error) => {
       console.error("Error creating project:", error);
