@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/topic")
+@RequestMapping("/topics")
 public class TopicController {
 
     private final TopicService trendingService;
@@ -24,7 +24,7 @@ public class TopicController {
     @GetMapping("/summary")
     public ResponseEntity<TopicResponse> getSummary(
             @RequestParam String keyword,
-            @RequestParam(defaultValue = "3") int lines) {
+            @RequestParam(defaultValue = "1") int lines) {
         String summary = trendingService.execute(keyword, lines);
         return ResponseEntity.ok(new TopicResponse(summary));
     }
