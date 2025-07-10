@@ -366,7 +366,7 @@ class RemotionJsonGenerator {
                     const itemId = this.generateId();
                     
                     // Estimate audio duration (you might want to get real duration)
-                    const estimatedDuration = Math.min(totalVideoDuration - audioCurrentTime, 30000); // Max 30s per audio
+                    const estimatedDuration = finalImageDurations[i]
                     const audioEndTime = Math.min(audioCurrentTime + estimatedDuration, totalVideoDuration);
                     
                     const audioItem = this.createAudioItem(audioUrl, itemId, audioCurrentTime, audioEndTime, estimatedDuration);
