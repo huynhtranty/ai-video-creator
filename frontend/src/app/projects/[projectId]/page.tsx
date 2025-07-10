@@ -213,61 +213,45 @@ function ProjectPageContent() {
   };
 
   // Helper function to convert project data to video data format
-  const convertProjectToVideoData = (): VideoData => {
-    // If we have dynamic resources from the current session, use them
+  const convertProjectToVideoData = (): VideoData | null => {
     if (resources.length > 0) {
       return {
         title: projectTitle,
         context: context || project?.imageContext || "Default context for video generation",
         contents: resources.map(resource => ({
           description: typeof resource.textContent === 'string' ? resource.textContent : "Generated content",
-          image: resource.imageSrc || "https://via.placeholder.com/1920x1080/cccccc/666666?text=No+Image",
+          image: resource.imageSrc || "",
           subtitles: [{
             text: typeof resource.textContent === 'string' ? resource.textContent : "Generated text content",
-            audio: resource.audioSrc || "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
-            duration: 8000, // Default duration in milliseconds
+            audio: resource.audioSrc || "",
+            duration: resource.audioDuration || 8000, 
           }]
         }))
       };
     }
 
-    // If we have project scripts from the database, use them
     if (project?.scripts && project.scripts.length > 0) {
       return {
-        title: project.name || "Untitled Project",
+        title: project.name || "Untitled",
         context: project.imageContext || "Video context from project data",
         contents: project.scripts.map(script => ({
           description: script.content,
-          image: script.media?.url || "https://via.placeholder.com/1920x1080/cccccc/666666?text=No+Image",
+          image: script.media?.url || "",
           subtitles: [{
             text: script.content,
-            audio: script.voice?.audioUrl || "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
-            duration: script.voice?.duration ? script.voice.duration * 1000 : 8000, // Convert seconds to milliseconds
+            audio: script.voice?.audioUrl || "",
+            duration: script.voice?.duration ? script.voice.duration : 8000,
           }]
         }))
       };
     }
 
-    // No data available - return minimal structure for empty project
-    return {
-      title: projectTitle || "Empty Project",
-      context: "Please generate content to create a video",
-      contents: [{
-        description: "No content available. Please generate content first.",
-        image: "https://via.placeholder.com/1920x1080/cccccc/666666?text=Generate+Content+First",
-        subtitles: [{
-          text: "Please generate content using the text input above to create your video.",
-          audio: "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
-          duration: 5000,
-        }]
-      }]
-    };
+    return null;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check if there's any content to create video from
     if (resources.length === 0 && (!project?.scripts || project.scripts.length === 0)) {
       addToast("Vui lòng tạo nội dung trước khi tạo video!", "warning");
       return;
@@ -279,7 +263,6 @@ function ProjectPageContent() {
   const handleEdit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check if there's any content to edit
     if (resources.length === 0 && (!project?.scripts || project.scripts.length === 0)) {
       addToast("Vui lòng tạo nội dung trước khi chỉnh sửa video!", "warning");
       return;
@@ -366,6 +349,7 @@ function ProjectPageContent() {
   const handleTemplateSelect = async (config: VideoConfig) => {
     // Get current video data (project data, dynamic resources, or static fallback)
     const videoData = convertProjectToVideoData();
+    console.log("Video Data:", videoData);
     
     // Extract data with selected template configuration
     const apiData = extractDataToAPI(videoData, {

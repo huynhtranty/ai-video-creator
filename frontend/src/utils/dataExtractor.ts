@@ -37,7 +37,7 @@ interface APIFormat {
 }
 
 export function extractDataToAPI(
-  data: VideoData,
+  data: VideoData | null,
   options: {
     width?: number;
     height?: number;
@@ -63,28 +63,28 @@ export function extractDataToAPI(
   const id = generateId();
 
   // Extract image URLs
-  const imageUrls: string[] = data.contents.map(content => content.image);
+  const imageUrls: string[] = data?.contents.map(content => content.image) || [];
 
   // Extract audio URLs (unique ones only)
   const audioUrls: string[] = Array.from(
     new Set(
-      data.contents.flatMap(content => 
+      data?.contents.flatMap(content => 
         content.subtitles.map(subtitle => subtitle.audio)
       )
     )
   );
 
   // Generate SRT content
-  const srtContent = generateSRTContent(data.contents);
+  const srtContent = generateSRTContent(data?.contents || []);
 
   // Calculate image durations based on subtitles
-  const imageDurations: number[] = data.contents.map(content => {
+  const imageDurations: number[] = data?.contents.map(content => {
     const totalDuration = content.subtitles.reduce(
       (sum, subtitle) => sum + subtitle.duration,
       0
     );
     return totalDuration;
-  });
+  }) || [];
 
   // Generate fit modes array
   const imageFitModes: string[] = new Array(imageUrls.length).fill(defaultFitMode);

@@ -13,6 +13,7 @@ export const transformScriptResponseWithLoading = (
     imageAlt: `generated-${Date.now()}-${script.order}`,
     textContent: script.content,
     audioSrc: script.voice?.audioUrl,
+    audioDuration: script.voice?.duration,
     description: script.content,
     isImageLoading: !script.media,
     isAudioLoading: !script.voice
@@ -31,6 +32,7 @@ export const transformProjectScriptsToResources = (
     imageAlt: `script-${script.id}`,
     textContent: script.content,
     audioSrc: script.voice?.audioUrl,
+    audioDuration: script.voice?.duration,
     description: script.content,
     isImageLoading: !script.media,
     isAudioLoading: !script.voice
