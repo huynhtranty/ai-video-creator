@@ -1,0 +1,435 @@
+{
+  "id": "KTa3TG9yOuxJyPmF",
+  "size": {
+    "width": 1080,
+    "height": 1920
+  },
+  "fps": 30,
+  "tracks": [
+    {
+      "id": "PtqYQXDdqiqyEGmm",
+      "accepts": [
+        "text",
+        "audio",
+        "helper",
+        "video",
+        "image",
+        "caption",
+        "template"
+      ],
+      "type": "audio",
+      "items": [
+        "08xjsW9jZyKwiRhl"
+      ],
+      "magnetic": false,
+      "static": false
+    },
+    {
+      "id": "RxSJsnNdjwpHxccr",
+      "items": [
+        "voxbKXxM8I1ZMV1r",
+        "XbYBmUS3ja9FqO2A"
+      ],
+      "type": "image",
+      "accepts": [
+        "text",
+        "image",
+        "video",
+        "audio",
+        "caption",
+        "template"
+      ]
+    },
+    {
+      "id": "363bPNlvGr8YY7Y7",
+      "accepts": [
+        "text",
+        "audio",
+        "helper",
+        "video",
+        "image",
+        "caption",
+        "template"
+      ],
+      "type": "text",
+      "items": [
+        "dAGBBxUMwnaWezaA",
+        "mKUgnliasXcOznZk"
+      ],
+      "magnetic": false,
+      "static": false
+    }
+  ],
+  "trackItemIds": [
+    "voxbKXxM8I1ZMV1r",
+    "XbYBmUS3ja9FqO2A",
+    "08xjsW9jZyKwiRhl",
+    "dAGBBxUMwnaWezaA",
+    "mKUgnliasXcOznZk"
+  ],
+  "trackItemsMap": {
+    "voxbKXxM8I1ZMV1r": {
+      "id": "voxbKXxM8I1ZMV1r",
+      "type": "image",
+      "name": "image",
+      "display": {
+        "from": 0,
+        "to": 3000
+      },
+      "playbackRate": 1,
+      "metadata": {},
+      "details": {
+        "src": "https://plus.unsplash.com/premium_photo-1686817098743-818c1699ba7e",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(0.5625)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "600px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "XbYBmUS3ja9FqO2A": {
+      "id": "XbYBmUS3ja9FqO2A",
+      "type": "image",
+      "name": "image",
+      "display": {
+        "from": 3000,
+        "to": 7000
+      },
+      "playbackRate": 1,
+      "metadata": {},
+      "details": {
+        "src": "https://plus.unsplash.com/premium_photo-1686817098743-818c1699ba7e",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(0.5625)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "600px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "08xjsW9jZyKwiRhl": {
+      "id": "08xjsW9jZyKwiRhl",
+      "name": "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
+      "type": "audio",
+      "display": {
+        "from": 0,
+        "to": 7000
+      },
+      "trim": {
+        "from": 0,
+        "to": 7000
+      },
+      "playbackRate": 1,
+      "metadata": {
+        "author": "Unknown"
+      },
+      "duration": 7000,
+      "isMain": false,
+      "details": {
+        "src": "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
+        "volume": 100
+      }
+    },
+    "dAGBBxUMwnaWezaA": {
+      "id": "dAGBBxUMwnaWezaA",
+      "name": "text",
+      "type": "text",
+      "display": {
+        "from": 0,
+        "to": 2000
+      },
+      "metadata": {},
+      "isMain": false,
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Hello World!",
+        "opacity": 100,
+        "width": 1080,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": 900,
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "mKUgnliasXcOznZk": {
+      "id": "mKUgnliasXcOznZk",
+      "name": "text",
+      "type": "text",
+      "display": {
+        "from": 3000,
+        "to": 5000
+      },
+      "metadata": {},
+      "isMain": false,
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Welcome to the video!",
+        "opacity": 100,
+        "width": 1080,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": 900,
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    }
+  },
+  "transitionIds": [
+    "voxbKXxM8I1ZMV1r-3Ga1DqAKOYlgCxpP"
+  ],
+  "transitionsMap": {
+    "voxbKXxM8I1ZMV1r-3Ga1DqAKOYlgCxpP": {
+      "id": "voxbKXxM8I1ZMV1r-3Ga1DqAKOYlgCxpP",
+      "duration": 1500,
+      "fromId": "voxbKXxM8I1ZMV1r",
+      "toId": "3Ga1DqAKOYlgCxpP",
+      "kind": "none",
+      "trackId": "RxSJsnNdjwpHxccr",
+      "type": "transition"
+    }
+  },
+  "scale": {
+    "index": 7,
+    "unit": 300,
+    "zoom": 0.0033333333333333335,
+    "segments": 5
+  },
+  "duration": 7000,
+  "activeIds": [],
+  "trackItemDetailsMap": {
+    "voxbKXxM8I1ZMV1r": {
+      "type": "image",
+      "details": {
+        "src": "https://plus.unsplash.com/premium_photo-1686817098743-818c1699ba7e",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(0.5625)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "600px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "XbYBmUS3ja9FqO2A": {
+      "type": "image",
+      "details": {
+        "src": "https://plus.unsplash.com/premium_photo-1686817098743-818c1699ba7e",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(0.5625)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "600px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "08xjsW9jZyKwiRhl": {
+      "type": "audio",
+      "details": {
+        "src": "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
+        "volume": 100
+      }
+    },
+    "dAGBBxUMwnaWezaA": {
+      "type": "text",
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Hello World!",
+        "opacity": 100,
+        "width": 1080,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": 900,
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "mKUgnliasXcOznZk": {
+      "type": "text",
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Welcome to the video!",
+        "opacity": 100,
+        "width": 1080,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": 900,
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    }
+  },
+  "structure": []
+}

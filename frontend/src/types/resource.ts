@@ -64,6 +64,7 @@ export interface GeneratedResource {
   imageAlt: string;
   textContent: string;
   audioSrc?: string;
+  audioDuration?: number;
   description: string;
   isImageLoading?: boolean;
   isImageError?: boolean;

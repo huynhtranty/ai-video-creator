@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import apiClient from "@/lib/api-client";
 import { Project, CreateProjectRequest, UpdateProjectRequest } from "@/types/project";
@@ -64,9 +64,16 @@ export const useUpdateProject = () => {
 };
 
 export const useDeleteProject = () => {
+  const queryClient = useQueryClient();
+  
   return useMutation<void, Error, string>({
     mutationFn: async (projectId: string) => {
       await apiClient.delete(`/projects/${projectId}`);
+    },
+    onSuccess: () => {
+      // Invalidate and refetch projects after successful deletion
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['projects', 'recent'] });
     },
     onError: (error) => {
       console.error("Error deleting project:", error);

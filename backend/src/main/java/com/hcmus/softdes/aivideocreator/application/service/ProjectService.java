@@ -121,6 +121,7 @@ public class ProjectService {
              }).toList();
     }
 
+    @Transactional
     public void deleteProject(UUID id) {
         if (id == null) {
             throw new IllegalArgumentException("Project ID cannot be null");

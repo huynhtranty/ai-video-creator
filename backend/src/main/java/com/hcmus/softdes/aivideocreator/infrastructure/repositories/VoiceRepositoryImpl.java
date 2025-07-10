@@ -87,9 +87,9 @@ public class VoiceRepositoryImpl implements VoiceRepository {
                 fos.write(audioBytes);
             }
             Mp3File mp3File = new Mp3File(tempFile.getAbsolutePath());
-            int durationInSeconds = (int) mp3File.getLengthInSeconds();
+            int durationInMiliseconds = (int) (mp3File.getLengthInMilliseconds());
             tempFile.delete();
-            return durationInSeconds;
+            return durationInMiliseconds;
         } catch (Exception e) {
             return -1; // Handle errors appropriately
         }

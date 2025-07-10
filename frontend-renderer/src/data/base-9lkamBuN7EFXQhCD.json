@@ -1,0 +1,949 @@
+{
+  "id": "9lkamBuN7EFXQhCD",
+  "size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "fps": 30,
+  "tracks": [
+    {
+      "id": "hTZ7sAEujLFEmCBG",
+      "accepts": [
+        "text",
+        "audio",
+        "helper",
+        "video",
+        "image",
+        "caption",
+        "template"
+      ],
+      "type": "audio",
+      "items": [
+        "xe16Ht95KRIyQ45h"
+      ],
+      "magnetic": false,
+      "static": false
+    },
+    {
+      "id": "823MCHSTGj9eI6rh",
+      "items": [
+        "QMlsmE3b4PUNYygP",
+        "NwlE23S4wSgzJNUl",
+        "DxiwkBlAJTfcGVXT",
+        "DcaepEvawQqwEHKG"
+      ],
+      "type": "image",
+      "accepts": [
+        "text",
+        "image",
+        "video",
+        "audio",
+        "caption",
+        "template"
+      ]
+    },
+    {
+      "id": "z4fQ5P9M2jN31gmq",
+      "accepts": [
+        "text",
+        "audio",
+        "helper",
+        "video",
+        "image",
+        "caption",
+        "template"
+      ],
+      "type": "text",
+      "items": [
+        "834ssA5YItq18lPG",
+        "RF2otcI16GNyqfXW",
+        "6eW6QtdDBaB6z5hn",
+        "uiFYz4Uu6fmD3N7S",
+        "Tl7gVuKzodzYTFpn",
+        "C31s0YvvAXaZnw7E"
+      ],
+      "magnetic": false,
+      "static": false
+    }
+  ],
+  "trackItemIds": [
+    "QMlsmE3b4PUNYygP",
+    "NwlE23S4wSgzJNUl",
+    "DxiwkBlAJTfcGVXT",
+    "DcaepEvawQqwEHKG",
+    "xe16Ht95KRIyQ45h",
+    "834ssA5YItq18lPG",
+    "RF2otcI16GNyqfXW",
+    "6eW6QtdDBaB6z5hn",
+    "uiFYz4Uu6fmD3N7S",
+    "Tl7gVuKzodzYTFpn",
+    "C31s0YvvAXaZnw7E"
+  ],
+  "trackItemsMap": {
+    "QMlsmE3b4PUNYygP": {
+      "id": "QMlsmE3b4PUNYygP",
+      "type": "image",
+      "name": "image",
+      "display": {
+        "from": 0,
+        "to": 18000
+      },
+      "playbackRate": 1,
+      "metadata": {},
+      "details": {
+        "src": "https://www.shutterstock.com/shutterstock/photos/1931719025/display_1500/stock-photo-blood-sugar-testing-equipment-for-diabetics-with-monitor-and-lancing-device-and-heath-foods-below-1931719025.jpg",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(1.0000)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "-100px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "NwlE23S4wSgzJNUl": {
+      "id": "NwlE23S4wSgzJNUl",
+      "type": "image",
+      "name": "image",
+      "display": {
+        "from": 18000,
+        "to": 29000
+      },
+      "playbackRate": 1,
+      "metadata": {},
+      "details": {
+        "src": "https://www.shutterstock.com/shutterstock/photos/1931719025/display_1500/stock-photo-blood-sugar-testing-equipment-for-diabetics-with-monitor-and-lancing-device-and-heath-foods-below-1931719025.jpg",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(1.0000)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "-100px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "DxiwkBlAJTfcGVXT": {
+      "id": "DxiwkBlAJTfcGVXT",
+      "type": "image",
+      "name": "image",
+      "display": {
+        "from": 29000,
+        "to": 52500
+      },
+      "playbackRate": 1,
+      "metadata": {},
+      "details": {
+        "src": "https://www.shutterstock.com/shutterstock/photos/1931719025/display_1500/stock-photo-blood-sugar-testing-equipment-for-diabetics-with-monitor-and-lancing-device-and-heath-foods-below-1931719025.jpg",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(1.0000)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "-100px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "DcaepEvawQqwEHKG": {
+      "id": "DcaepEvawQqwEHKG",
+      "type": "image",
+      "name": "image",
+      "display": {
+        "from": 52500,
+        "to": 57000
+      },
+      "playbackRate": 1,
+      "metadata": {},
+      "details": {
+        "src": "https://www.shutterstock.com/shutterstock/photos/1931719025/display_1500/stock-photo-blood-sugar-testing-equipment-for-diabetics-with-monitor-and-lancing-device-and-heath-foods-below-1931719025.jpg",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(1.0000)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "-100px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "xe16Ht95KRIyQ45h": {
+      "id": "xe16Ht95KRIyQ45h",
+      "name": "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
+      "type": "audio",
+      "display": {
+        "from": 0,
+        "to": 57000
+      },
+      "trim": {
+        "from": 0,
+        "to": 57000
+      },
+      "playbackRate": 1,
+      "metadata": {
+        "author": "Unknown"
+      },
+      "duration": 57000,
+      "isMain": false,
+      "details": {
+        "src": "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
+        "volume": 100
+      }
+    },
+    "834ssA5YItq18lPG": {
+      "id": "834ssA5YItq18lPG",
+      "name": "text",
+      "type": "text",
+      "display": {
+        "from": 0,
+        "to": 7500
+      },
+      "metadata": {},
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Trong guồng quay hối hả của cuộc sống hiện đại, chúng ta thường mải miết theo đuổi danh vọng, tiền tài, mà đôi khi quên đi một điều giản dị nhưng vô cùng quan trọng: sức khỏe.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "RF2otcI16GNyqfXW": {
+      "id": "RF2otcI16GNyqfXW",
+      "name": "text",
+      "type": "text",
+      "display": {
+        "from": 7500,
+        "to": 18000
+      },
+      "metadata": {},
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Sức khỏe không chỉ là sự vắng mặt của bệnh tật, mà là trạng thái hoàn hảo về thể chất, tinh thần và xã hội, là nền tảng vững chắc cho mọi ước mơ và hoài bão của mỗi người.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "6eW6QtdDBaB6z5hn": {
+      "id": "6eW6QtdDBaB6z5hn",
+      "name": "text",
+      "type": "text",
+      "display": {
+        "from": 18000,
+        "to": 29000
+      },
+      "metadata": {},
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Bạn có thể có tất cả của cải trên đời, nhưng nếu không có sức khỏe, liệu bạn có thể tận hưởng chúng một cách trọn vẹn? Một cơ thể cường tráng, một tinh thần minh mẫn chính là chìa khóa để ta làm việc, học tập và trải nghiệm cuộc sống.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "uiFYz4Uu6fmD3N7S": {
+      "id": "uiFYz4Uu6fmD3N7S",
+      "name": "text",
+      "type": "text",
+      "display": {
+        "from": 29000,
+        "to": 41500
+      },
+      "metadata": {},
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Hãy tưởng tượng một ngày bạn thức dậy tràn đầy năng lượng, sẵn sàng đối mặt với mọi thử thách. Đó là món quà vô giá mà sức khỏe mang lại, giúp bạn theo đuổi đam mê và đạt được thành công.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "Tl7gVuKzodzYTFpn": {
+      "id": "Tl7gVuKzodzYTFpn",
+      "name": "text",
+      "type": "text",
+      "display": {
+        "from": 41500,
+        "to": 52500
+      },
+      "metadata": {},
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Để giữ gìn vốn quý này, hãy bắt đầu từ những thói quen nhỏ: ăn uống khoa học, tập luyện đều đặn, ngủ đủ giấc và giữ tinh thần lạc quan. Đừng chờ đến khi mất đi mới hối tiếc.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "C31s0YvvAXaZnw7E": {
+      "id": "C31s0YvvAXaZnw7E",
+      "name": "text",
+      "type": "text",
+      "display": {
+        "from": 52500,
+        "to": 57000
+      },
+      "metadata": {},
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Hãy nhớ rằng, sức khỏe chính là tài sản quý giá nhất mà bạn có. Hãy trân trọng và bảo vệ nó mỗi ngày.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    }
+  },
+  "transitionIds": [
+    "QMlsmE3b4PUNYygP-NwlE23S4wSgzJNUl",
+    "NwlE23S4wSgzJNUl-DxiwkBlAJTfcGVXT",
+    "DxiwkBlAJTfcGVXT-DcaepEvawQqwEHKG"
+  ],
+  "transitionsMap": {
+    "QMlsmE3b4PUNYygP-NwlE23S4wSgzJNUl": {
+      "id": "QMlsmE3b4PUNYygP-NwlE23S4wSgzJNUl",
+      "duration": 1000,
+      "fromId": "QMlsmE3b4PUNYygP",
+      "toId": "NwlE23S4wSgzJNUl",
+      "kind": "fade",
+      "trackId": "823MCHSTGj9eI6rh",
+      "type": "transition"
+    },
+    "NwlE23S4wSgzJNUl-DxiwkBlAJTfcGVXT": {
+      "id": "NwlE23S4wSgzJNUl-DxiwkBlAJTfcGVXT",
+      "duration": 1000,
+      "fromId": "NwlE23S4wSgzJNUl",
+      "toId": "DxiwkBlAJTfcGVXT",
+      "kind": "fade",
+      "trackId": "823MCHSTGj9eI6rh",
+      "type": "transition"
+    },
+    "DxiwkBlAJTfcGVXT-DcaepEvawQqwEHKG": {
+      "id": "DxiwkBlAJTfcGVXT-DcaepEvawQqwEHKG",
+      "duration": 1000,
+      "fromId": "DxiwkBlAJTfcGVXT",
+      "toId": "DcaepEvawQqwEHKG",
+      "kind": "fade",
+      "trackId": "823MCHSTGj9eI6rh",
+      "type": "transition"
+    }
+  },
+  "scale": {
+    "index": 7,
+    "unit": 300,
+    "zoom": 0.0033333333333333335,
+    "segments": 5
+  },
+  "duration": 57000,
+  "activeIds": [],
+  "trackItemDetailsMap": {
+    "QMlsmE3b4PUNYygP": {
+      "type": "image",
+      "details": {
+        "src": "https://www.shutterstock.com/shutterstock/photos/1931719025/display_1500/stock-photo-blood-sugar-testing-equipment-for-diabetics-with-monitor-and-lancing-device-and-heath-foods-below-1931719025.jpg",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(1.0000)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "-100px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "NwlE23S4wSgzJNUl": {
+      "type": "image",
+      "details": {
+        "src": "https://www.shutterstock.com/shutterstock/photos/1931719025/display_1500/stock-photo-blood-sugar-testing-equipment-for-diabetics-with-monitor-and-lancing-device-and-heath-foods-below-1931719025.jpg",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(1.0000)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "-100px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "DxiwkBlAJTfcGVXT": {
+      "type": "image",
+      "details": {
+        "src": "https://www.shutterstock.com/shutterstock/photos/1931719025/display_1500/stock-photo-blood-sugar-testing-equipment-for-diabetics-with-monitor-and-lancing-device-and-heath-foods-below-1931719025.jpg",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(1.0000)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "-100px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "DcaepEvawQqwEHKG": {
+      "type": "image",
+      "details": {
+        "src": "https://www.shutterstock.com/shutterstock/photos/1931719025/display_1500/stock-photo-blood-sugar-testing-equipment-for-diabetics-with-monitor-and-lancing-device-and-heath-foods-below-1931719025.jpg",
+        "width": 1920,
+        "height": 1280,
+        "opacity": 100,
+        "transform": "scale(1.0000)",
+        "border": "none",
+        "borderRadius": 0,
+        "boxShadow": {
+          "color": "#000000",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        },
+        "top": "-100px",
+        "left": "0px",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "blur": 0,
+        "brightness": 100,
+        "flipX": false,
+        "flipY": false,
+        "rotate": "0deg",
+        "visibility": "visible"
+      }
+    },
+    "xe16Ht95KRIyQ45h": {
+      "type": "audio",
+      "details": {
+        "src": "https://cdn.designcombo.dev/audio/Dawn%20of%20change.mp3",
+        "volume": 100
+      }
+    },
+    "834ssA5YItq18lPG": {
+      "type": "text",
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Trong guồng quay hối hả của cuộc sống hiện đại, chúng ta thường mải miết theo đuổi danh vọng, tiền tài, mà đôi khi quên đi một điều giản dị nhưng vô cùng quan trọng: sức khỏe.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "RF2otcI16GNyqfXW": {
+      "type": "text",
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Sức khỏe không chỉ là sự vắng mặt của bệnh tật, mà là trạng thái hoàn hảo về thể chất, tinh thần và xã hội, là nền tảng vững chắc cho mọi ước mơ và hoài bão của mỗi người.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "6eW6QtdDBaB6z5hn": {
+      "type": "text",
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Bạn có thể có tất cả của cải trên đời, nhưng nếu không có sức khỏe, liệu bạn có thể tận hưởng chúng một cách trọn vẹn? Một cơ thể cường tráng, một tinh thần minh mẫn chính là chìa khóa để ta làm việc, học tập và trải nghiệm cuộc sống.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "uiFYz4Uu6fmD3N7S": {
+      "type": "text",
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Hãy tưởng tượng một ngày bạn thức dậy tràn đầy năng lượng, sẵn sàng đối mặt với mọi thử thách. Đó là món quà vô giá mà sức khỏe mang lại, giúp bạn theo đuổi đam mê và đạt được thành công.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "Tl7gVuKzodzYTFpn": {
+      "type": "text",
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Để giữ gìn vốn quý này, hãy bắt đầu từ những thói quen nhỏ: ăn uống khoa học, tập luyện đều đặn, ngủ đủ giấc và giữ tinh thần lạc quan. Đừng chờ đến khi mất đi mới hối tiếc.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    },
+    "C31s0YvvAXaZnw7E": {
+      "type": "text",
+      "details": {
+        "fontFamily": "Roboto-Bold",
+        "fontSize": 30,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textDecoration": "none",
+        "textAlign": "center",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "wordSpacing": "normal",
+        "color": "#ffffff",
+        "backgroundColor": "transparent",
+        "border": "none",
+        "textShadow": "none",
+        "text": "Hãy nhớ rằng, sức khỏe chính là tài sản quý giá nhất mà bạn có. Hãy trân trọng và bảo vệ nó mỗi ngày.",
+        "opacity": 100,
+        "width": 1920,
+        "wordWrap": "break-word",
+        "wordBreak": "normal",
+        "WebkitTextStrokeColor": "#ffffff",
+        "WebkitTextStrokeWidth": "0px",
+        "top": "983px",
+        "left": "0px",
+        "textTransform": "none",
+        "transform": "none",
+        "skewX": 0,
+        "skewY": 0,
+        "height": 37,
+        "fontUrl": "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "boxShadow": {
+          "color": "#ffffff",
+          "x": 0,
+          "y": 0,
+          "blur": 0
+        }
+      }
+    }
+  },
+  "structure": []
+}

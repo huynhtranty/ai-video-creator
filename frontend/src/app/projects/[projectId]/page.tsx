@@ -6,6 +6,7 @@ import Sidebar from "@/features/dashboard/components/Sidebar";
 import HeaderSection from "@/features/projects/components/HeaderSection";
 import TextInput from "@/features/projects/components/TextInput";
 import ResourceSection from "@/features/projects/components/ResourceSection";
+import TemplateChooserPopup from "@/components/videoTemplates/TemplateChooserPopup";
 import { useGenerateScript } from "@/features/projects/api/script";
 import { useGetProject, useUpdateProject } from "@/features/projects/api/project";
 import { GeneratedResource } from "@/types/resource";
@@ -14,6 +15,36 @@ import { transformScriptResponseWithLoading, transformProjectScriptsToResources 
 import { generateImageForScript } from "@/features/projects/api/image";
 import { generateTtsForScript } from "@/features/projects/api/tts";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { extractDataToAPI } from "@/utils/dataExtractor";
+import { useVideoRender } from "@/features/videoRender/hooks/useVideoRender";
+import { handleVideoComplete, handleVideoError } from "@/utils/videoActions";
+
+// Types for static fallback data
+interface VideoData {
+  title: string;
+  context: string;
+  contents: {
+    description: string;
+    image: string;
+    subtitles: {
+      text: string;
+      audio: string;
+      duration: number;
+    }[];
+  }[];
+}
+
+interface VideoConfig {
+  template: { name: string };
+  width: number;
+  height: number;
+  fps: number;
+  enableTransitions: boolean;
+  transitionDuration: number;
+  fitMode: string;
+  transitionEffect: string;
+  audioConfig: string;
+}
 
 function ProjectPageContent() {
   const params = useParams();
@@ -25,10 +56,27 @@ function ProjectPageContent() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [context, setContext] = useState<string>("");
   const [projectTitle, setProjectTitle] = useState("Loading...");
+  const [showTemplateChooser, setShowTemplateChooser] = useState(false);
   const { addToast } = useToast();
   
   const generateScript = useGenerateScript();
   const updateProject = useUpdateProject();
+  
+  const {
+    renderVideo,
+    status,
+    isRendering,
+    error,
+    progress,
+    currentVideoId,
+    cancelRender
+  } = useVideoRender({
+    onComplete: handleVideoComplete,
+    onError: handleVideoError,
+    onProgress: (status) => {
+      console.log(`Render progress: ${status.progress}%`);
+    }
+  });
   
   const { data: project, isLoading: isProjectLoading, error: projectError } = useGetProject(projectId);
 
@@ -164,6 +212,166 @@ function ProjectPageContent() {
     }
   };
 
+  // Helper function to convert project data to video data format
+  const convertProjectToVideoData = (): VideoData | null => {
+    if (resources.length > 0) {
+      return {
+        title: projectTitle,
+        context: context || project?.imageContext || "Default context for video generation",
+        contents: resources.map(resource => ({
+          description: typeof resource.textContent === 'string' ? resource.textContent : "Generated content",
+          image: resource.imageSrc || "",
+          subtitles: [{
+            text: typeof resource.textContent === 'string' ? resource.textContent : "Generated text content",
+            audio: resource.audioSrc || "",
+            duration: resource.audioDuration || 8000, 
+          }]
+        }))
+      };
+    }
+
+    if (project?.scripts && project.scripts.length > 0) {
+      return {
+        title: project.name || "Untitled",
+        context: project.imageContext || "Video context from project data",
+        contents: project.scripts.map(script => ({
+          description: script.content,
+          image: script.media?.url || "",
+          subtitles: [{
+            text: script.content,
+            audio: script.voice?.audioUrl || "",
+            duration: script.voice?.duration ? script.voice.duration : 8000,
+          }]
+        }))
+      };
+    }
+
+    return null;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (resources.length === 0 && (!project?.scripts || project.scripts.length === 0)) {
+      addToast("Vui lòng tạo nội dung trước khi tạo video!", "warning");
+      return;
+    }
+    
+    setShowTemplateChooser(true);
+  };
+
+  const handleEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (resources.length === 0 && (!project?.scripts || project.scripts.length === 0)) {
+      addToast("Vui lòng tạo nội dung trước khi chỉnh sửa video!", "warning");
+      return;
+    }
+    
+    try {
+      // Get current video data (project data, dynamic resources, or static fallback)
+      const videoData = convertProjectToVideoData();
+      
+      // Extract data in API format with default settings
+      const apiData = extractDataToAPI(videoData, {
+        width: 1920,
+        height: 1080,
+        fps: 30,
+        enableTransitions: true,
+        transitionDuration: 1000,
+        defaultFitMode: 'cover',
+        defaultTransition: 'fade'
+      });
+
+      // Add audio configuration
+      (apiData.config as Record<string, unknown>).audioConfig = 'background';
+
+      // Generate unique ID for this video
+      const videoId = `video_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Prepare video data
+      const editorVideoData = {
+        id: videoId,
+        originalData: videoData,
+        apiData: apiData,
+        timestamp: new Date().toISOString()
+      };
+
+      console.log('📤 Preparing to send video data:', editorVideoData);
+
+      // Open editor in new tab
+      const editorUrl = `http://localhost:5173/?videoId=${videoId}`;
+      const editorWindow = window.open(editorUrl, '_blank');
+
+      if (!editorWindow) {
+        addToast('❌ Popup blocked! Please allow popups for this site.', 'error');
+        return;
+      }
+
+      // Wait for editor window to load, then send data
+      const sendDataWhenReady = () => {
+        const maxAttempts = 50; // 10 seconds max
+        let attempts = 0;
+
+        const trySendData = () => {
+          attempts++;
+          
+          try {
+            editorWindow.postMessage({
+              type: 'VIDEO_DATA',
+              payload: editorVideoData
+            }, 'http://localhost:5173');
+            
+          } catch (sendError) {
+            console.log(`Attempt ${attempts} failed, retrying...`, sendError);
+            
+            if (attempts < maxAttempts) {
+              setTimeout(trySendData, 200);
+            } else {
+              console.error('❌ Failed to send data after max attempts');
+              addToast('❌ Failed to send data to editor. Please try again.', 'error');
+            }
+          }
+        };
+
+        // Start trying after a short delay
+        setTimeout(trySendData, 1000);
+      };
+
+      sendDataWhenReady();
+
+    } catch (error) {
+      console.error('❌ Error preparing video data:', error);
+      addToast('Lỗi khi chuẩn bị dữ liệu!', 'error');
+    }
+  };
+
+  const handleTemplateSelect = async (config: VideoConfig) => {
+    // Get current video data (project data, dynamic resources, or static fallback)
+    const videoData = convertProjectToVideoData();
+    console.log("Video Data:", videoData);
+    
+    // Extract data with selected template configuration
+    const apiData = extractDataToAPI(videoData, {
+      width: config.width,
+      height: config.height,
+      fps: config.fps,
+      enableTransitions: config.enableTransitions,
+      transitionDuration: config.transitionDuration,
+      defaultFitMode: config.fitMode,
+      defaultTransition: config.transitionEffect
+    });
+
+    // Add audio configuration
+    (apiData.config as Record<string, unknown>).audioConfig = config.audioConfig;
+
+    console.log("Selected Template:", config.template.name);
+    console.log("API Data:", apiData);
+    
+    // Start rendering
+    await renderVideo(apiData);
+  };
+
     const updateResource = (resourceId: string, updates: Partial<GeneratedResource>) => {
     setResources(prevResources => {
       const updatedResources = prevResources.map(resource => 
@@ -267,6 +475,8 @@ function ProjectPageContent() {
           <HeaderSection 
             title={projectTitle}
             onTitleChange={handleTitleChange}
+            onSubmit={handleSubmit}
+            onEdit={handleEdit}
           />
           <TextInput value={inputText} onChange={setInputText} />
         </div>
@@ -280,6 +490,74 @@ function ProjectPageContent() {
             projectId={projectId}
           />
         </div>
+        
+        {/* Template Chooser Popup */}
+        <TemplateChooserPopup
+          isOpen={showTemplateChooser}
+          onClose={() => setShowTemplateChooser(false)}
+          onSelect={handleTemplateSelect}
+        />
+        
+        {/* Render Progress Display */}
+        {isRendering && (
+          <div style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            backgroundColor: 'white',
+            border: '2px solid #3b82f6',
+            borderRadius: '8px',
+            padding: '16px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            zIndex: 1000,
+            minWidth: '300px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <h3 style={{ margin: 0, color: '#1f2937' }}>🎬 Rendering Video...</h3>
+              <button
+                onClick={cancelRender}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '16px',
+                  cursor: 'pointer',
+                  color: '#6b7280'
+                }}
+                title="Cancel render"
+              >
+                ✕
+              </button>
+            </div>
+            <div style={{ marginBottom: '8px', fontSize: '14px', color: '#6b7280' }}>
+              Progress: {progress}%
+              {status?.state && ` • ${status.state}`}
+            </div>
+            <div style={{
+              width: '100%',
+              height: '8px',
+              backgroundColor: '#e5e7eb',
+              borderRadius: '4px',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                width: `${progress}%`,
+                height: '100%',
+                backgroundColor: '#3b82f6',
+                transition: 'width 0.3s ease'
+              }} />
+            </div>
+            {currentVideoId && (
+              <div style={{ marginTop: '8px', fontSize: '12px', color: '#9ca3af' }}>
+                ID: {currentVideoId}
+              </div>
+            )}
+            {error && (
+              <div style={{ marginTop: '8px', fontSize: '12px', color: '#ef4444' }}>
+                Error: {error}
+              </div>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );

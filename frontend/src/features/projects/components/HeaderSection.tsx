@@ -4,9 +4,11 @@ import Image from "next/image";
 interface HeaderSectionProps {
   title: string;
   onTitleChange: (newTitle: string) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  onEdit:(e: React.FormEvent) => void;
 }
 
-export default function HeaderSection({ title, onTitleChange }: HeaderSectionProps) {
+export default function HeaderSection({ title, onTitleChange, onSubmit, onEdit }: HeaderSectionProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [localTitle, setLocalTitle] = useState(title);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -20,7 +22,7 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
     setLocalTitle(newTitle);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       onTitleChange(localTitle);
       setIsEditing(false);
@@ -32,7 +34,6 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
     setIsEditing(false);
   };
 
-  // Focus input when editing starts
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus();
@@ -40,7 +41,6 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
     }
   }, [isEditing]);
 
-  // Sync local title with prop title
   useEffect(() => {
     setLocalTitle(title);
   }, [title]);
@@ -54,7 +54,7 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
             type="text"
             value={localTitle}
             onChange={handleTitleChange}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyDown}
             onBlur={handleBlur}
             className="text-3xl font-bold mr-4 bg-transparent border-b-2 border-blue-500 outline-none"
           />
@@ -70,11 +70,29 @@ export default function HeaderSection({ title, onTitleChange }: HeaderSectionPro
           </button>
         </div>
       </div>
-      <div className="lg:w-1/8 lg:pl-4">
+      <div className="flex gap-1 lg:w-2/8 lg:pl-4">
         <button
+          onClick={onSubmit}
           className="w-full bg-[#8362E5] hover:bg-[#6F4EC8] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
         >
           Tạo video
+        </button>
+        <button 
+          onClick={onEdit}
+          className="w-full text-white px-4 py-2 rounded-lg"
+          style={{
+            background: "linear-gradient(to right, #61FFF2, #300DF4)",
+            backgroundColor: "#61FFF2", // Fallback color
+            transition: "background 0.3s ease", // Smooth transition for hover
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "linear-gradient(to right, #4DE6D9, #260BC7)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "linear-gradient(to right, #61FFF2, #300DF4)";
+          }}
+        >
+          Sửa video
         </button>
       </div>
     </div>
