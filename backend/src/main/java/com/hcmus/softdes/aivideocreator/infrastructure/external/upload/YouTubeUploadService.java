@@ -47,8 +47,10 @@ public class YouTubeUploadService {
                 videoObject,
                 mediaContent
         );
-//        videoInsert.setOauthToken(credential.getAccessToken());
-        System.out.println("credential video: " + credential);
+        if (credential == null || credential.isEmpty()) {
+            throw new IllegalArgumentException("Credential must not be null or empty");
+        }
+
         videoInsert.setOauthToken(credential);
 
         Video returnedVideo = videoInsert.execute();

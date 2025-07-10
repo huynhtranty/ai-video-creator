@@ -1,9 +1,11 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
+import com.google.api.services.youtube.model.VideoStatistics;
 import com.hcmus.softdes.aivideocreator.api.mappers.VideoMapper;
 import com.hcmus.softdes.aivideocreator.application.dto.video.VideoDto;
 import com.hcmus.softdes.aivideocreator.application.service.VideoService;
 import com.hcmus.softdes.aivideocreator.domain.model.Video;
+import com.hcmus.softdes.aivideocreator.infrastructure.external.upload.YouTubeUploadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +18,12 @@ import java.util.UUID;
 @RequestMapping("/api/videos")
 public class VideoController {
     VideoService videoService;
+    YouTubeUploadService youtubeService;
     VideoMapper videoMapper = new VideoMapper();
 
-    public VideoController(VideoService videoService) {
+    public VideoController(VideoService videoService, YouTubeUploadService youtubeService) {
         this.videoService = videoService;
+        this.youtubeService = youtubeService;
     }
 
     @PostMapping
@@ -75,10 +79,16 @@ public class VideoController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/analytics")
-    public ResponseEntity<String> getAnalytics() {
-        // Logic to retrieve analytics data
-        String analyticsData = "Analytics data"; // Replace with actual retrieval logic
-        return ResponseEntity.ok(analyticsData);
+    @GetMapping("/{videoId}/analytics")
+    public ResponseEntity<VideoStatistics> getAnalytics(@PathVariable String videoId) {
+        try {
+            VideoStatistics stats = youtubeService.getYouTubeVideoStats(videoId);
+            if (stats == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(stats);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
