@@ -66,6 +66,7 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-null}
       - NEXTAUTH_URL=http://localhost:3000
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-your-secret-key-here}
+      - IMAGE_URL=${IMAGE_URL:-the-url-to-the-image-public-cloud-server}
 networks:
   app-network:
     driver: bridge

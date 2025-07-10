@@ -6,6 +6,7 @@ import { LoginRequest } from "@/types/api";
 export type RegisterCredentials = {
   username: string;
   email: string;
+  fullname: string;
   password: string;
   dateOfBirth: string;
 };

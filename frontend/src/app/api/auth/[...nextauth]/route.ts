@@ -50,9 +50,9 @@ const handler = NextAuth({
               };
             }
           }
-
           return null;
         } catch (_error) {
+          console.log(_error);
           return null;
         }
       },
