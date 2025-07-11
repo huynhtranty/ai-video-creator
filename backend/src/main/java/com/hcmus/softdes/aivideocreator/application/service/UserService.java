@@ -1,12 +1,15 @@
 package com.hcmus.softdes.aivideocreator.application.service;
 
-import com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories.GoogleTokenRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.hcmus.softdes.aivideocreator.application.common.repositories.GoogleTokenRepository;
 import com.hcmus.softdes.aivideocreator.application.common.repositories.UserRepository;
 import com.hcmus.softdes.aivideocreator.application.dto.user.UserDto;
 import com.hcmus.softdes.aivideocreator.domain.exception.user.UserNotFoundException;
 import com.hcmus.softdes.aivideocreator.domain.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -68,5 +71,15 @@ public class UserService {
             throw new UserNotFoundException();
         }
         googleTokenRepository.saveToken(user.getEmail(), accessToken, refreshToken, expiresAt);
+    }
+
+    public String getGoogleAccessToken(String email) {
+        return googleTokenRepository.getAccessToken(email);
+    }
+    public String getGoogleRefreshToken(String email) {
+        return googleTokenRepository.getRefreshToken(email);
+    }
+    public String refreshGoogleAccessToken(String email) {
+        return googleTokenRepository.refreshAccessToken(email);
     }
 }

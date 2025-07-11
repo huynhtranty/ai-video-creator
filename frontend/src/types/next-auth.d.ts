@@ -14,6 +14,7 @@ declare module "next-auth" {
     accessToken?: string;
     name?: string;
     email?: string;
+    fullname?: string;
   }
 }
 

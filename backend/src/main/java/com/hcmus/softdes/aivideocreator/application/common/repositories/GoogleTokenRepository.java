@@ -1,7 +1,10 @@
-package com.hcmus.softdes.aivideocreator.application.common.interfaces.repositories;
+package com.hcmus.softdes.aivideocreator.application.common.repositories;
 
 import java.time.Instant;
 
 public interface GoogleTokenRepository {
     void saveToken(String email, String accessToken, String refreshToken, Instant expiresAt);
+    String getAccessToken(String email);
+    String getRefreshToken(String email);
+    String refreshAccessToken(String refreshToken);
 }

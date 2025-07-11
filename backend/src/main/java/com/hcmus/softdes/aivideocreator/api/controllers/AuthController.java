@@ -101,4 +101,39 @@ public class AuthController {
         var response = new AuthResponse(UserMapper.toUserResponse(applicationUser), jwtToken);
         return ResponseEntity.ok().headers(headers).body(response);
     }
+
+    @GetMapping("/google/token")
+    public ResponseEntity<String> getGoogleAccessToken() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = userService.findUserByUsername(username).getEmail();
+        var accessToken = userService.getGoogleAccessToken(email);
+
+        if (accessToken == null) {
+            return ResponseEntity.status(401).body("No valid access token found");
+        }
+        return ResponseEntity.ok(accessToken);
+    }
+    @GetMapping("/google/refresh")
+    public ResponseEntity<String> getGoogleRefreshToken() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = userService.findUserByUsername(username).getEmail();
+        var refreshToken = userService.getGoogleRefreshToken(email);
+
+        if (refreshToken == null) {
+            return ResponseEntity.status(401).body("No valid refresh token found");
+        }
+        return ResponseEntity.ok(refreshToken);
+    }
+    @GetMapping("/google/refresh-access-token")
+    public ResponseEntity<String> refreshGoogleAccessToken() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = userService.findUserByUsername(username).getEmail();
+        String refreshToken = userService.getGoogleRefreshToken(email);
+        var newAccessToken = userService.refreshGoogleAccessToken(refreshToken);
+
+        if (newAccessToken == null) {
+            return ResponseEntity.status(401).body("Failed to refresh access token");
+        }
+        return ResponseEntity.ok(newAccessToken);
+    }
 }

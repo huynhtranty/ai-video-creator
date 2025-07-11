@@ -1,12 +1,67 @@
 import React from "react";
+import { useListRecentProjects } from "@/features/projects/api/project";
+import ProjectCard from "@/features/projects/components/ProjectCard";
 
 export default function RecentProjectsSection() {
-  const projects = [
-    { id: 1, alt: "Video 1" },
-    { id: 2, alt: "Video 2" },
-    { id: 3, alt: "Video 3" },
-    { id: 4, alt: "Video 4" },
-  ];
+  const { data: projects = [], isLoading, error } = useListRecentProjects();
+
+  if (isLoading) {
+    return (
+      <section style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        <div className="list-project-section" style={{ marginTop: "5px", width: "90%" }}>
+          <h2
+            className="trending-title"
+            style={{
+              fontSize: "20px",
+              marginBottom: "5px",
+              fontWeight: "bold",
+              fontFamily: "'Dancing Script', cursive",
+            }}
+          >
+            Dự án gần đây:
+          </h2>
+          <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+            <div 
+              className="spinner"
+              style={{ 
+                width: "30px", 
+                height: "30px", 
+                border: "3px solid #f3f3f3",
+                borderTop: "3px solid #8362E5",
+                borderRadius: "50%",
+                animation: "spin 1s linear infinite",
+                margin: "0 auto 16px"
+              }}
+            />
+            Đang tải dự án gần đây...
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        <div className="list-project-section" style={{ marginTop: "5px", width: "90%" }}>
+          <h2
+            className="trending-title"
+            style={{
+              fontSize: "20px",
+              marginBottom: "5px",
+              fontWeight: "bold",
+              fontFamily: "'Dancing Script', cursive",
+            }}
+          >
+            Dự án gần đây:
+          </h2>
+          <div style={{ textAlign: "center", padding: "40px", color: "#e74c3c" }}>
+            Không thể tải dự án gần đây. Vui lòng thử lại.
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section style={{ display: "flex", justifyContent: "center", width: "100%" }}>
@@ -23,35 +78,23 @@ export default function RecentProjectsSection() {
           Dự án gần đây:
         </h2>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "1rem",
-          }}
-        >
-          {projects.map((project) => (
-            <div key={project.id}>
-              <div
-                style={{
-                  padding: "1rem",
-                  background: "white",
-                  borderRadius: "16px",
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  textAlign: "center",
-                  width: "100%",
-                  height: "180px",
-                  backgroundColor: "#EEEEEE",
-                }}
-              >
-                <img src="/videoTemp.svg" alt={project.alt} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              </div>
-              <div style={{ padding: "5px 15px", background: "white" }}>
-                <p style={{ fontSize: "14px", color: "#00000", fontFamily: "'Inter', cursive" }}>#VideoEditing</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {projects.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+            Chưa có dự án nào gần đây.
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, minmax(200px, 1fr))",
+              gap: "1rem",
+            }}
+          >
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

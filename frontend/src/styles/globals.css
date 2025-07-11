@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -119,4 +124,143 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom Audio Player Styling */
+.audio-player {
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  outline: none;
+}
+
+.audio-player::-webkit-media-controls-panel {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 8px;
+}
+
+.audio-player::-webkit-media-controls-play-button,
+.audio-player::-webkit-media-controls-pause-button {
+  background-color: #8362E5;
+  border-radius: 50%;
+  margin-left: 8px;
+}
+
+.audio-player::-webkit-media-controls-play-button:hover,
+.audio-player::-webkit-media-controls-pause-button:hover {
+  background-color: #6F4EC8;
+  transform: scale(1.05);
+}
+
+.audio-player::-webkit-media-controls-timeline {
+  background: linear-gradient(to right, #61FFF2, #300DF4);
+  border-radius: 4px;
+  margin: 0 8px;
+  height: 4px;
+}
+
+.audio-player::-webkit-media-controls-current-time-display,
+.audio-player::-webkit-media-controls-time-remaining-display {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.audio-player::-webkit-media-controls-volume-slider {
+  background: linear-gradient(to right, #61FFF2, #300DF4);
+  border-radius: 4px;
+  height: 4px;
+}
+
+.audio-player::-webkit-media-controls-mute-button {
+  background-color: #8362E5;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.audio-player::-webkit-media-controls-mute-button:hover {
+  background-color: #6F4EC8;
+}
+
+/* Firefox Audio Player Styling */
+.audio-player::-moz-media-controls {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 8px;
+}
+
+/* Focus styles */
+.audio-player:focus {
+  outline: 2px solid #61FFF2;
+  outline-offset: 2px;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Line clamp utilities */
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Custom scrollbar styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+}
+
+/* Line clamp utilities */
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Custom scrollbar styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+.scrollbar-track-gray-100::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
 }

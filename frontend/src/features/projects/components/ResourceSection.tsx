@@ -1,80 +1,120 @@
-import React from "react";
 import ResourceItem from "./ResourceItem";
+import ResourceSetting from "./ResourceSetting";
+import { GeneratedResource } from "@/types/resource";
 
-export default function ResourceSection() {
+interface ResourceSectionProps {
+  resources: GeneratedResource[];
+  onGenerateResources: (scriptStyle: string, imageStyle: string, voiceStyle: string) => Promise<void>;
+  onUpdateResource?: (resourceId: string, updates: Partial<GeneratedResource>) => void;
+  isGenerating: boolean;
+  context?: string;
+  projectId?: string;
+}
+
+export default function ResourceSection({ 
+  resources, 
+  onGenerateResources, 
+  onUpdateResource,
+  isGenerating,
+  context,
+  projectId
+}: ResourceSectionProps) {
+
+  const handleImageUpdate = (resourceId: string, newImageSrc: string) => {
+    if (onUpdateResource) {
+      onUpdateResource(resourceId, { imageSrc: newImageSrc });
+    }
+  };
+
+  const handleAudioUpdate = (resourceId: string, newAudioSrc: string) => {
+    if (onUpdateResource) {
+      onUpdateResource(resourceId, { audioSrc: newAudioSrc });
+    }
+  };
+
+  const handleLoadingStateChange = (resourceId: string, updates: { isImageLoading?: boolean; isAudioLoading?: boolean }) => {
+    if (onUpdateResource) {
+      onUpdateResource(resourceId, updates);
+    }
+  };
+
+  const handleScriptUpdate = (resourceId: string, newScript: string) => {
+    if (onUpdateResource) {
+      onUpdateResource(resourceId, { textContent: newScript });
+    }
+  };
+
   return (
-    <div>
-      <h2 className="text-xl font-semibold pb-2.5">Tài nguyên</h2>
-      <div
-        style={{
-          maxHeight: "calc(100vh - 200px)", // Chiều cao đủ để hiển thị 3 đoạn (~600px cho 3 đoạn)
-          overflowY: "auto", // Cho phép cuộn dọc khi vượt quá 3 đoạn
-          marginBottom: "1rem",
-        }}
-      >
-        <div className="space-y-5 lg:pr-4 lg:pb-4">
-          {/* Resource Item 1 */}
-          <ResourceItem
-            imageSrc="/rand1.svg"
-            imageAlt="Tank entering Saigon"
-            textContent={
-              <p className="text-gray-600">
-                50 năm thống nhất đất nước: Hòa bình, thống nhất và khắc vùng vươn lên. Những dấu xe
-                tăng hằn mạnh của quân giải phóng tiến vào Sài Gòn ngày 30/4/1975, đánh dấu thời khắc
-                lịch sử của chiến dịch Hồ Chí Minh lịch sử, cuộc kháng chiến chống Mỹ và mở ra một
-                chương mới cho đất nước.
-              </p>
-            }
-          />
-          {/* Resource Item 2 */}
-          <ResourceItem
-            imageSrc="/rand2.svg"
-            imageAlt="Independence Palace"
-            textContent={
-              <>
-                <p className="text-gray-600">
-                  Là cơ hội trưng bày Dinh Độc Lập, biểu trưng cho sự toàn thắng của cuộc kháng chiến,
-                  của ý chí độc lập và khát vọng hòa bình của dân tộc Việt Nam, sau chiến tranh, hòa
-                  bình, phát triển, hội nhập quốc tế và vươn lên mạnh mẽ.
-                </p>
-              </>
-            }
-          />
-          {/* Resource Item 3 */}
-          <ResourceItem
-            imageSrc="/rand3.svg"
-            imageAlt="People welcoming liberation army"
-            textContent={
-              <p className="text-gray-600">
-                Người dân Sài Gòn hoàn thành đón quân giải phóng, ngày đất nước thống nhất trở về ven,
-                non sông liền một dải, Bắc - Nam sum họp một nhà
-              </p>
-            }
-          />
-          {/* Add Item Section */}
-          <div className="flex flex-col lg:flex-row gap-0 items-start">
-            <div
-              className="w-full flex items-center justify-center rounded-lg"
-              style={{
-                border: "2px dashed #a855f7",
-                backgroundColor: "#ffffff",
-                height: "0",
-                paddingBottom: "11.1111%",
-                position: "relative",
-              }}
-            >
-              <button
-                className="text-fuchsia-700 px-4 py-2 rounded-lg"
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                }}
-              >
-                Thêm mục
-              </button>
+    <div className="flex gap-8 h-full">
+      {/* ResourceSetting on the left */}
+      <div className="w-80 flex-shrink-0">
+        <ResourceSetting onGenerateResources={onGenerateResources} isGenerating={isGenerating} />
+      </div>
+      
+      {/* Resource items on the right */}
+      <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex items-center justify-between pb-6 flex-shrink-0">
+          <h2 className="text-2xl font-bold text-gray-800">
+            Tài nguyên
+            {resources.length > 0 && (
+              <span className="text-base font-normal text-gray-500 ml-3">
+                ({resources.length} mục)
+              </span>
+            )}
+          </h2>
+          {isGenerating && (
+            <div className="flex items-center gap-3 text-sm text-gray-500 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
+              <svg className="animate-spin h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span className="font-medium">Đang tạo tài nguyên...</span>
             </div>
+          )}
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            paddingBottom: "2rem",
+            minHeight: 0,
+          }}
+          className="pr-2 scrollbar-thin"
+        >
+          <div className="space-y-6 pb-4">
+            {resources.length === 0 ? (
+              <div className="text-center py-16 text-gray-500 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                <div className="mb-6">
+                  <svg className="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">Chưa có tài nguyên nào</h3>
+                <p className="text-gray-500 max-w-md mx-auto">Nhập nội dung bên trái và nhấn &quot;Tạo tài nguyên&quot; để bắt đầu tạo video của bạn</p>
+              </div>
+            ) : (
+              resources.map((resource) => (
+                <ResourceItem
+                  key={resource.id}
+                  id={resource.id}
+                  imageSrc={resource.imageSrc}
+                  imageAlt={resource.imageAlt}
+                  textContent={resource.textContent}
+                  audioSrc={resource.audioSrc}
+                  onImageUpdate={handleImageUpdate}
+                  onAudioUpdate={handleAudioUpdate}
+                  onScriptUpdate={handleScriptUpdate}
+                  onLoadingStateChange={handleLoadingStateChange}
+                  context={context}
+                  projectId={projectId}
+                  isImageLoading={resource.isImageLoading}
+                  isImageError={resource.isImageError}
+                  isAudioLoading={resource.isAudioLoading}
+                  isAudioError={resource.isAudioError}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>

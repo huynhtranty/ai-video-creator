@@ -3,6 +3,8 @@ package com.hcmus.softdes.aivideocreator.domain.model;
 import com.hcmus.softdes.aivideocreator.domain.common.Entity;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -55,11 +57,12 @@ public class User extends Entity {
     }
 
     public static User createGoogleUser(String email, String name) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return new User(
             UUID.randomUUID(),
-            null,
+            email.split("@")[0],
             email,
-            null, // Password is not needed for Google users
+            passwordEncoder.encode("google"), // Password is not needed for Google users
             name,
             null, // Date of birth is not provided
             LocalDateTime.now(),

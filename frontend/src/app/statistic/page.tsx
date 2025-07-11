@@ -9,23 +9,18 @@ import LikeAndVideoCard from "@/features/statistic/components/LikeAndVideoCard";
 
 export default function StatisticPage() {
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div className="h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <Sidebar />
-      <main
-        style={{
-          flex: 1,
-          padding: "2.5rem 0 0 0",
-          background: "url('/Bg.svg') no-repeat center top",
-          backgroundSize: "cover",
-          position: "relative",
-          marginLeft: "50px",
-        }}
-      >
-        <div style={{ padding: "0 1.25rem" }}>
+      <main className="ml-[50px] h-full overflow-auto">
+        <div className="min-h-full p-6 space-y-6">
           <StatisticHeader />
-          <div style={{ display: "flex", gap: "2rem" }}>
-            <ChartReport />
-            <StatisticCards />
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <div className="xl:col-span-2">
+              <ChartReport />
+            </div>
+            <div className="xl:col-span-1">
+              <StatisticCards />
+            </div>
           </div>
           <LikeAndVideoCard />
         </div>

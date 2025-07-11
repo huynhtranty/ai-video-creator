@@ -34,13 +34,6 @@ export default function Sidebar() {
     >
       <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: "1rem" }}>
         <div className="pt-4 flex flex-col items-center justify-center">
-          <button className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
-            <Image className="MenuType" src="/detailBtn.svg" alt="Menu Button" width={20} height={20} />
-          </button>
-          <span className="HomeSpan">Menu</span>
-        </div>
-
-        <div className="pt-4 flex flex-col items-center justify-center">
           <Link href="/dashboard" className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
             <Image className="homeImageType" src="/HomeBtn.svg" alt="Home Button" width={20} height={20} />
           </Link>
@@ -65,14 +58,14 @@ export default function Sidebar() {
           </Link>
           <span className="HomeSpan">Dự án</span>
         </div>
+        <div className="pt-1 flex flex-col items-center justify-center">
+          <Link href="/videos" className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
+            <Image className="VideoType" src="/videoTemp.svg" alt="Videos Button" width={20} height={20} />
+          </Link>
+          <span className="HomeSpan">Video</span>
+        </div>
 
         <div style={{ flexGrow: 1 }}></div>
-
-        <div className="flex flex-col items-center justify-center">
-          <button className="w-10 h-10 flex items-center justify-center rounded-4xl p-1 hover:bg-pink-300 transition-colors">
-            <Image className="NotificationType" src="/Notification.svg" alt="Notification Button" width={20} height={20} />
-          </button>
-        </div>
 
         <div className="flex flex-col items-center justify-center relative" style={{ marginBottom: "5px" }}>
           <DropdownMenu>

@@ -1,75 +1,72 @@
 "use client";
 import React from "react";
+import { Card } from "@/components/ui/card";
+import { TrendingUpIcon, TrendingDownIcon, EyeIcon, PlayIcon } from "lucide-react";
 
 export default function StatisticCards() {
   const cards = [
     {
       title: "Tổng tất cả lượt xem",
-      value: "10K",
-      icon: "/View-Statistic.svg",
-      bg: "linear-gradient(to bottom, #4FF900 0%,#FAF3F3 60%, #FAF3F3 100%)",
-      iconWidth: "80px",
-      iconHeight: "80px",
-      iconMargin: "5px 0",
-      border: "2px solid #1890ff",
+      value: "15",
+      change: "+25%",
+      trend: "up",
+      icon: EyeIcon,
+      gradient: "from-blue-500 to-blue-600",
+      bgGradient: "from-blue-50 to-blue-100",
+      iconBg: "bg-blue-100",
+      iconColor: "text-blue-600"
     },
     {
       title: "Số lượt xem trên Youtube",
-      value: "10K",
-      icon: "/Youtube-Statistic.svg",
-      bg: "linear-gradient(to bottom, #ff4d4f 0%, #FAF3F3 60%,#FAF3F3 100%)",
-      iconWidth: "55px",
-      iconHeight: "65px",
-      iconMargin: "15px 0 12px 0",
-    },
-    {
-      title: "Số lượt xem trên Facebook",
-      value: "10K",
-      icon: "/Fb-Statistic.svg",
-      bg: "linear-gradient(to bottom, #3F00EA 0%,#FAF3F3 60%, #FAF3F3 100%)",
-      iconWidth: "70px",
-      iconHeight: "70px",
-      iconMargin: "10px 0 8px 0",
-    },
-    {
-      title: "Số lượt xem trên Tiktok",
-      value: "10K",
-      icon: "/Tiktok-Statistic.svg",
-      bg: "linear-gradient(to bottom, #434343 0%, #FAF3F3 60%, #FAF3F3 100%)",
-      iconWidth: "70px",
-      iconHeight: "70px",
-      iconMargin: "12px 0 7px 0",
-    },
+      value: "15",
+      change: "+25%", 
+      trend: "up",
+      icon: PlayIcon,
+      gradient: "from-red-500 to-red-600",
+      bgGradient: "from-red-50 to-red-100",
+      iconBg: "bg-red-100",
+      iconColor: "text-red-600"
+    }
   ];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem", flex: 1 }}>
+    <div className="space-y-4">
       {cards.map((item, i) => (
-        <div
-          key={i}
-          style={{
-            background: item.bg,
-            borderRadius: "20px",
-            textAlign: "center",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            ...(item.border ? { border: item.border } : {}),
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <img
-              src={item.icon}
-              alt={item.title}
-              style={{
-                width: item.iconWidth,
-                height: item.iconHeight,
-                objectFit: "contain",
-                margin: item.iconMargin,
-              }}
-            />
+        <Card key={i} className={`p-4 bg-gradient-to-r ${item.bgGradient} border-0 shadow-md hover:shadow-lg transition-all duration-300 group`}>
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`p-2 rounded-lg ${item.iconBg} group-hover:scale-110 transition-transform duration-300`}>
+                  <item.icon className={`h-5 w-5 ${item.iconColor}`} />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600 leading-tight">{item.title}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-end justify-between">
+                <div>
+                  <p className="text-2xl font-bold text-gray-900 mb-1">{item.value}</p>
+                  <div className={`flex items-center gap-1 text-xs font-medium ${
+                    item.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {item.trend === 'up' ? (
+                      <TrendingUpIcon className="h-3 w-3" />
+                    ) : (
+                      <TrendingDownIcon className="h-3 w-3" />
+                    )}
+                    <span>{item.change}</span>
+                  </div>
+                </div>
+                
+                <div className="text-right">
+                  <div className={`w-16 h-1 rounded-full bg-gradient-to-r ${item.gradient} opacity-60`}></div>
+                  <p className="text-xs text-gray-500 mt-1">so với tháng trước</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <p style={{ fontWeight: "bold", fontSize: "1.1rem" }}>{item.title}</p>
-          <p style={{ fontSize: "2rem", fontWeight: "bold" }}>{item.value}</p>
-        </div>
+        </Card>
       ))}
     </div>
   );
