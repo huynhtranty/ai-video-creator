@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "@/lib/api-client";
 
 // Video type based on the backend VideoDto
@@ -15,6 +15,18 @@ export interface Video {
   createdAt: string;
   updatedAt: string;
   thumbnailUrl?: string;
+}
+
+// Create video request type
+export interface CreateVideoRequest {
+  title: string;
+  description?: string;
+  filePath: string;
+  status: "PENDING" | "COMPLETED" | "FAILED";
+  platform: "NONE" | "YOUTUBE" | "TIKTOK" | "FACEBOOK";
+  duration: number;
+  projectId: string;
+  userId: string;
 }
 
 export const useListVideos = () => {
@@ -100,6 +112,24 @@ export const useListVideos = () => {
           }
         ] as Video[];
       }
+    },
+  });
+};
+
+export const useCreateVideo = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation<Video, Error, CreateVideoRequest>({
+    mutationFn: async (data: CreateVideoRequest) => {
+      const response = await apiClient.post("/api/videos", data);
+      return response.data;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch videos after successful creation
+      queryClient.invalidateQueries({ queryKey: ['videos'] });
+    },
+    onError: (error) => {
+      console.error("Error creating video:", error);
     },
   });
 };

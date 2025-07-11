@@ -29,32 +29,40 @@ public class VideoService {
         // this.assignmentRepository = null; // Assuming assignmentRepository is not used in this service
     }
 
+    public Video createVideo(String title, String description, String filePath, Status status, Platform platform, Integer duration, UUID projectId, UUID userId) {
+        if (title == null || description == null || filePath == null || userId == null) {
+            throw new IllegalArgumentException("Video title, description, file path, and user ID cannot be null");
+        }
+
+        // Create a new Video object with the provided details
+        Video videoData = Video.builder()
+                .id(UUID.randomUUID())
+                .title(title)
+                .description(description)
+                .filePath(filePath)
+                .status(status != null ? status : Status.COMPLETED)
+                .platform(platform != null ? platform : Platform.NONE)
+                .duration(duration != null ? duration : 0)
+                .projectId(projectId)
+                .userId(userId)
+                .createdAt(java.time.LocalDateTime.now())
+                .updatedAt(java.time.LocalDateTime.now())
+                .build();
+
+        videoRepository.saveVideo(videoData);
+        
+        // Verify the video was saved
+        Video savedVideo = videoRepository.getVideo(videoData.getId());
+        if (savedVideo == null) {
+            throw new RuntimeException("Failed to create video");
+        }
+        
+        return savedVideo;
+    }
+
+    // Keep the old method for backward compatibility
     public void createVideo(String title, String description, UUID userId) {
-        if (title == null || description == null || userId == null) {
-            throw new IllegalArgumentException("Video title, description, and file path cannot be null");
-        }
-//        List<Asset> projectAssets = assetRepository.findByProjectId(projectId);
-//        if (projectAssets.isEmpty()) {
-//            throw new IllegalArgumentException("No assets found for project ID: " + projectId);
-//        }
-        // request to API create video
-        // Assuming the API returns a video ID or similar identifier
-        // Here we create a new Video object with the provided details
-        // and save it to the repository
-        // This is a placeholder for the actual video creation logic
-        if (userId == null) {
-            throw new IllegalArgumentException("User ID cannot be null");
-        }
-//        MultiPartFile videoGenerated= videoGenerator.generateVideo(title, description, userId);
-//        String key = userId.toString() + "/" + title.replaceAll(" ", "_") + ".mp4";
-//        String filePath = r2Client.uploadVideo(key, videoGenerated , videoGenerated.getSize());
-
-//        Video videoData = Video.create(title, description, filePath, Status.PENDING, Platform.NONE, 0, null, userId);
-
-//        videoRepository.saveVideo(videoData);
-//        if (videoRepository.getVideo(videoData.getId()) == null) {
-//            throw new RuntimeException("Failed to create video");
-//        }
+        createVideo(title, description, null, Status.PENDING, Platform.NONE, 0, null, userId);
     }
 
     public Video getVideo(UUID videoId) {

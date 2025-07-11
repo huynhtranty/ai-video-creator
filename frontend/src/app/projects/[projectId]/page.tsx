@@ -7,8 +7,10 @@ import HeaderSection from "@/features/projects/components/HeaderSection";
 import TextInput from "@/features/projects/components/TextInput";
 import ResourceSection from "@/features/projects/components/ResourceSection";
 import TemplateChooserPopup from "@/components/videoTemplates/TemplateChooserPopup";
+import VideoModal from "@/features/videos/components/VideoModal";
 import { useGenerateScript } from "@/features/projects/api/script";
 import { useGetProject, useUpdateProject } from "@/features/projects/api/project";
+import { useCreateVideo, Video } from "@/features/videos/api/video";
 import { GeneratedResource } from "@/types/resource";
 import { ToastProvider, useToast } from "@/components/ui/toast";
 import { transformScriptResponseWithLoading, transformProjectScriptsToResources } from "@/utils/scriptHelpers";
@@ -58,10 +60,56 @@ function ProjectPageContent() {
   const [context, setContext] = useState<string>("");
   const [projectTitle, setProjectTitle] = useState("Loading...");
   const [showTemplateChooser, setShowTemplateChooser] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const { addToast } = useToast();
   
   const generateScript = useGenerateScript();
   const updateProject = useUpdateProject();
+  const createVideo = useCreateVideo();
+  
+  // Custom video completion handler
+  const handleVideoCompleteWithSave = (videoUrl: string) => {
+    handleVideoComplete(
+      videoUrl,
+      async (data) => {
+        try {
+          // Create video record in backend
+          const videoData = await createVideo.mutateAsync({
+            title: projectTitle || "Generated Video",
+            description: `Video generated from project: ${projectTitle}`,
+            filePath: videoUrl,
+            status: "COMPLETED",
+            platform: "NONE",
+            duration: 0, // We don't have duration info from render
+            projectId: projectId,
+            userId: "current-user", // This should be populated from auth context
+          });
+
+          // Show success message
+          addToast("Video saved successfully!", "success");
+          
+          // Show video modal
+          setSelectedVideo(videoData);
+          setIsVideoModalOpen(true);
+        } catch (error) {
+          console.error("Error saving video:", error);
+          addToast("Video rendered successfully but failed to save to database", "warning");
+        }
+      },
+      {
+        projectId: projectId,
+        projectTitle: projectTitle,
+        context: context
+      }
+    );
+  };
+
+  // Close video modal handler
+  const handleCloseVideoModal = () => {
+    setIsVideoModalOpen(false);
+    setSelectedVideo(null);
+  };
   
   const {
     renderVideo,
@@ -72,7 +120,7 @@ function ProjectPageContent() {
     currentVideoId,
     cancelRender
   } = useVideoRender({
-    onComplete: handleVideoComplete,
+    onComplete: handleVideoCompleteWithSave,
     onError: handleVideoError,
     onProgress: (status) => {
       console.log(`Render progress: ${status.progress}%`);
@@ -571,6 +619,13 @@ function ProjectPageContent() {
             )}
           </div>
         )}
+
+        {/* Video Modal */}
+        <VideoModal
+          isOpen={isVideoModalOpen}
+          video={selectedVideo}
+          onClose={handleCloseVideoModal}
+        />
       </main>
     </div>
   );

@@ -32,13 +32,40 @@ public class VideoController {
             description = "Create a new video with the provided details.")
     public ResponseEntity<VideoDto> createVideo (@RequestBody VideoDto request){
         // check if the request is valid
-        if (request.getTitle() == null || request.getDescription() == null) {
+        if (request.getTitle() == null || request.getFilePath() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        Video videoData = VideoMapper.toVideo(request);
-        videoService.createVideo(videoData.getTitle(), videoData.getDescription(), videoData.getUserId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(request);
+        UUID userId;
+        try {
+            // Try to get user ID from security context first
+            String authDetails = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
+            userId = UUID.fromString(authDetails);
+        } catch (Exception e) {
+            // If security context fails, use the user ID from request or a default
+            if (request.getUserId() != null) {
+                userId = request.getUserId();
+            } else {
+                // For development/testing, use a default user ID
+                userId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+            }
+        }
+        
+        // Create video using the new method
+        Video createdVideo = videoService.createVideo(
+            request.getTitle(), 
+            request.getDescription(),
+            request.getFilePath(),
+            request.getStatus(),
+            request.getPlatform(),
+            request.getDuration(),
+            request.getProjectId(),
+            userId
+        );
+        
+        // Convert to DTO and return
+        VideoDto responseDto = VideoMapper.toVideoDto(createdVideo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
     @GetMapping("/{videoId}")
     @Operation(summary = "Get video by ID",
