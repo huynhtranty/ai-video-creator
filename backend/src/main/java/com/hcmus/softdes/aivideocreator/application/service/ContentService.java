@@ -71,7 +71,7 @@ public class ContentService {
             throw new RuntimeException("Invalid projectId: must be a valid UUID", e);
         }
 
-        ScriptGeneratedLayout scriptContent = provider.generateScript(request.prompt());
+        ScriptGeneratedLayout scriptContent = provider.generateScript(request.prompt(), request.scriptStyle());
 
         var project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));

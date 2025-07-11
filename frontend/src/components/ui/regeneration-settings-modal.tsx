@@ -1,18 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Settings, FileText, Image as ImageIcon, Volume2 } from "lucide-react";
+import { ChevronDown, Settings, FileText, Image, Volume2 } from "lucide-react";
 
-interface ResourceSettings {
+interface RegenerationSettings {
   script: {
     style: string;
     model: string;
@@ -28,12 +29,21 @@ interface ResourceSettings {
   };
 }
 
-interface ResourceSettingProps {
-  onGenerateResources: (settings: ResourceSettings) => Promise<void>;
-  isGenerating: boolean;
+interface RegenerationSettingsModalProps {
+  onRegenerate: (type: 'script' | 'audio' | 'image', settings: any) => Promise<void>;
+  children: React.ReactNode;
+  type: 'script' | 'audio' | 'image';
+  isLoading: boolean;
 }
 
-export default function ResourceSetting({ onGenerateResources, isGenerating }: ResourceSettingProps) {
+export default function RegenerationSettingsModal({
+  onRegenerate,
+  children,
+  type,
+  isLoading
+}: RegenerationSettingsModalProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  
   // Script settings
   const [scriptStyle, setScriptStyle] = useState("Chuyên nghiệp");
   const [scriptModel, setScriptModel] = useState("Gemini");
@@ -55,91 +65,50 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
   const audioModels = ["AzureTTS", "GoogleTTS"];
   const imageStyles = ["Thực tế", "Hoạt hình", "Nghệ thuật", "Tối giản", "Cổ điển"];
 
-  // Data mappings
-  const scriptModelMap: Record<string, string> = {
-    "Gemini": "gemini-script",
-    "Cloudflare": "llama-script"
-  };
-
-  const audioGenderMap: Record<string, string> = {
-    "Nam": "MALE",
-    "Nữ": "FEMALE"
-  };
-
-  const audioLanguageMap: Record<string, string> = {
-    "Detect": "",
-    "English": "en",
-    "Vietnamese": "vi"
-  };
-
-  const audioModelMap: Record<string, string> = {
-    "AzureTTS": "azure",
-    "GoogleTTS": "google"
-  };
-
-  const scriptStyleMap: Record<string, string> = {
-    "Chuyên nghiệp": "professional",
-    "Thân thiện": "friendly",
-    "Hài hước": "humorous",
-    "Nghiêm túc": "serious",
-    "Sáng tạo": "creative"
-  };
-
-  const imageStyleMap: Record<string, string> = {
-    "Thực tế": "realistic",
-    "Hoạt hình": "cartoon",
-    "Nghệ thuật": "artistic",
-    "Tối giản": "minimalist",
-    "Cổ điển": "classic"
-  };
-
-  const handleGenerateResources = async () => {
-    const settings: ResourceSettings = {
+  const handleRegenerate = async () => {
+    const settings = {
       script: {
-        style: scriptStyleMap[scriptStyle] || scriptStyle,
-        model: scriptModelMap[scriptModel] || scriptModel,
+        style: scriptStyle,
+        model: scriptModel,
       },
       audio: {
-        gender: audioGenderMap[audioGender] || audioGender,
-        language: audioLanguageMap[audioLanguage] || audioLanguage,
+        gender: audioGender,
+        language: audioLanguage,
         speedRate: audioSpeedRate[0],
-        model: audioModelMap[audioModel] || audioModel,
+        model: audioModel,
       },
       image: {
-        style: imageStyleMap[imageStyle] || imageStyle,
+        style: imageStyle,
       },
     };
-    await onGenerateResources(settings);
+
+    let typeSettings;
+    switch (type) {
+      case 'script':
+        typeSettings = settings.script;
+        break;
+      case 'audio':
+        typeSettings = settings.audio;
+        break;
+      case 'image':
+        typeSettings = settings.image;
+        break;
+    }
+
+    await onRegenerate(type, typeSettings);
+    setIsOpen(false);
   };
 
-  const handleReset = () => {
-    setScriptStyle("Chuyên nghiệp");
-    setScriptModel("Gemini");
-    setAudioGender("Nam");
-    setAudioLanguage("Detect");
-    setAudioSpeedRate([1.0]);
-    setAudioModel("GoogleTTS");
-    setImageStyle("Thực tế");
-  };
-
-  return (
-    <Card className="w-full shadow-lg border-0 bg-white">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-          <Settings className="w-5 h-5 text-[#8362E5]" />
-          Cài đặt tài nguyên
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Settings Grid - Responsive layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Script Settings */}
+  const renderSettings = () => {
+    switch (type) {
+      case 'script':
+        return (
           <div className="space-y-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
             <div className="flex items-center gap-2 mb-3">
               <FileText className="w-4 h-4 text-blue-600" />
               <h3 className="font-medium text-gray-800">Kịch bản</h3>
             </div>
-          
+            
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Phong cách</label>
@@ -194,8 +163,10 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
               </div>
             </div>
           </div>
+        );
 
-          {/* Audio Settings */}
+      case 'audio':
+        return (
           <div className="space-y-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-100">
             <div className="flex items-center gap-2 mb-3">
               <Volume2 className="w-4 h-4 text-green-600" />
@@ -301,11 +272,13 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
               </div>
             </div>
           </div>
+        );
 
-          {/* Image Settings */}
+      case 'image':
+        return (
           <div className="space-y-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100">
             <div className="flex items-center gap-2 mb-3">
-              <ImageIcon className="w-4 h-4 text-purple-600" />
+              <Image className="w-4 h-4 text-purple-600" />
               <h3 className="font-medium text-gray-800">Hình ảnh</h3>
             </div>
             
@@ -335,36 +308,59 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
               </DropdownMenu>
             </div>
           </div>
-        </div>
+        );
 
-        {/* Action Buttons */}
-        <div className="flex flex-wrap gap-3 pt-6 border-t border-gray-200">
-          <Button
-            onClick={handleGenerateResources}
-            disabled={isGenerating}
-            className="flex-1 min-w-[200px] text-white py-3 rounded-lg transition-colors font-medium bg-[#8362E5] hover:bg-[#6F4EC8] disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {isGenerating ? (
-              <div className="flex items-center gap-2">
-                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Đang tạo...
-              </div>
-            ) : (
-              "Tạo tài nguyên"
-            )}
-          </Button>
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            className="flex-1 min-w-[200px] border-gray-300 text-gray-600 py-3 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors font-medium"
-          >
-            Đặt lại mặc định
-          </Button>
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Settings className="w-5 h-5 text-[#8362E5]" />
+            Cài đặt tái tạo
+          </DialogTitle>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          {renderSettings()}
+          
+          <Separator />
+          
+          <div className="flex gap-3 pt-4">
+            <Button
+              onClick={handleRegenerate}
+              disabled={isLoading}
+              className="flex-1 text-white py-2 rounded-lg transition-colors font-medium bg-[#8362E5] hover:bg-[#6F4EC8] disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Đang tạo...
+                </div>
+              ) : (
+                "Tái tạo"
+              )}
+            </Button>
+            <Button
+              onClick={() => setIsOpen(false)}
+              variant="outline"
+              className="px-6 py-2 border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors font-medium"
+            >
+              Hủy
+            </Button>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -198,7 +198,11 @@ function ProjectPageContent() {
     }
   };
 
-  const generateResources = async (scriptStyle: string, imageStyle: string, voiceStyle: string) => {
+  const generateResources = async (settings: {
+    script: { style: string; model: string };
+    audio: { gender: string; language: string; speedRate: number; model: string };
+    image: { style: string };
+  }) => {
     if (!inputText.trim()) {
       addToast("Vui lòng nhập nội dung trước khi tạo tài nguyên!", "warning");
       return;
@@ -209,8 +213,15 @@ function ProjectPageContent() {
     try {
       const response = await generateScript.mutateAsync({ 
         prompt: inputText,
-        provider: "gemini-script",
-        projectId: projectId, 
+        provider: settings.script.model.toLowerCase(),
+        projectId: projectId,
+        scriptStyle: settings.script.style,
+        scriptModel: settings.script.model,
+        audioGender: settings.audio.gender,
+        audioLanguage: settings.audio.language,
+        audioSpeedRate: settings.audio.speedRate,
+        audioModel: settings.audio.model,
+        imageStyle: settings.image.style,
       }); 
       setContext(response.context);
 
@@ -230,6 +241,8 @@ function ProjectPageContent() {
             provider: "gemini-image",
             projectId: projectId,
             scriptId: resource.id,
+            // Include image style settings
+            style: settings.image.style,
           })
           .then(imageResponse => {
             const imageUrl = imageResponse.url;
@@ -243,12 +256,14 @@ function ProjectPageContent() {
 
           const audioPromise = generateTtsForScript({
             text: resource.textContent,
-            languageCode: response.language || "en",
-            speakingRate: 1.0,
-            gender: voiceStyle === "Nữ thanh niên" ? "FEMALE" : "MALE",
-            projectId,
+            languageCode: settings.audio.language === "Detect" ? "auto" : settings.audio.language.toLowerCase(),
+            speakingRate: settings.audio.speedRate,
+            gender: settings.audio.gender === "Nam" ? "MALE" : "FEMALE",
+            projectId: projectId,
             scriptId: resource.id,
-            provider: "google"
+            provider: settings.audio.model.toLowerCase(),
+            // Include audio settings
+            model: settings.audio.model,
           })
           .then(audioResponse => {
             updateResource(resource.id, { audioSrc: audioResponse.audioUrl, isAudioLoading: false });
@@ -522,8 +537,8 @@ function ProjectPageContent() {
           display: "flex",
           flexDirection: "column",
           minHeight: 0,
+          overflowY: "auto",
         }}
-        className="overflow-hidden"
       >
         <div
           style={{
@@ -540,7 +555,7 @@ function ProjectPageContent() {
           />
           <TextInput value={inputText} onChange={setInputText} />
         </div>
-        <div style={{ flex: 1, minHeight: 0 }}>
+        <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
           <ResourceSection 
             resources={resources}
             onGenerateResources={generateResources}

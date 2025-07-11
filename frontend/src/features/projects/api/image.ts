@@ -9,10 +9,16 @@ export const generateImageForScript = async (request: ImageRequest): Promise<Ima
 
 export const regenerateScriptImage = async (
   scriptId: string,
-  provider: string = "gemini-image"
+  provider: string = "gemini-image",
+  settings?: {
+    style?: string;
+  }
 ): Promise<ImageResponse> => {
   const response = await apiClient.post(`/contents/image/${scriptId}/regenerate`, {
-    provider: provider
+    provider: provider,
+    ...(settings && {
+      style: settings.style,
+    })
   });
   return response.data;
 };

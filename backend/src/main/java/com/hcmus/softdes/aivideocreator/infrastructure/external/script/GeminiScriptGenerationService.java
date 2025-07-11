@@ -17,7 +17,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
     private String apiKey;
 
     @Override
-    public ScriptGeneratedLayout generateScript(String prompt) {
+    public ScriptGeneratedLayout generateScript(String prompt, String style) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         Schema contentSchema = Schema.builder()
@@ -60,11 +60,11 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             
             ###
             
-            Generate a vivid, reusable visual context for a short cinematic sequence. 
-            The setting should include a distinct location, time period, mood, and aesthetic style. 
-            Ensure the scene includes persistent environmental details (e.g., lighting, architecture, weather), 
-            character types, and visual motifs that can remain consistent across multiple frames. 
-            The context should be concise (under 300 words) 
+            Generate a vivid, reusable visual context for a short cinematic sequence.
+            The setting should include a distinct location, time period, mood, and aesthetic style.
+            Ensure the scene includes persistent environmental details (e.g., lighting, architecture, weather),
+            character types, and visual motifs that can remain consistent across multiple frames.
+            The context should be concise (under 300 words)
             and suitable for guiding image generation for a storyboard or animated video.
             The context should include any description of any characters that are relevant to the topic.
             
@@ -77,7 +77,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             - Be vivid, clear, concise, and scene-focused.
             - Avoid mentioning visuals do not describe the art style, camera moves, colors, or characters' physical details.
              The narrative should flow logically: include an introduction, key points, and a meaningful conclusion.
-            
+                
             Topic:
             """ + prompt;
 

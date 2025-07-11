@@ -5,6 +5,7 @@ import { uploadImageFile, regenerateScriptImage } from "@/features/projects/api/
 import { uploadVoiceFile, regenerateScriptVoice } from "@/features/projects/api/tts";
 import { updateScriptContent, regenerateScriptContent } from "@/features/projects/api/script";
 import CustomAudioPlayer from "@/components/ui/custom-audio-player";
+import RegenerationSettingsModal from "@/components/ui/regeneration-settings-modal";
 
 interface ResourceItemProps {
   id: string;
@@ -91,36 +92,76 @@ export default function ResourceItem({
     }
   }, [isEditingText]);
 
-  const handleRegenerateImage = async () => {
+  const handleRegenerateWithSettings = async (type: 'script' | 'audio' | 'image', settings: any) => {
     if (!projectId) {
-      alert("Không thể tạo lại ảnh cho mục này!");
+      alert("Không thể tạo lại cho mục này!");
       return;
     }
 
-    setIsRegeneratingImage(true);
-    setShowImageOverlay(false);
-    
-    // Notify parent component that image regeneration started
-    if (onLoadingStateChange) {
-      onLoadingStateChange(id, { isImageLoading: true });
-    }
-    
     try {
-      const response = await regenerateScriptImage(id, "gemini-image");
-      // The response is an ImageResponse, so we can directly get the URL
-      const newImageSrc = response.url;
-      setCurrentImageSrc(newImageSrc);
-      if (onImageUpdate) {
-        onImageUpdate(id, newImageSrc);
+      switch (type) {
+        case 'script':
+          setIsRegeneratingContent(true);
+          const scriptResponse = await regenerateScriptContent(id, settings.model?.toLowerCase() || "gemini-script", {
+            style: settings.style,
+            model: settings.model,
+          });
+          if (onScriptUpdate) {
+            onScriptUpdate(id, scriptResponse.content);
+          }
+          break;
+
+        case 'image':
+          setIsRegeneratingImage(true);
+          if (onLoadingStateChange) {
+            onLoadingStateChange(id, { isImageLoading: true });
+          }
+          const imageResponse = await regenerateScriptImage(id, "gemini-image", {
+            style: settings.style,
+          });
+          setCurrentImageSrc(imageResponse.url);
+          if (onImageUpdate) {
+            onImageUpdate(id, imageResponse.url);
+          }
+          if (onLoadingStateChange) {
+            onLoadingStateChange(id, { isImageLoading: false });
+          }
+          break;
+
+        case 'audio':
+          setIsRegeneratingAudio(true);
+          if (onLoadingStateChange) {
+            onLoadingStateChange(id, { isAudioLoading: true });
+          }
+          const audioResponse = await regenerateScriptVoice(id, settings.model?.toLowerCase() || "google", {
+            gender: settings.gender === "Nam" ? "MALE" : "FEMALE",
+            language: settings.language === "Detect" ? "auto" : settings.language.toLowerCase(),
+            speedRate: settings.speedRate,
+            model: settings.model,
+          });
+          setCurrentAudioSrc(audioResponse.audioUrl);
+          if (onAudioUpdate) {
+            onAudioUpdate(id, audioResponse.audioUrl);
+          }
+          if (onLoadingStateChange) {
+            onLoadingStateChange(id, { isAudioLoading: false });
+          }
+          break;
       }
-    } catch {
-      alert("Không thể tạo lại ảnh. Vui lòng thử lại sau!");
+    } catch (error) {
+      console.error(`Error regenerating ${type}:`, error);
+      alert(`Không thể tạo lại ${type}. Vui lòng thử lại sau!`);
     } finally {
-      setIsRegeneratingImage(false);
-      
-      // Notify parent component that image regeneration ended
-      if (onLoadingStateChange) {
-        onLoadingStateChange(id, { isImageLoading: false });
+      switch (type) {
+        case 'script':
+          setIsRegeneratingContent(false);
+          break;
+        case 'image':
+          setIsRegeneratingImage(false);
+          break;
+        case 'audio':
+          setIsRegeneratingAudio(false);
+          break;
       }
     }
   };
@@ -233,57 +274,6 @@ export default function ResourceItem({
     }
   };
 
-  const handleRegenerateContent = async () => {
-    if (!projectId) {
-      alert("Không thể tạo lại nội dung cho mục này!");
-      return;
-    }
-
-    setIsRegeneratingContent(true);
-    setShowContentOverlay(false);
-    try {
-      const response = await regenerateScriptContent(id, "gemini-script");
-      if (onScriptUpdate) {
-        onScriptUpdate(id, response.content);
-      }
-    } catch {
-      alert("Không thể tạo lại nội dung. Vui lòng thử lại sau!");
-    } finally {
-      setIsRegeneratingContent(false);
-    }
-  };
-
-  const handleRegenerateAudio = async () => {
-    if (!projectId) {
-      alert("Không thể tạo lại âm thanh cho mục này!");
-      return;
-    }
-
-    setIsRegeneratingAudio(true);
-    
-    // Notify parent component that audio regeneration started
-    if (onLoadingStateChange) {
-      onLoadingStateChange(id, { isAudioLoading: true });
-    }
-    
-    try {
-      const response = await regenerateScriptVoice(id, "google");
-      const newAudioSrc = response.audioUrl;
-      setCurrentAudioSrc(newAudioSrc);
-      if (onAudioUpdate) {
-        onAudioUpdate(id, newAudioSrc);
-      }
-    } catch {
-      alert("Không thể tạo lại âm thanh. Vui lòng thử lại sau!");
-    } finally {
-      setIsRegeneratingAudio(false);
-      
-      // Notify parent component that audio regeneration ended
-      if (onLoadingStateChange) {
-        onLoadingStateChange(id, { isAudioLoading: false });
-      }
-    }
-  };
   return (
     <div className="bg-white rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200">
       <div className="flex flex-col lg:flex-row h-auto min-h-[16rem]">
@@ -320,14 +310,19 @@ export default function ResourceItem({
                 {/* Hover Overlay */}
                 {showImageOverlay && (
                   <div className="absolute inset-0 bg-white bg-opacity-60 backdrop-blur-[2px] flex items-center justify-center space-x-4 transition-all duration-300">
-                    <button
-                      onClick={handleRegenerateImage}
-                      disabled={isRegeneratingImage || isUploadingImage}
-                      className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
-                      title="Tạo lại ảnh"
+                    <RegenerationSettingsModal
+                      type="image"
+                      onRegenerate={handleRegenerateWithSettings}
+                      isLoading={isRegeneratingImage}
                     >
-                      <RotateCcw className="w-5 h-5" />
-                    </button>
+                      <button
+                        disabled={isRegeneratingImage || isUploadingImage}
+                        className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
+                        title="Tạo lại ảnh"
+                      >
+                        <RotateCcw className="w-5 h-5" />
+                      </button>
+                    </RegenerationSettingsModal>
                     <button
                       onClick={handleUploadImage}
                       disabled={isUploadingImage || isRegeneratingImage}
@@ -411,14 +406,19 @@ export default function ResourceItem({
                       {/* Content Hover Overlay - Same style as image */}
                       {showContentOverlay && (
                         <div className="absolute inset-0 bg-white bg-opacity-60 backdrop-blur-[2px] flex items-center justify-center space-x-4 transition-all duration-300">
-                          <button
-                            onClick={handleRegenerateContent}
-                            disabled={isRegeneratingContent}
-                            className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
-                            title="Tạo lại nội dung"
+                          <RegenerationSettingsModal
+                            type="script"
+                            onRegenerate={handleRegenerateWithSettings}
+                            isLoading={isRegeneratingContent}
                           >
-                            <Sparkles className="w-5 h-5" />
-                          </button>
+                            <button
+                              disabled={isRegeneratingContent}
+                              className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
+                              title="Tạo lại nội dung"
+                            >
+                              <Sparkles className="w-5 h-5" />
+                            </button>
+                          </RegenerationSettingsModal>
                           <button
                             onClick={handleUploadScript}
                             className="bg-white bg-opacity-95 hover:bg-opacity-100 text-gray-700 p-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-110 border border-gray-200"
@@ -470,16 +470,19 @@ export default function ResourceItem({
                     {/* Dropdown menu - positioned to avoid cut-off */}
                     {showAudioDropdown && (
                       <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[160px] z-30">
-                        <button
-                          onClick={() => {
-                            handleRegenerateAudio();
-                            setShowAudioDropdown(false);
-                          }}
-                          disabled={isRegeneratingAudio || isUploadingAudio}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        <RegenerationSettingsModal
+                          type="audio"
+                          onRegenerate={handleRegenerateWithSettings}
+                          isLoading={isRegeneratingAudio}
                         >
-                          Tạo lại âm thanh
-                        </button>
+                          <button
+                            disabled={isRegeneratingAudio || isUploadingAudio}
+                            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            onClick={() => setShowAudioDropdown(false)}
+                          >
+                            Tạo lại âm thanh
+                          </button>
+                        </RegenerationSettingsModal>
                         <button
                           onClick={() => {
                             handleUploadAudio();
