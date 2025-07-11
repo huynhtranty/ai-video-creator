@@ -4,6 +4,8 @@ import com.google.api.services.youtube.model.VideoStatistics;
 import com.hcmus.softdes.aivideocreator.api.mappers.VideoMapper;
 import com.hcmus.softdes.aivideocreator.application.dto.video.VideoDto;
 import com.hcmus.softdes.aivideocreator.application.service.VideoService;
+import com.hcmus.softdes.aivideocreator.domain.enums.Platform;
+import com.hcmus.softdes.aivideocreator.domain.enums.Status;
 import com.hcmus.softdes.aivideocreator.domain.model.Video;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.upload.YouTubeUploadService;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -82,12 +85,13 @@ public class VideoController {
     @GetMapping
     @Operation(summary = "Get all videos",
             description = "Retrieve all videos associated with the user.")
-    public ResponseEntity<VideoDto[]> getAllVideos() {
+    public ResponseEntity<List<VideoDto>> getAllVideos() {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getDetails().toString());
-        VideoDto[] videoResponses = videoService.getVideosByUserId(userId).stream()
+        List<VideoDto> videoResponses = videoService.getVideosByUserId(userId).stream()
                 .map(VideoMapper::toVideoDto)
-                .toArray(VideoDto[]::new);
-        if (videoResponses.length == 0) {
+                .toList();
+
+        if (videoResponses.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(videoResponses);

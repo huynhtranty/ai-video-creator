@@ -39,10 +39,10 @@ public class VideoEntity {
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
-    @Column(name = "platform", columnDefinition = "VARCHAR(255) DEFAULT 'None'")
+    @Column(name = "platform")
     private Platform platform; // Default to 'None'
 
-    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'UNPUBLISHED'")
+    @Column(name = "status")
     private Status status; // Default to 'Unpublished'
 
     @Column(name = "duration", nullable = false)
