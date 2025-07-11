@@ -8,12 +8,12 @@ import { TrendingUpIcon, BarChartIcon, PieChartIcon } from "lucide-react";
 export default function ChartReport() {
   // Mock data for different charts
   const viewsData = [
-    { name: 'T1', youtube: 4000, facebook: 2400, tiktok: 2400 },
-    { name: 'T2', youtube: 3000, facebook: 1398, tiktok: 2210 },
-    { name: 'T3', youtube: 2000, facebook: 9800, tiktok: 2290 },
-    { name: 'T4', youtube: 2780, facebook: 3908, tiktok: 2000 },
-    { name: 'T5', youtube: 1890, facebook: 4800, tiktok: 2181 },
-    { name: 'T6', youtube: 2390, facebook: 3800, tiktok: 2500 },
+    { name: 'T1', youtube: 4000 },
+    { name: 'T2', youtube: 3000 },
+    { name: 'T3', youtube: 2000 },
+    { name: 'T4', youtube: 2780 },
+    { name: 'T5', youtube: 1890 },
+    { name: 'T6', youtube: 2390 },
   ];
 
   const engagementData = [
@@ -83,22 +83,12 @@ export default function ChartReport() {
                     <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
                     <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                   </linearGradient>
-                  <linearGradient id="facebook" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                  <linearGradient id="tiktok" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                  </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="name" stroke="#6b7280" />
                 <YAxis stroke="#6b7280" />
                 <Tooltip content={<CustomTooltip />} />
                 <Area type="monotone" dataKey="youtube" stackId="1" stroke="#ef4444" fill="url(#youtube)" strokeWidth={2} />
-                <Area type="monotone" dataKey="facebook" stackId="1" stroke="#3b82f6" fill="url(#facebook)" strokeWidth={2} />
-                <Area type="monotone" dataKey="tiktok" stackId="1" stroke="#10b981" fill="url(#tiktok)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -106,14 +96,6 @@ export default function ChartReport() {
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
               <span>YouTube</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span>Facebook</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span>TikTok</span>
             </div>
           </div>
         </TabsContent>

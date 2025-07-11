@@ -7,8 +7,8 @@ export default function LikeAndVideoCard() {
   const stats = [
     {
       title: "Tổng số lượt thích",
-      subtitle: "Trên các nền tảng",
-      value: "24.8K",
+      subtitle: "YouTube",
+      value: "12.1K",
       change: "+18.2%",
       icon: HeartIcon,
       gradient: "from-pink-500 to-rose-500",
@@ -17,14 +17,12 @@ export default function LikeAndVideoCard() {
       iconColor: "text-pink-600",
       details: [
         { platform: "YouTube", count: "12.1K", color: "bg-red-500" },
-        { platform: "Facebook", count: "8.3K", color: "bg-blue-500" },
-        { platform: "TikTok", count: "4.4K", color: "bg-gray-500" },
       ]
     },
     {
       title: "Tổng số Video",
-      subtitle: "Trên các nền tảng", 
-      value: "156",
+      subtitle: "YouTube", 
+      value: "89",
       change: "+12.5%",
       icon: PlayCircleIcon,
       gradient: "from-blue-500 to-indigo-500",
@@ -33,14 +31,12 @@ export default function LikeAndVideoCard() {
       iconColor: "text-blue-600",
       details: [
         { platform: "YouTube", count: "89", color: "bg-red-500" },
-        { platform: "Facebook", count: "42", color: "bg-blue-500" },
-        { platform: "TikTok", count: "25", color: "bg-gray-500" },
       ]
     },
     {
       title: "Tổng số người theo dõi",
-      subtitle: "Trên các nền tảng",
-      value: "45.2K",
+      subtitle: "YouTube",
+      value: "28.1K",
       change: "+25.1%",
       icon: UsersIcon,
       gradient: "from-green-500 to-emerald-500",
@@ -49,8 +45,6 @@ export default function LikeAndVideoCard() {
       iconColor: "text-green-600",
       details: [
         { platform: "YouTube", count: "28.1K", color: "bg-red-500" },
-        { platform: "Facebook", count: "12.6K", color: "bg-blue-500" },
-        { platform: "TikTok", count: "4.5K", color: "bg-gray-500" },
       ]
     },
   ];
@@ -83,7 +77,7 @@ export default function LikeAndVideoCard() {
           </div>
 
           <div className="space-y-2">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Chi tiết theo nền tảng</p>
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Nền tảng</p>
             {stat.details.map((detail, i) => (
               <div key={i} className="flex items-center justify-between py-1">
                 <div className="flex items-center gap-2">

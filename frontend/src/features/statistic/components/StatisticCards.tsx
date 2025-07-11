@@ -26,33 +26,7 @@ export default function StatisticCards() {
       bgGradient: "from-red-50 to-red-100",
       iconBg: "bg-red-100",
       iconColor: "text-red-600"
-    },
-    {
-      title: "Số lượt xem trên Facebook",
-      value: "3.1K",
-      change: "+8.7%",
-      trend: "up",
-      icon: MonitorIcon,
-      gradient: "from-blue-600 to-blue-700",
-      bgGradient: "from-blue-50 to-blue-100",
-      iconBg: "bg-blue-100",
-      iconColor: "text-blue-700"
-    },
-    {
-      title: "Số lượt xem trên Tiktok",
-      value: "1.2K",
-      change: "-2.3%",
-      trend: "down",
-      icon: ({ className }: { className?: string }) => (
-        <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43V7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.43z"/>
-        </svg>
-      ),
-      gradient: "from-gray-500 to-gray-600",
-      bgGradient: "from-gray-50 to-gray-100",
-      iconBg: "bg-gray-100", 
-      iconColor: "text-gray-600"
-    },
+    }
   ];
 
   return (
