@@ -72,7 +72,7 @@ function ProjectPageContent() {
   const handleVideoCompleteWithSave = (videoUrl: string) => {
     handleVideoComplete(
       videoUrl,
-      async (data) => {
+      async () => {
         try {
           // Create video record in backend
           const videoData = await createVideo.mutateAsync({
@@ -83,7 +83,6 @@ function ProjectPageContent() {
             platform: "NONE",
             duration: 0, // We don't have duration info from render
             projectId: projectId,
-            userId: "current-user", // This should be populated from auth context
           });
 
           // Show success message

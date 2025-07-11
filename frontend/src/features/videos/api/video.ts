@@ -26,7 +26,7 @@ export interface CreateVideoRequest {
   platform: "NONE" | "YOUTUBE" | "TIKTOK" | "FACEBOOK";
   duration: number;
   projectId: string;
-  userId: string;
+  userId?: string; // Optional since backend gets it from auth context
 }
 
 export const useListVideos = () => {
