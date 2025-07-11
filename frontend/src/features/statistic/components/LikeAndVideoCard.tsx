@@ -8,29 +8,29 @@ export default function LikeAndVideoCard() {
     {
       title: "Tổng số lượt thích",
       subtitle: "YouTube",
-      value: "12.1K",
-      change: "+18.2%",
+      value: "3",
+      change: "+50%",
       icon: HeartIcon,
       gradient: "from-pink-500 to-rose-500",
       bgGradient: "from-pink-50 to-rose-50",
       iconBg: "bg-pink-100",
       iconColor: "text-pink-600",
       details: [
-        { platform: "YouTube", count: "12.1K", color: "bg-red-500" },
+        { platform: "YouTube", count: "3", color: "bg-red-500" },
       ]
     },
     {
       title: "Tổng số Video",
       subtitle: "YouTube", 
-      value: "89",
-      change: "+12.5%",
+      value: "1",
+      change: "+100%",
       icon: PlayCircleIcon,
       gradient: "from-blue-500 to-indigo-500",
       bgGradient: "from-blue-50 to-indigo-50",
       iconBg: "bg-blue-100",
       iconColor: "text-blue-600",
       details: [
-        { platform: "YouTube", count: "89", color: "bg-red-500" },
+        { platform: "YouTube", count: "1", color: "bg-red-500" },
       ]
     },
     {
