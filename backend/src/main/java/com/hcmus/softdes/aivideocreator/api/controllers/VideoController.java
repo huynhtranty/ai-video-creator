@@ -16,7 +16,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/api/videos")
+@RequestMapping("/videos")
 public class VideoController {
     VideoService videoService;
     YouTubeUploadService youtubeService;
