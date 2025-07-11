@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
 import { Card } from "@/components/ui/card";
-import { TrendingUpIcon, TrendingDownIcon, EyeIcon, PlayIcon, MonitorIcon } from "lucide-react";
+import { TrendingUpIcon, TrendingDownIcon, EyeIcon, PlayIcon } from "lucide-react";
 
 export default function StatisticCards() {
   const cards = [
     {
       title: "Tổng tất cả lượt xem",
-      value: "12.5K",
-      change: "+15.3%",
+      value: "15",
+      change: "+25%",
       trend: "up",
       icon: EyeIcon,
       gradient: "from-blue-500 to-blue-600",
@@ -18,8 +18,8 @@ export default function StatisticCards() {
     },
     {
       title: "Số lượt xem trên Youtube",
-      value: "8.2K",
-      change: "+12.1%", 
+      value: "15",
+      change: "+25%", 
       trend: "up",
       icon: PlayIcon,
       gradient: "from-red-500 to-red-600",

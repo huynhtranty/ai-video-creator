@@ -8,26 +8,26 @@ import { TrendingUpIcon, BarChartIcon, PieChartIcon } from "lucide-react";
 export default function ChartReport() {
   // Mock data for different charts
   const viewsData = [
-    { name: 'T1', youtube: 4000 },
-    { name: 'T2', youtube: 3000 },
-    { name: 'T3', youtube: 2000 },
-    { name: 'T4', youtube: 2780 },
-    { name: 'T5', youtube: 1890 },
-    { name: 'T6', youtube: 2390 },
+    { name: 'T1', youtube: 5 },
+    { name: 'T2', youtube: 8 },
+    { name: 'T3', youtube: 3 },
+    { name: 'T4', youtube: 12 },
+    { name: 'T5', youtube: 7 },
+    { name: 'T6', youtube: 15 },
   ];
 
   const engagementData = [
-    { name: 'Likes', value: 45, color: '#3b82f6' },
-    { name: 'Comments', value: 25, color: '#10b981' },
-    { name: 'Shares', value: 20, color: '#f59e0b' },
-    { name: 'Saves', value: 10, color: '#ef4444' },
+    { name: 'Likes', value: 75, color: '#3b82f6' },
+    { name: 'Comments', value: 15, color: '#10b981' },
+    { name: 'Shares', value: 5, color: '#f59e0b' },
+    { name: 'Saves', value: 5, color: '#ef4444' },
   ];
 
   const performanceMetrics = [
-    { metric: 'Generated Leads', value: 63, color: '#ef4444', target: 70 },
-    { metric: 'Submitted Tickets', value: 32, color: '#10b981', target: 40 },
-    { metric: 'Server Allocation', value: 71, color: '#3b82f6', target: 80 },
-    { metric: 'Content Quality', value: 85, color: '#f59e0b', target: 90 },
+    { metric: 'Generated Leads', value: 8, color: '#ef4444', target: 20 },
+    { metric: 'Submitted Tickets', value: 2, color: '#10b981', target: 10 },
+    { metric: 'Server Allocation', value: 25, color: '#3b82f6', target: 50 },
+    { metric: 'Content Quality', value: 65, color: '#f59e0b', target: 80 },
   ];
 
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ color: string; dataKey: string; value: number }>; label?: string }) => {
@@ -164,7 +164,7 @@ export default function ChartReport() {
           </div>
           <div className="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
             <p className="text-orange-700 font-medium text-sm">
-              📈 +17.5% tăng trưởng tài nguyên server so với tháng trước
+              📈 +2.1% tăng trưởng tài nguyên server so với tháng trước
             </p>
           </div>
         </TabsContent>
