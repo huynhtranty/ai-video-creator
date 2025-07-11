@@ -242,7 +242,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                 gap: "24px",
               }}
             >
-              {/* Video Thumbnail */}
+              {/* Video Preview */}
               <div
                 style={{
                   position: "relative",
@@ -253,7 +253,26 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                   aspectRatio: "16/9",
                 }}
               >
-                {video.thumbnailUrl && !imageError ? (
+                {video.filePath ? (
+                  <video
+                    src={video.filePath}
+                    controls
+                    preload="metadata"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      backgroundColor: "#000",
+                      borderRadius: "16px",
+                    }}
+                    onError={(e) => {
+                      console.error("Video failed to load:", e);
+                      setImageError(true);
+                    }}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                ) : video.thumbnailUrl && !imageError ? (
                   <img
                     src={video.thumbnailUrl}
                     alt={video.title || "Video thumbnail"}
@@ -290,13 +309,13 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                         textAlign: "center",
                       }}
                     >
-                      {imageError ? "Image unavailable" : "No thumbnail available"}
+                      {imageError ? "Video unavailable" : "No video available"}
                     </p>
                   </div>
                 )}
                 
-                {/* Duration overlay */}
-                {video.duration && (
+                {/* Duration overlay - only show if video is not available or on thumbnails */}
+                {video.duration && (!video.filePath || (!video.filePath && video.thumbnailUrl && !imageError)) && (
                   <div
                     style={{
                       position: "absolute",
@@ -478,32 +497,71 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                     </div>
 
                     {/* Save Button */}
-                    <button
-                      onClick={handleSave}
-                      style={{
-                        background: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
-                        color: "white",
-                        padding: "12px 24px",
-                        borderRadius: "12px",
-                        border: "none",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        fontFamily: "'Inter', sans-serif",
-                        transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
-                        alignSelf: "flex-start",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow = "0 8px 25px rgba(139, 92, 246, 0.3)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "none";
-                      }}
-                    >
-                      💾 Save Changes
-                    </button>
+                    <div style={{ display: "flex", gap: "12px" }}>
+                      <button
+                        onClick={handleSave}
+                        style={{
+                          background: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+                          color: "white",
+                          padding: "12px 24px",
+                          borderRadius: "12px",
+                          border: "none",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                          fontFamily: "'Inter', sans-serif",
+                          transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = "translateY(-2px)";
+                          e.currentTarget.style.boxShadow = "0 8px 25px rgba(139, 92, 246, 0.3)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = "translateY(0)";
+                          e.currentTarget.style.boxShadow = "none";
+                        }}
+                      >
+                        💾 Save Changes
+                      </button>
+
+                      {/* Download Button */}
+                      {video.filePath && (
+                        <button
+                          onClick={() => {
+                            if (video.filePath) {
+                              const link = document.createElement('a');
+                              link.href = video.filePath;
+                              link.download = `${video.title || 'video'}.mp4`;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            }
+                          }}
+                          style={{
+                            background: "linear-gradient(135deg, #10b981, #059669)",
+                            color: "white",
+                            padding: "12px 24px",
+                            borderRadius: "12px",
+                            border: "none",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            fontFamily: "'Inter', sans-serif",
+                            transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = "translateY(-2px)";
+                            e.currentTarget.style.boxShadow = "0 8px 25px rgba(16, 185, 129, 0.3)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = "translateY(0)";
+                            e.currentTarget.style.boxShadow = "none";
+                          }}
+                        >
+                          📥 Download Video
+                        </button>
+                      )}
+                    </div>
                   </div>
                 )}
 
@@ -544,10 +602,11 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                               transition: "all 0.2s ease",
                             }}
                           >
-                            <img
+                            <Image
                               src={getPlatformIcon(platform)}
                               alt={platform}
-                              style={{ width: "20px", height: "20px" }}
+                              width={20}
+                              height={20}
                             />
                             {platform}
                           </button>
@@ -568,10 +627,11 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                           gap: "12px",
                         }}
                       >
-                        <img
+                        <Image
                           src={getPlatformIcon(video.platform)}
                           alt={video.platform}
-                          style={{ width: "24px", height: "24px" }}
+                          width={24}
+                          height={24}
                         />
                         <div>
                           <p

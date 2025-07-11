@@ -101,6 +101,9 @@ const VideoGrid: React.FC<VideoGridProps> = ({ videos }) => {
                 overflow: "hidden",
                 cursor: "pointer",
                 transition: "all 0.3s ease-in-out",
+                height: "320px",
+                display: "flex",
+                flexDirection: "column",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-4px)";
@@ -208,31 +211,23 @@ const VideoGrid: React.FC<VideoGridProps> = ({ videos }) => {
               </div>
 
               {/* Video Details */}
-              <div style={{ padding: "16px" }}>
-                <h3
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: "600",
-                    color: "#212529",
-                    fontFamily: "'Inter', sans-serif",
-                    margin: "0 0 8px 0",
-                    lineHeight: "1.4",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                  }}
-                >
-                  {video.title || video.alt || "Untitled Video"}
-                </h3>
-
-                {video.description && (
-                  <p
+              <div style={{ 
+                padding: "16px", 
+                flex: "1", 
+                display: "flex", 
+                flexDirection: "column", 
+                justifyContent: "space-between",
+                minHeight: "140px" // Fixed height for content area
+              }}>
+                {/* Title and Description Container */}
+                <div>
+                  <h3
                     style={{
-                      fontSize: "14px",
-                      color: "#6c757d",
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      color: "#212529",
                       fontFamily: "'Inter', sans-serif",
-                      margin: "0 0 12px 0",
+                      margin: "0 0 8px 0",
                       lineHeight: "1.4",
                       display: "-webkit-box",
                       WebkitLineClamp: 2,
@@ -240,16 +235,34 @@ const VideoGrid: React.FC<VideoGridProps> = ({ videos }) => {
                       overflow: "hidden",
                     }}
                   >
-                    {video.description}
-                  </p>
-                )}
+                    {video.title || video.alt || "Untitled Video"}
+                  </h3>
 
+                  {video.description && (
+                    <p
+                      style={{
+                        fontSize: "14px",
+                        color: "#6c757d",
+                        fontFamily: "'Inter', sans-serif",
+                        margin: "0",
+                        lineHeight: "1.4",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {video.description}
+                    </p>
+                  )}
+                </div>
+
+                {/* Platform and Date Container */}
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    marginTop: "12px",
                   }}
                 >
                   {video.platform && (
