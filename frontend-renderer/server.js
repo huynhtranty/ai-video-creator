@@ -84,7 +84,7 @@ app.post("/render-from-assets", (req, res) => {
     transitionTypes = null,
     enableTransitions = true,
     transitionDuration = 1500,
-    audioConfig = 'background' // NEW: audio configuration
+    audioConfig = 'sequential' // NEW: audio configuration
     // There are three options: background, sequential, or simultaneous
   } = config;
 

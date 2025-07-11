@@ -8,6 +8,7 @@ import com.hcmus.softdes.aivideocreator.domain.model.Video;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.upload.YouTubeUploadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -39,7 +40,7 @@ public class VideoController {
         videoService.createVideo(videoData.getTitle(), videoData.getDescription(), videoData.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
-    @GetMapping("/videos/{videoId}")
+    @GetMapping("/{videoId}")
     @Operation(summary = "Get video by ID",
             description = "Retrieve a video by its unique identifier.")
     public ResponseEntity<VideoDto> getVideo(@PathVariable UUID videoId) {
@@ -51,11 +52,12 @@ public class VideoController {
         return ResponseEntity.ok(videoDto);
     }
 
-    @GetMapping("/videos")
+    @GetMapping
     @Operation(summary = "Get all videos",
             description = "Retrieve all videos associated with the user.")
     public ResponseEntity<VideoDto[]> getAllVideos() {
-        VideoDto[] videoResponses = videoService.getVideosByUserId(null).stream()
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getDetails().toString());
+        VideoDto[] videoResponses = videoService.getVideosByUserId(userId).stream()
                 .map(VideoMapper::toVideoDto)
                 .toArray(VideoDto[]::new);
         if (videoResponses.length == 0) {
@@ -64,7 +66,7 @@ public class VideoController {
         return ResponseEntity.ok(videoResponses);
     }
 
-    @DeleteMapping("/videos/{videoId}")
+    @DeleteMapping("/{videoId}")
     @Operation(summary = "Delete video by ID",
             description = "Delete a video by its unique identifier.")
     public ResponseEntity<Void> deleteVideo(@PathVariable UUID videoId) {

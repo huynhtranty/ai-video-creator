@@ -12,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class VideoDto {
+    private UUID id;
     private String title;
     private String description;
     private String filePath;

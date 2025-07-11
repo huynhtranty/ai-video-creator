@@ -1,9 +1,42 @@
 // D:\OneDrive - VNU-HCMUS\OneDrive - VNU-HCMUS\HCMUS - The third year\HK2\github\ai-video-creator\frontend\src\features\projects\components\video-detail\ModalContent.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
-const ModalContent = () => {
+interface Video {
+  id: string;
+  title?: string;
+  description?: string;
+  filePath?: string;
+  status?: "PENDING" | "COMPLETED" | "FAILED";
+  platform?: "NONE" | "YOUTUBE" | "TIKTOK" | "FACEBOOK";
+  duration?: number;
+  projectId?: string;
+  userId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  thumbnailUrl?: string;
+  alt?: string;
+}
+
+interface ModalContentProps {
+  video?: Video | null;
+}
+
+const ModalContent: React.FC<ModalContentProps> = ({ video }) => {
+  const [title, setTitle] = useState(video?.title || "");
+  const [description, setDescription] = useState(video?.description || "");
+
+  const handleSave = () => {
+    // TODO: Implement save functionality
+    console.log("Saving video:", { title, description });
+  };
+
+  const handleShare = () => {
+    // TODO: Implement share functionality
+    console.log("Sharing video:", video?.id);
+  };
+
   return (
     <div
       style={{
@@ -18,6 +51,8 @@ const ModalContent = () => {
         <input
           type="text"
           placeholder="Nhập tiêu đề"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           style={{
             width: "100%",
             padding: "0.5rem 1rem",
@@ -33,6 +68,8 @@ const ModalContent = () => {
         <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Mô tả</p>
         <textarea
           placeholder="Nhập mô tả"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           style={{
             width: "100%",
             padding: "0.5rem 1rem",
@@ -47,6 +84,7 @@ const ModalContent = () => {
       </div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <button
+          onClick={handleSave}
           style={{
             background: "linear-gradient(to right, #5DEFFF, #4105F5)",
             color: "white",
@@ -75,6 +113,7 @@ const ModalContent = () => {
           Lưu Video
         </button>
         <button
+          onClick={handleShare}
           style={{
             background: "linear-gradient(to right, #5DEFFF, #4105F5)",
             color: "white",

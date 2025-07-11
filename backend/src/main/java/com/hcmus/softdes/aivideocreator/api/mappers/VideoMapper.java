@@ -22,6 +22,7 @@ public class VideoMapper {
 
     public static VideoDto toVideoDto(Video video) {
         return VideoDto.builder()
+            .id(video.getId())
             .title(video.getTitle())
             .description(video.getDescription())
             .filePath(video.getFilePath())

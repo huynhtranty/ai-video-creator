@@ -19,7 +19,7 @@ export interface VideoConfig {
   transitionDuration: number;
   fitMode: string;
   enableTransitions: boolean;
-  audioConfig: 'background' | 'sequential' | 'simultaneous';
+  audioConfig?: 'background' | 'sequential' | 'simultaneous';
 }
 
 const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose, onSelect }) => {
@@ -31,7 +31,6 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
   const [transitionDuration, setTransitionDuration] = useState(1000);
   const [fitMode, setFitMode] = useState('cover');
   const [enableTransitions, setEnableTransitions] = useState(true);
-  const [audioConfig, setAudioConfig] = useState<'background' | 'sequential' | 'simultaneous'>('background');
 
   if (!isOpen) return null;
 
@@ -53,8 +52,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
       transitionEffect,
       transitionDuration,
       fitMode,
-      enableTransitions,
-      audioConfig
+      enableTransitions
     };
     onSelect(config);
     onClose();
@@ -294,34 +292,6 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
           )}
         </div>
 
-        {/* Audio Configuration */}
-        <div style={{ marginBottom: '24px' }}>
-          <h4 style={{ marginBottom: '12px' }}>🎵 Audio Configuration</h4>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {[
-              { value: 'background', label: 'Background', desc: 'Main audio + effects' },
-              { value: 'sequential', label: 'Sequential', desc: 'Play one after another' },
-              { value: 'simultaneous', label: 'Mix', desc: 'Play all together' }
-            ].map((option) => (
-              <button
-                key={option.value}
-                onClick={() => setAudioConfig(option.value as any)}
-                style={{
-                  padding: '8px 16px',
-                  border: audioConfig === option.value ? '2px solid #3b82f6' : '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  backgroundColor: audioConfig === option.value ? '#eff6ff' : 'white',
-                  cursor: 'pointer',
-                  fontSize: '14px'
-                }}
-              >
-                <div style={{ fontWeight: 'bold' }}>{option.label}</div>
-                <div style={{ fontSize: '10px', color: '#6b7280' }}>{option.desc}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Preview */}
         <div style={{
           backgroundColor: '#f3f4f6',
@@ -335,7 +305,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
               selectedTemplate.id === 'custom' ? customWidth : selectedTemplate.width
             }×{
               selectedTemplate.id === 'custom' ? customHeight : selectedTemplate.height
-            } • {fps} FPS • {fitMode} fit • {enableTransitions ? transitionEffect : 'No'} transitions • {audioConfig} audio
+            } • {fps} FPS • {fitMode} fit • {enableTransitions ? transitionEffect : 'No'} transitions
           </div>
         </div>
 

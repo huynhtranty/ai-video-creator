@@ -2,9 +2,9 @@
 "use client";
 
 import React from "react";
-import ProjectPreview from "./video-detail/ProjectPreview";
-import SocialButtons from "./video-detail/SocialButtons";
-import ModalContent from "./video-detail/ModalContent";
+import ProjectPreview from "../../videos/components/ProjectPreview";
+import SocialButtons from "../../videos/components/SocialButtons";
+import ModalContent from "../../videos/components/ModalContent";
 
 interface Project {
   id: string | number;

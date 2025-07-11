@@ -36,9 +36,6 @@
     "typescript": "^4.9.4"
   },
   "scripts": {
-    "start": "remotion studio",
-    "build": "remotion render RenderVideo out/video.mp4",
-    "upgrade": "remotion upgrade",
-    "test": "eslint src --ext ts,tsx,js,jsx && tsc"
+    "start": "node server.js"
   }
 }

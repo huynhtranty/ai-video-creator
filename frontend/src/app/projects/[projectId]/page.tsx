@@ -43,7 +43,7 @@ interface VideoConfig {
   transitionDuration: number;
   fitMode: string;
   transitionEffect: string;
-  audioConfig: string;
+  audioConfig?: string;
 }
 
 function ProjectPageContent() {
