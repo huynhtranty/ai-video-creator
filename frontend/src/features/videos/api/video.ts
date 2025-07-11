@@ -49,7 +49,7 @@ export const useCreateVideo = () => {
   
   return useMutation<Video, Error, CreateVideoRequest>({
     mutationFn: async (data: CreateVideoRequest) => {
-      const response = await apiClient.post("/api/videos", data);
+      const response = await apiClient.post("/videos", data);
       return response.data;
     },
     onSuccess: () => {
