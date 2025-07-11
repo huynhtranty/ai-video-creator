@@ -7,6 +7,7 @@ out/
 
 # IDE - VS Code
 .vscode/
+.vs/
 .settings/
 .project
 .classpath
