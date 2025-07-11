@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { useUploadToYouTube, useUploadToTikTok } from "../../videos/api/video";
 
 interface Video {
   id: string;
@@ -31,6 +32,10 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
   const [activeTab, setActiveTab] = useState<"details" | "share">("details");
   const [selectedPlatform, setSelectedPlatform] = useState<string>("YOUTUBE");
   const [imageError, setImageError] = useState(false);
+  
+  // Upload hooks
+  const uploadToYouTube = useUploadToYouTube();
+  const uploadToTikTok = useUploadToTikTok();
 
   // Handle escape key to close modal
   React.useEffect(() => {
@@ -73,9 +78,81 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
     // TODO: Implement actual save functionality
   };
 
-  const handleShare = () => {
-    console.log("Sharing video:", { id: video.id, platform: selectedPlatform });
-    // TODO: Implement actual share functionality
+  const handleShare = async () => {
+    if (!video?.filePath) {
+      alert("❌ No video file available for upload");
+      return;
+    }
+
+    try {
+      // Convert video file path to actual File object
+      console.log("🔄 Preparing video file for upload...");
+      const response = await fetch(video.filePath);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch video file: ${response.statusText}`);
+      }
+      
+      const blob = await response.blob();
+      const file = new File([blob], `${video.title || 'video'}.mp4`, { type: 'video/mp4' });
+
+      if (selectedPlatform === "YOUTUBE") {
+        const uploadData = {
+          file,
+          title: title || video.title || "Untitled Video",
+          description: description || video.description || "Uploaded from AI Video Creator"
+        };
+
+        console.log("🚀 Uploading to YouTube...", {
+          fileName: file.name,
+          fileSize: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+          title: uploadData.title,
+          description: uploadData.description
+        });
+
+        uploadToYouTube.mutate(uploadData, {
+          onSuccess: (response) => {
+            console.log("✅ Upload successful:", response);
+            alert(`✅ Successfully uploaded to YouTube!\n\n${response.message || response}`);
+          },
+          onError: (error: Error) => {
+            console.error("❌ Upload failed:", error);
+            const errorMessage = error.message || "Unknown error occurred";
+            alert(`❌ Failed to upload to YouTube:\n\n${errorMessage}`);
+          }
+        });
+      } else if (selectedPlatform === "TIKTOK") {
+        const uploadData = {
+          file,
+          title: title || video.title || "Untitled Video"
+        };
+
+        console.log("🚀 Uploading to TikTok...", {
+          fileName: file.name,
+          fileSize: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+          title: uploadData.title
+        });
+
+        uploadToTikTok.mutate(uploadData, {
+          onSuccess: (response) => {
+            console.log("✅ Upload successful:", response);
+            alert(`✅ Successfully uploaded to TikTok!\n\n${response.message || response}`);
+          },
+          onError: (error: Error) => {
+            console.error("❌ Upload failed:", error);
+            const errorMessage = error.message || "Unknown error occurred";
+            alert(`❌ Failed to upload to TikTok:\n\n${errorMessage}`);
+          }
+        });
+      } else {
+        console.log("Sharing video:", { id: video.id, platform: selectedPlatform });
+        // TODO: Implement Facebook upload
+        alert(`ℹ️ ${selectedPlatform} upload not implemented yet`);
+      }
+    } catch (error: unknown) {
+      console.error("❌ Error preparing file:", error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+      alert(`❌ Failed to prepare video file for upload:\n\n${errorMessage}`);
+    }
   };
 
   const formatDuration = (duration?: number) => {
@@ -662,29 +739,37 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                     {/* Share Button */}
                     <button
                       onClick={handleShare}
+                      disabled={uploadToYouTube.isPending || uploadToTikTok.isPending}
                       style={{
-                        background: "linear-gradient(135deg, #06b6d4, #0891b2)",
+                        background: (uploadToYouTube.isPending || uploadToTikTok.isPending)
+                          ? "linear-gradient(135deg, #9ca3af, #6b7280)" 
+                          : "linear-gradient(135deg, #06b6d4, #0891b2)",
                         color: "white",
                         padding: "12px 24px",
                         borderRadius: "12px",
                         border: "none",
                         fontSize: "14px",
                         fontWeight: "600",
-                        cursor: "pointer",
+                        cursor: (uploadToYouTube.isPending || uploadToTikTok.isPending) ? "not-allowed" : "pointer",
                         fontFamily: "'Inter', sans-serif",
                         transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
                         alignSelf: "flex-start",
+                        opacity: (uploadToYouTube.isPending || uploadToTikTok.isPending) ? 0.7 : 1,
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow = "0 8px 25px rgba(6, 182, 212, 0.3)";
+                        if (!uploadToYouTube.isPending && !uploadToTikTok.isPending) {
+                          e.currentTarget.style.transform = "translateY(-2px)";
+                          e.currentTarget.style.boxShadow = "0 8px 25px rgba(6, 182, 212, 0.3)";
+                        }
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.transform = "translateY(0)";
                         e.currentTarget.style.boxShadow = "none";
                       }}
                     >
-                      🚀 Share to {selectedPlatform}
+                      {(uploadToYouTube.isPending || uploadToTikTok.isPending)
+                        ? `⏳ Uploading to ${selectedPlatform}...` 
+                        : `🚀 Share to ${selectedPlatform}`}
                     </button>
                   </div>
                 )}
