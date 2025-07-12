@@ -17,7 +17,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
     private String apiKey;
 
     @Override
-    public ScriptGeneratedLayout generateScript(String prompt, String style) {
+    public ScriptGeneratedLayout generateScript(String prompt, String scriptStyle) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         Schema contentSchema = Schema.builder()
@@ -57,6 +57,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             ###
             
             Detect the language code of the topic.
+            The language code should be in ISO 639-1 format (e.g., "en" for English, "fr" for French).
             
             ###
             
@@ -67,12 +68,15 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             The context should be concise (under 300 words)
             and suitable for guiding image generation for a storyboard or animated video.
             The context should include any description of any characters that are relevant to the topic.
+            The context should be descriptive about the art style, camera moves, colors, and characters' physical details.
+            In this context:
             
             ###
             
             Generate 4–10 script paragraphs (more if needed), where each describes **a single scene**.
-            
+            """ + getStylePrompt(scriptStyle) + """
             Each script paragraph should:
+            - Follows the language code detected from the topic.
             - Be written for spoken narration.
             - Be vivid, clear, concise, and scene-focused.
             - Avoid mentioning visuals do not describe the art style, camera moves, colors, or characters' physical details.
@@ -88,6 +92,17 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse script generation response", e);
         }
+    }
+
+    private String getStylePrompt(String style) {
+        return switch (style) {
+            case "professional" -> "The script should be written in a professional style, suitable for business presentations or educational content.";
+            case "friendly" -> "The script should be written in a friendly and approachable style, suitable for casual conversations or social media content.";
+            case "humorous" -> "The script should be written in a humorous style, suitable for comedy sketches or light-hearted content.";
+            case "serious" -> "The script should be written in a serious style, suitable for dramatic or emotional content.";
+            case "creative" -> "The script should be written in a creative style, suitable for storytelling or artistic content.";
+            default -> "The written style of the script should be match with the topic given.";
+        };
     }
 
     @Override

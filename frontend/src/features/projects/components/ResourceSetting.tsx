@@ -101,7 +101,7 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
       },
       audio: {
         gender: audioGenderMap[audioGender] || audioGender,
-        language: audioLanguageMap[audioLanguage] || audioLanguage,
+        language: audioLanguageMap[audioLanguage],
         speedRate: audioSpeedRate[0],
         model: audioModelMap[audioModel] || audioModel,
       },

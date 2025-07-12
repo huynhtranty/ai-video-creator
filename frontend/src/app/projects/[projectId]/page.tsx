@@ -241,7 +241,6 @@ function ProjectPageContent() {
             provider: "gemini-image",
             projectId: projectId,
             scriptId: resource.id,
-            // Include image style settings
             style: settings.image.style,
           })
           .then(imageResponse => {
@@ -256,13 +255,12 @@ function ProjectPageContent() {
 
           const audioPromise = generateTtsForScript({
             text: resource.textContent,
-            languageCode: settings.audio.language === "Detect" ? "auto" : settings.audio.language.toLowerCase(),
+            languageCode: settings.audio.language || response.language,
             speakingRate: settings.audio.speedRate,
-            gender: settings.audio.gender === "Nam" ? "MALE" : "FEMALE",
+            gender: settings.audio.gender,
             projectId: projectId,
             scriptId: resource.id,
             provider: settings.audio.model.toLowerCase(),
-            // Include audio settings
             model: settings.audio.model,
           })
           .then(audioResponse => {
