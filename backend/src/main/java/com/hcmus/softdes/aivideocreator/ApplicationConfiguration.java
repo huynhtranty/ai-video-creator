@@ -42,6 +42,9 @@ public class ApplicationConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/auth/**").permitAll();
+                    authorize.requestMatchers("/videos/youtube-test").permitAll(); // Test endpoint
+                    authorize.requestMatchers("/videos/youtube/*/analytics").permitAll(); // Analytics endpoint for testing
+                    authorize.requestMatchers("/videos/youtube/*/test").permitAll(); // Test endpoint
                     authorize.anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

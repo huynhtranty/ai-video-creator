@@ -13,6 +13,8 @@ public class VideoMapper {
             videoDto.getDescription(),
             videoDto.getFilePath(),
             videoDto.getStatus(),
+            videoDto.getYoutubeId(),
+            videoDto.getThumbnailUrl(),
             videoDto.getPlatform(),
             videoDto.getDuration(),
             videoDto.getProjectId(),
@@ -29,6 +31,8 @@ public class VideoMapper {
             .status(video.getStatus())
             .platform(video.getPlatform())
             .duration(video.getDuration())
+            .youtubeId(video.getYoutubeId())
+            .thumbnailUrl(video.getThumbnailUrl())
             .projectId(video.getProjectId())
             .userId(video.getUserId())
             .createdAt(video.getCreatedAt().toString())

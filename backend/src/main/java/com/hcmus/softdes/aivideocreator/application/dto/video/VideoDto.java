@@ -23,6 +23,8 @@ public class VideoDto {
     private UUID projectId;
     private UUID userId;
     private Status status;
+    private String youtubeId;
+    private String thumbnailUrl;
     private int duration;
     private Platform platform;
     private String createdAt;

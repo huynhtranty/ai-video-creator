@@ -1,6 +1,8 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
+import com.hcmus.softdes.aivideocreator.application.dto.upload.PlatformUploadResponse;
 import com.hcmus.softdes.aivideocreator.application.service.UserService;
+import com.hcmus.softdes.aivideocreator.application.service.VideoService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.upload.TikTokUploadService;
 import com.hcmus.softdes.aivideocreator.infrastructure.external.upload.YouTubeUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +24,23 @@ public class UploadController {
     private final YouTubeUploadService youtubeService;
     private final TikTokUploadService tiktokService;
     private final UserService authService;
+    private final VideoService videoService;
 
     @Autowired
     public UploadController(YouTubeUploadService youtubeService,
                             TikTokUploadService tiktokService,
-                            UserService authService) {
+                            UserService authService, VideoService videoService) {
         this.youtubeService = youtubeService;
         this.tiktokService = tiktokService;
         this.authService = authService;
+        this.videoService = videoService;
     }
 
     @PostMapping("/youtube")
-    public ResponseEntity<String> uploadToYoutube(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<PlatformUploadResponse> uploadToYoutube(@RequestParam("file") MultipartFile file,
                                                   @RequestParam String title,
-                                                  @RequestParam String description) throws Exception {
+                                                  @RequestParam String description,
+                                                  @RequestParam String VideoId) throws Exception {
         File tempFile = File.createTempFile("video", ".mp4");
         file.transferTo(tempFile);
 
@@ -43,9 +48,16 @@ public class UploadController {
         String email = authService.findUserByUsername(username).getEmail();
         var accessToken = authService.getGoogleAccessToken(email);
 
-        String result = youtubeService.uploadVideo(tempFile, accessToken, title, description);
+        String youtubeVideoId = youtubeService.uploadVideo(tempFile, accessToken, title, description);
+        UUID videoId = VideoId != null ? UUID.fromString(VideoId) : UUID.randomUUID();
+        videoService.saveYouTubeVideoId(youtubeVideoId, videoId);
         tempFile.delete();
-        return ResponseEntity.ok(result);
+        
+        PlatformUploadResponse response = new PlatformUploadResponse(
+            "Video uploaded successfully. YouTube ID: " + youtubeVideoId,
+            youtubeVideoId
+        );
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/tiktok")

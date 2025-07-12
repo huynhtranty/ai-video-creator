@@ -39,6 +39,12 @@ public class VideoEntity {
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
+    @Column(name = "youtube_id")
+    private String youtubeId; // Optional field for YouTube video ID
+
+    @Column(name = "thumbnail_url")
+    private String thumbnailUrl; // Optional field for video thumbnail
+
     @Column(name = "platform")
     private Platform platform; // Default to 'None'
 

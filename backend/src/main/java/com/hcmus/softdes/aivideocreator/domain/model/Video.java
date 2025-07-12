@@ -17,6 +17,8 @@ public class Video extends Entity {
     String title;
     String description;
     String filePath;
+    String youtubeId;
+    String thumbnailUrl;
     Status status;
     Platform platform; // Optional field for social media platform
     int duration;
@@ -29,6 +31,8 @@ public class Video extends Entity {
         String description,
         String filePath,
         Status status,
+        String YoutubeId,
+        String thumbnailUrl,
         Platform platform,
         int duration,
         UUID projectId,
@@ -39,6 +43,8 @@ public class Video extends Entity {
         this.description = description;
         this.filePath = filePath;
         this.status = status;
+        this.youtubeId = YoutubeId;
+        this.thumbnailUrl = thumbnailUrl;
         this.platform = platform;
         this.duration = duration;
         this.projectId = projectId;
@@ -50,6 +56,8 @@ public class Video extends Entity {
         String description,
         String filePath,
         Status status,
+        String YoutubeId,
+        String thumbnailUrl,
         Platform platform,
         int duration,
         UUID projectId,
@@ -61,6 +69,8 @@ public class Video extends Entity {
             description,
             filePath,
             status,
+            YoutubeId,
+            thumbnailUrl,
             platform,
             duration,
             projectId,
