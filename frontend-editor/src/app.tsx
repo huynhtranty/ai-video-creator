@@ -317,7 +317,7 @@ export default function App() {
           
           <button 
             onClick={() => {
-              const creatorUrl = 'http://localhost:3000/projects/new';
+              const creatorUrl = 'http://localhost:3000/projects';
               window.open(creatorUrl, '_blank');
             }}
             style={{

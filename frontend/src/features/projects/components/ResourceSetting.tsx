@@ -51,7 +51,7 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
   const scriptStyles = ["Chuyên nghiệp", "Thân thiện", "Hài hước", "Nghiêm túc", "Sáng tạo"];
   const scriptModels = ["Gemini", "Cloudflare"];
   const audioGenders = ["Nam", "Nữ"];
-  const audioLanguages = ["Detect", "English", "Vietnamese"];
+  const audioLanguages = ["Phát hiện ngôn ngữ", "English", "Tiếng Việt"];
   const audioModels = ["AzureTTS", "GoogleTTS"];
   const imageStyles = ["Thực tế", "Hoạt hình", "Nghệ thuật", "Tối giản", "Cổ điển"];
 
@@ -67,9 +67,9 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
   };
 
   const audioLanguageMap: Record<string, string> = {
-    "Detect": "",
+    "Phát hiện ngôn ngữ": "",
     "English": "en",
-    "Vietnamese": "vi"
+    "Tiếng Việt": "vi"
   };
 
   const audioModelMap: Record<string, string> = {
@@ -116,7 +116,7 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
     setScriptStyle("Chuyên nghiệp");
     setScriptModel("Gemini");
     setAudioGender("Nam");
-    setAudioLanguage("Detect");
+    setAudioLanguage("Phát hiện ngôn ngữ");
     setAudioSpeedRate([1.0]);
     setAudioModel("GoogleTTS");
     setImageStyle("Thực tế");
@@ -195,112 +195,113 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
             </div>
           </div>
 
-          {/* Audio Settings */}
-          <div className="space-y-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-100">
+            {/* Audio Settings */}
+            <div className="space-y-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-100">
             <div className="flex items-center gap-2 mb-3">
               <Volume2 className="w-4 h-4 text-green-600" />
               <h3 className="font-medium text-gray-800">Âm thanh</h3>
             </div>
             
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Giới tính</label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-between h-10 px-3 py-2 border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-[#8362E5] focus:border-[#8362E5] focus:ring-2 focus:ring-[#8362E5]/20"
-                    >
-                      {audioGender}
-                      <ChevronDown className="w-4 h-4 ml-2" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
-                    {audioGenders.map((gender) => (
-                      <DropdownMenuItem
-                        key={gender}
-                        onClick={() => setAudioGender(gender)}
-                        className="cursor-pointer hover:bg-[#8362E5]/10"
-                      >
-                        {gender}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <label className="text-sm font-medium text-gray-700">Giới tính</label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between h-10 px-3 py-2 border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-[#8362E5] focus:border-[#8362E5] focus:ring-2 focus:ring-[#8362E5]/20"
+                >
+                  {audioGender}
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full">
+                {audioGenders.map((gender) => (
+                  <DropdownMenuItem
+                  key={gender}
+                  onClick={() => setAudioGender(gender)}
+                  className="cursor-pointer hover:bg-[#8362E5]/10"
+                  >
+                  {gender}
+                  </DropdownMenuItem>
+                ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Ngôn ngữ</label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-between h-10 px-3 py-2 border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-[#8362E5] focus:border-[#8362E5] focus:ring-2 focus:ring-[#8362E5]/20"
-                    >
-                      {audioLanguage}
-                      <ChevronDown className="w-4 h-4 ml-2" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
-                    {audioLanguages.map((language) => (
-                      <DropdownMenuItem
-                        key={language}
-                        onClick={() => setAudioLanguage(language)}
-                        className="cursor-pointer hover:bg-[#8362E5]/10"
-                      >
-                        {language}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <label className="text-sm font-medium text-gray-700">Ngôn ngữ</label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between h-10 px-3 py-2 border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-[#8362E5] focus:border-[#8362E5] focus:ring-2 focus:ring-[#8362E5]/20"
+                >
+                  {audioLanguage}
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full">
+                {audioLanguages.map((language) => (
+                  <DropdownMenuItem
+                  key={language}
+                  onClick={() => setAudioLanguage(language)}
+                  className="cursor-pointer hover:bg-[#8362E5]/10"
+                  >
+                  {language}
+                  </DropdownMenuItem>
+                ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               </div>
 
+              {/* Row 2: Speech Rate and TTS Model */}
               <div className="space-y-3">
-                <label className="text-sm font-medium text-gray-700">Tốc độ nói</label>
-                <div className="px-3 py-2 bg-white rounded-lg border border-gray-200">
-                  <div className="flex justify-between text-xs text-gray-500 mb-2">
-                    <span>0.5x</span>
-                    <span className="font-medium text-[#8362E5]">{audioSpeedRate[0]}x</span>
-                    <span>2.0x</span>
-                  </div>
-                  <Slider
-                    value={audioSpeedRate}
-                    onValueChange={setAudioSpeedRate}
-                    max={2.0}
-                    min={0.5}
-                    step={0.1}
-                    className="w-full"
-                  />
+              <label className="text-sm font-medium text-gray-700">Tốc độ nói</label>
+              <div className="px-3 py-2 bg-white rounded-lg border border-gray-200">
+                <div className="flex justify-between text-xs text-gray-500 mb-2">
+                <span>0.5x</span>
+                <span className="font-medium text-[#8362E5]">{audioSpeedRate[0]}x</span>
+                <span>2.0x</span>
                 </div>
+                <Slider
+                value={audioSpeedRate}
+                onValueChange={setAudioSpeedRate}
+                max={2.0}
+                min={0.5}
+                step={0.1}
+                className="w-full"
+                />
+              </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Mô hình TTS</label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-between h-10 px-3 py-2 border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-[#8362E5] focus:border-[#8362E5] focus:ring-2 focus:ring-[#8362E5]/20"
-                    >
-                      {audioModel}
-                      <ChevronDown className="w-4 h-4 ml-2" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
-                    {audioModels.map((model) => (
-                      <DropdownMenuItem
-                        key={model}
-                        onClick={() => setAudioModel(model)}
-                        className="cursor-pointer hover:bg-[#8362E5]/10"
-                      >
-                        {model}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <label className="text-sm font-medium text-gray-700">Mô hình TTS</label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between h-10 px-3 py-2 border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-[#8362E5] focus:border-[#8362E5] focus:ring-2 focus:ring-[#8362E5]/20"
+                >
+                  {audioModel}
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full">
+                {audioModels.map((model) => (
+                  <DropdownMenuItem
+                  key={model}
+                  onClick={() => setAudioModel(model)}
+                  className="cursor-pointer hover:bg-[#8362E5]/10"
+                  >
+                  {model}
+                  </DropdownMenuItem>
+                ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               </div>
             </div>
-          </div>
+            </div>
 
           {/* Image Settings */}
           <div className="space-y-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100">
@@ -339,30 +340,30 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 pt-6 border-t border-gray-200">
-          <Button
+            <Button
             onClick={handleGenerateResources}
             disabled={isGenerating}
-            className="flex-1 min-w-[200px] text-white py-3 rounded-lg transition-colors font-medium bg-[#8362E5] hover:bg-[#6F4EC8] disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
+            className="px-6 text-white py-3 rounded-lg transition-colors font-medium bg-[#8362E5] hover:bg-[#6F4EC8] disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
             {isGenerating ? (
               <div className="flex items-center gap-2">
-                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Đang tạo...
+              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Đang tạo...
               </div>
             ) : (
               "Tạo tài nguyên"
             )}
-          </Button>
-          <Button
+            </Button>
+            <Button
             onClick={handleReset}
             variant="outline"
-            className="flex-1 min-w-[200px] border-gray-300 text-gray-600 py-3 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors font-medium"
-          >
+            className="px-6 border-gray-300 text-gray-600 py-3 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors font-medium"
+            >
             Đặt lại mặc định
-          </Button>
+            </Button>
         </div>
       </CardContent>
     </Card>

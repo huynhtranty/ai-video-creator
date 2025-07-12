@@ -61,7 +61,7 @@ export default function ResourceSection({
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col">
       {/* ResourceSetting on top */}
       <div className="flex-shrink-0 mb-8">
         <ResourceSetting onGenerateResources={onGenerateResources} isGenerating={isGenerating} />
