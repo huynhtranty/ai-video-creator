@@ -1,6 +1,5 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
-import com.google.api.services.youtube.model.VideoStatistics;
 import com.hcmus.softdes.aivideocreator.api.mappers.VideoMapper;
 import com.hcmus.softdes.aivideocreator.application.common.exceptions.YouTubeServiceException;
 import com.hcmus.softdes.aivideocreator.application.dto.video.VideoDto;
@@ -156,13 +155,9 @@ public class VideoController {
     @GetMapping("/youtube/{youtubeId}/analytics")
     @Operation(summary = "Get YouTube video analytics",
             description = "Retrieve analytics for a YouTube video by its YouTube ID.")
-    public ResponseEntity<?> getAnalytics(@PathVariable String youtubeId) {
+    public ResponseEntity<VideoStats> getAnalytics(@PathVariable String youtubeId) {
         System.out.println("Analytics endpoint called with YouTube ID: " + youtubeId);
         
-        // First test: Return simple response to verify endpoint is reachable
-        return ResponseEntity.ok("Analytics endpoint reached for YouTube ID: " + youtubeId);
-        
-        /*
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             System.out.println("Username from security context: " + username);
@@ -181,7 +176,6 @@ public class VideoController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
-        */
     }
     
     @GetMapping("/youtube/{youtubeId}/test")
@@ -194,5 +188,27 @@ public class VideoController {
     public ResponseEntity<String> simpleTestEndpoint() {
         System.out.println("Simple test endpoint called");
         return ResponseEntity.ok("Simple test endpoint working");
+    }
+
+    @GetMapping("/stats")
+    @Operation(summary = "Get overall video statistics",
+            description = "Retrieve overall statistics for all user videos.")
+    public ResponseEntity<List<VideoStats>> getOverallStats() {
+        try {
+            UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getDetails().toString());
+            List<Video> videos = videoService.getVideosByUserId(userId);
+            if (videos.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            List<VideoStats> videoStatsList = youtubeService.getYouTubeVideoStatsBatch(
+                    videos.stream().map(Video::getYoutubeId).toList(),
+                    userId.toString()
+            );
+            return ResponseEntity.ok(videoStatsList);
+        } catch (Exception e) {
+            System.err.println("Error getting video stats: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
