@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Communication Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .button:hover { background: #0056b3; }
+        .log { background: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; padding: 10px; margin: 10px 0; max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Editor Communication Test</h1>
+    <p>This page tests communication between main app and video editor.</p>
+    
+    <div>
+        <button class="button" onclick="testEditorCommunication()">🚀 Test Editor Communication</button>
+        <button class="button" onclick="clearLog()">🗑️ Clear Log</button>
+    </div>
+    
+    <div id="log" class="log">
+        <div class="info">📋 Test Log (ready to test...)</div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            logDiv.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '<div class="info">📋 Test Log (cleared...)</div>';
+        }
+
+        function testEditorCommunication() {
+            log('🚀 Starting editor communication test...', 'info');
+            
+            // Generate test video data
+            const videoId = `test_video_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            const testData = {
+                id: videoId,
+                originalData: {
+                    title: "Test Video",
+                    context: "Test context for communication",
+                    contents: [{
+                        description: "Test scene description",
+                        image: "https://via.placeholder.com/640x480",
+                        subtitles: [{
+                            text: "Test subtitle text",
+                            audio: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
+                            duration: 3000
+                        }]
+                    }]
+                },
+                apiData: {
+                    id: videoId,
+                    assets: {
+                        imageUrls: ["https://via.placeholder.com/640x480"],
+                        audioUrls: ["https://www.soundjay.com/misc/sounds/bell-ringing-05.wav"],
+                        srtContent: "1\n00:00:00,000 --> 00:00:03,000\nTest subtitle text\n"
+                    },
+                    config: {
+                        width: 1920,
+                        height: 1080,
+                        fps: 30
+                    }
+                },
+                timestamp: new Date().toISOString()
+            };
+
+            log(`📝 Generated test data for video ID: ${videoId}`, 'info');
+
+            // Open editor window
+            const editorUrl = `http://localhost:5173/?videoId=${videoId}`;
+            log(`🌐 Opening editor: ${editorUrl}`, 'info');
+            
+            const editorWindow = window.open(editorUrl, '_blank');
+
+            if (!editorWindow) {
+                log('❌ Failed to open editor window (popup blocked?)', 'error');
+                return;
+            }
+
+            log('✅ Editor window opened successfully', 'success');
+
+            // Setup communication
+            let attempts = 0;
+            let dataReceived = false;
+            const maxAttempts = 50;
+
+            // Listen for confirmation
+            const handleMessage = (event) => {
+                if (event.origin !== 'http://localhost:5173') return;
+                
+                log(`📨 Received message: ${JSON.stringify(event.data)}`, 'info');
+                
+                if (event.data.type === 'DATA_RECEIVED' && event.data.videoId === videoId) {
+                    log('✅ Editor confirmed data received!', 'success');
+                    dataReceived = true;
+                    window.removeEventListener('message', handleMessage);
+                }
+            };
+
+            window.addEventListener('message', handleMessage);
+
+            // Send data function
+            const trySendData = () => {
+                attempts++;
+                
+                try {
+                    if (editorWindow.closed) {
+                        log('❌ Editor window was closed', 'error');
+                        window.removeEventListener('message', handleMessage);
+                        return;
+                    }
+
+                    log(`📤 Sending data (attempt ${attempts}/${maxAttempts})...`, 'info');
+                    
+                    editorWindow.postMessage({
+                        type: 'VIDEO_DATA',
+                        payload: testData
+                    }, 'http://localhost:5173');
+                    
+                    // Check for response
+                    setTimeout(() => {
+                        if (!dataReceived && attempts < maxAttempts && !editorWindow.closed) {
+                            trySendData();
+                        } else if (!dataReceived && attempts >= maxAttempts) {
+                            log('❌ Failed to send data after max attempts', 'error');
+                            log('💡 Make sure editor is running on localhost:5173', 'info');
+                            window.removeEventListener('message', handleMessage);
+                        }
+                    }, 200);
+                    
+                } catch (error) {
+                    log(`❌ Error sending data: ${error.message}`, 'error');
+                    
+                    if (attempts < maxAttempts && !editorWindow.closed) {
+                        setTimeout(trySendData, 500);
+                    } else {
+                        log('❌ Max attempts reached', 'error');
+                        window.removeEventListener('message', handleMessage);
+                    }
+                }
+            };
+
+            // Start sending after delay
+            setTimeout(() => {
+                log('⏳ Waiting for editor to load...', 'info');
+                trySendData();
+            }, 2000);
+
+            // Cleanup after timeout
+            setTimeout(() => {
+                if (!dataReceived) {
+                    log('⏰ Test timeout - cleaning up listeners', 'info');
+                    window.removeEventListener('message', handleMessage);
+                }
+            }, 30000);
+        }
+    </script>
+</body>
+</html>
