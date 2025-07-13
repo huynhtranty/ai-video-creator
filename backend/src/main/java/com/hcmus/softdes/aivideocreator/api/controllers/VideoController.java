@@ -1,8 +1,10 @@
 package com.hcmus.softdes.aivideocreator.api.controllers;
 
-import com.google.api.services.youtube.model.VideoStatistics;
 import com.hcmus.softdes.aivideocreator.api.mappers.VideoMapper;
+import com.hcmus.softdes.aivideocreator.application.common.exceptions.YouTubeServiceException;
 import com.hcmus.softdes.aivideocreator.application.dto.video.VideoDto;
+import com.hcmus.softdes.aivideocreator.application.dto.video.VideoStats;
+import com.hcmus.softdes.aivideocreator.application.service.UserService;
 import com.hcmus.softdes.aivideocreator.application.service.VideoService;
 import com.hcmus.softdes.aivideocreator.domain.enums.Platform;
 import com.hcmus.softdes.aivideocreator.domain.enums.Status;
@@ -23,11 +25,13 @@ import java.util.UUID;
 public class VideoController {
     VideoService videoService;
     YouTubeUploadService youtubeService;
+    UserService authService;
     VideoMapper videoMapper = new VideoMapper();
 
-    public VideoController(VideoService videoService, YouTubeUploadService youtubeService) {
+    public VideoController(VideoService videoService, YouTubeUploadService youtubeService, UserService userService) {
         this.videoService = videoService;
         this.youtubeService = youtubeService;
+        this.authService = userService;
     }
 
     @PostMapping
@@ -101,26 +105,109 @@ public class VideoController {
     @Operation(summary = "Delete video by ID",
             description = "Delete a video by its unique identifier.")
     public ResponseEntity<Void> deleteVideo(@PathVariable UUID videoId) {
-        // Logic to delete a video by its ID
+        System.out.println("Delete video endpoint called with videoId: " + videoId);
         try {
             videoService.deleteVideo(videoId);
+            System.out.println("Video deleted successfully: " + videoId);
+            // If deletion is successful, return 204 No Content
+            return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
+            System.err.println("Error deleting video " + videoId + ": " + e.getMessage());
+            e.printStackTrace();
             // If the video is not found, return 404 Not Found
             return ResponseEntity.notFound().build();
         }
-        // If deletion is successful, return 204 No Content
-        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{videoId}/analytics")
-    public ResponseEntity<VideoStatistics> getAnalytics(@PathVariable String videoId) {
+    @PutMapping("/{videoId}/status")
+    @Operation(summary = "Update video status",
+            description = "Update the status of a video by its unique identifier.")
+    public ResponseEntity<VideoDto> updateVideoStatus(@PathVariable UUID videoId, @RequestParam Status status,
+                                                      @RequestParam(required = false) Platform platform,
+                                                      @RequestParam(required = false) String title,
+                                                      @RequestParam(required = false) String description) {
         try {
-            VideoStatistics stats = youtubeService.getYouTubeVideoStats(videoId);
-            if (stats == null) {
+            Video video = videoService.getVideo(videoId);
+            if (video == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(stats);
+
+            // Update video details
+            if (title != null) {
+                video.setTitle(title);
+            }
+            if (description != null) {
+                video.setDescription(description);
+            }
+            video.setStatus(status);
+            if (platform != null) {
+                video.setPlatform(platform);
+            }
+
+            Video updatedVideo = videoService.updateVideo(videoMapper.toVideoDto(video));
+            VideoDto responseDto = videoMapper.toVideoDto(updatedVideo);
+            return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/youtube/{youtubeId}/analytics")
+    @Operation(summary = "Get YouTube video analytics",
+            description = "Retrieve analytics for a YouTube video by its YouTube ID.")
+    public ResponseEntity<VideoStats> getAnalytics(@PathVariable String youtubeId) {
+        System.out.println("Analytics endpoint called with YouTube ID: " + youtubeId);
+        
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            System.out.println("Username from security context: " + username);
+            String email = authService.findUserByUsername(username).getEmail();
+            System.out.println("Email found: " + email);
+            var accessToken = authService.getGoogleAccessToken(email);
+            System.out.println("Access token retrieved: " + (accessToken != null ? "✓" : "✗"));
+            VideoStats stats = youtubeService.getYouTubeVideoStats(youtubeId, accessToken);
+            System.out.println("Stats retrieved successfully");
+            return ResponseEntity.ok(stats);
+        } catch (YouTubeServiceException e) {
+            System.err.println("YouTubeServiceException: " + e.getMessage());
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            System.err.println("General exception: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+    
+    @GetMapping("/youtube/{youtubeId}/test")
+    public ResponseEntity<String> testEndpoint(@PathVariable String youtubeId) {
+        System.out.println("Test endpoint called with YouTube ID: " + youtubeId);
+        return ResponseEntity.ok("Test endpoint working for YouTube ID: " + youtubeId);
+    }
+    
+    @GetMapping("/youtube-test")
+    public ResponseEntity<String> simpleTestEndpoint() {
+        System.out.println("Simple test endpoint called");
+        return ResponseEntity.ok("Simple test endpoint working");
+    }
+
+    @GetMapping("/stats")
+    @Operation(summary = "Get overall video statistics",
+            description = "Retrieve overall statistics for all user videos.")
+    public ResponseEntity<List<VideoStats>> getOverallStats() {
+        try {
+            UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getDetails().toString());
+            List<Video> videos = videoService.getVideosByUserId(userId);
+            if (videos.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            List<VideoStats> videoStatsList = youtubeService.getYouTubeVideoStatsBatch(
+                    videos.stream().map(Video::getYoutubeId).toList(),
+                    userId.toString()
+            );
+            return ResponseEntity.ok(videoStatsList);
+        } catch (Exception e) {
+            System.err.println("Error getting video stats: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }

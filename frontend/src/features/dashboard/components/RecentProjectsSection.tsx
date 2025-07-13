@@ -15,7 +15,7 @@ export default function RecentProjectsSection() {
               fontSize: "20px",
               marginBottom: "5px",
               fontWeight: "bold",
-              fontFamily: "'Dancing Script', cursive",
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
             }}
           >
             Dự án gần đây:
@@ -50,7 +50,7 @@ export default function RecentProjectsSection() {
               fontSize: "20px",
               marginBottom: "5px",
               fontWeight: "bold",
-              fontFamily: "'Dancing Script', cursive",
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
             }}
           >
             Dự án gần đây:
@@ -72,7 +72,7 @@ export default function RecentProjectsSection() {
             fontSize: "20px",
             marginBottom: "5px",
             fontWeight: "bold",
-            fontFamily: "'Dancing Script', cursive",
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
           }}
         >
           Dự án gần đây:

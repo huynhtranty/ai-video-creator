@@ -341,6 +341,9 @@ function ProjectPageContent() {
       return;
     }
     
+    // Add loading toast
+    addToast("🚀 Opening video editor...", "info");
+    
     try {
       // Get current video data (project data, dynamic resources, or static fallback)
       const videoData = convertProjectToVideoData();
@@ -383,32 +386,76 @@ function ProjectPageContent() {
 
       // Wait for editor window to load, then send data
       const sendDataWhenReady = () => {
-        const maxAttempts = 50; // 10 seconds max
+        const maxAttempts = 100; // 20 seconds max
         let attempts = 0;
+        let dataReceived = false;
+
+        // Listen for confirmation from editor
+        const handleMessage = (event: MessageEvent) => {
+          if (event.origin !== 'http://localhost:5173') return;
+          
+          if (event.data.type === 'DATA_RECEIVED' && event.data.videoId === videoId) {
+            console.log('✅ Editor confirmed data received');
+            dataReceived = true;
+            addToast('✅ Video data sent to editor successfully!', 'success');
+            window.removeEventListener('message', handleMessage);
+          }
+        };
+
+        window.addEventListener('message', handleMessage);
 
         const trySendData = () => {
           attempts++;
           
           try {
+            // Check if window is still open
+            if (editorWindow.closed) {
+              console.error('❌ Editor window was closed');
+              addToast('❌ Editor window was closed. Please try again.', 'error');
+              window.removeEventListener('message', handleMessage);
+              return;
+            }
+
+            console.log(`📤 Sending data attempt ${attempts}/${maxAttempts}...`);
+            
             editorWindow.postMessage({
               type: 'VIDEO_DATA',
               payload: editorVideoData
             }, 'http://localhost:5173');
             
-          } catch (sendError) {
-            console.log(`Attempt ${attempts} failed, retrying...`, sendError);
+            // Check for confirmation after a delay
+            setTimeout(() => {
+              if (!dataReceived && attempts < maxAttempts && !editorWindow.closed) {
+                trySendData();
+              } else if (!dataReceived && attempts >= maxAttempts) {
+                console.error('❌ Failed to send data after max attempts');
+                addToast('❌ Failed to send data to editor. Please check if editor is running on localhost:5173', 'error');
+                window.removeEventListener('message', handleMessage);
+              }
+            }, 200);
             
-            if (attempts < maxAttempts) {
-              setTimeout(trySendData, 200);
+          } catch (sendError) {
+            console.log(`❌ Attempt ${attempts} failed:`, sendError);
+            
+            if (attempts < maxAttempts && !editorWindow.closed) {
+              setTimeout(trySendData, 500);
             } else {
               console.error('❌ Failed to send data after max attempts');
-              addToast('❌ Failed to send data to editor. Please try again.', 'error');
+              addToast('❌ Failed to send data to editor. Please ensure editor is running.', 'error');
+              window.removeEventListener('message', handleMessage);
             }
           }
         };
 
-        // Start trying after a short delay
-        setTimeout(trySendData, 1000);
+        // Start trying after editor has time to load
+        setTimeout(trySendData, 2000);
+        
+        // Cleanup listener after timeout
+        setTimeout(() => {
+          if (!dataReceived) {
+            window.removeEventListener('message', handleMessage);
+          }
+        }, 30000); // 30 second total timeout
       };
 
       sendDataWhenReady();

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useUploadToYouTube, useUploadToTikTok } from "../../videos/api/video";
+import { useUploadToYouTube, useUploadToTikTok, useDeleteVideo, useGetYouTubeStats, useUpdateVideo } from "../../videos/api/video";
 
 interface Video {
   id: string;
@@ -12,6 +12,7 @@ interface Video {
   status?: "PENDING" | "COMPLETED" | "FAILED";
   platform?: "NONE" | "YOUTUBE" | "TIKTOK" | "FACEBOOK";
   duration?: number;
+  youtubeId?: string;
   projectId?: string;
   userId?: string;
   createdAt?: string;
@@ -32,10 +33,14 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
   const [activeTab, setActiveTab] = useState<"details" | "share">("details");
   const [selectedPlatform, setSelectedPlatform] = useState<string>("YOUTUBE");
   const [imageError, setImageError] = useState(false);
-  
+  const [deleted, setDeleted] = useState(false);
+
   // Upload hooks
   const uploadToYouTube = useUploadToYouTube();
   const uploadToTikTok = useUploadToTikTok();
+  const deleteVideo = useDeleteVideo();
+  const youtubeStatsQuery = useGetYouTubeStats(video?.youtubeId || "");
+  const updateVideo = useUpdateVideo();
 
   // Handle escape key to close modal
   React.useEffect(() => {
@@ -65,7 +70,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
     }
   }, [video]);
 
-  if (!isOpen || !video) return null;
+  if (!isOpen || !video || deleted) return null;
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -74,8 +79,29 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
   };
 
   const handleSave = () => {
-    console.log("Saving video:", { id: video.id, title, description });
-    // TODO: Implement actual save functionality
+    if (!title.trim()) {
+      alert("Title cannot be empty");
+      return;
+    }
+    updateVideo.mutate(
+      { id: video.id, data: { title, description, status: video.status, platform: video.platform } },
+      {
+        onSuccess: () => {
+          alert("Video updated successfully!");
+          // Update local video object so modal reflects new title/description
+          if (video) {
+            video.title = title;
+            video.description = description;
+          }
+          // Optionally, force a re-render by updating state
+          setTitle(title);
+          setDescription(description);
+        },
+        onError: (error) => {
+          alert("Failed to update video: " + error.message);
+        }
+      }
+    );
   };
 
   const handleShare = async () => {
@@ -99,7 +125,8 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
         const uploadData = {
           file,
           title: title || video.title || "Untitled Video",
-          description: description || video.description || "Uploaded from AI Video Creator"
+          description: description || video.description || "Uploaded from AI Video Creator",
+          videoId: video.id // Pass videoId as required by backend
         };
 
         console.log("🚀 Uploading to YouTube...", {
@@ -112,6 +139,8 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
         uploadToYouTube.mutate(uploadData, {
           onSuccess: (response) => {
             console.log("✅ Upload successful:", response);
+            // Refresh the page to get updated video data with YouTube ID and platform
+            window.location.reload();
             alert(`✅ Successfully uploaded to YouTube!\n\n${response.message || response}`);
           },
           onError: (error: Error) => {
@@ -155,6 +184,21 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
     }
   };
 
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this video? This action cannot be undone.")) {
+      deleteVideo.mutate(video.id, {
+        onSuccess: () => {
+          setDeleted(true);
+          alert("Video deleted!");
+          onClose();
+        },
+        onError: (error) => {
+          alert("Failed to delete video: " + error.message);
+        }
+      });
+    }
+  };
+
   const formatDuration = (duration?: number) => {
     if (!duration) return "";
     const minutes = Math.floor(duration / 60);
@@ -188,15 +232,6 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
         {config.text}
       </span>
     );
-  };
-
-  const getPlatformIcon = (platform: string) => {
-    const icons = {
-      YOUTUBE: "/youtube-icon.svg",
-      TIKTOK: "/tiktok-icon.svg",
-      FACEBOOK: "/facebook-icon.svg",
-    };
-    return icons[platform as keyof typeof icons] || "/globe.svg";
   };
 
   return (
@@ -434,7 +469,6 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                     </span>
                   )}
                 </div>
-                
                 <h2
                   style={{
                     fontSize: "20px",
@@ -447,6 +481,32 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                 >
                   {video.title || "Untitled Video"}
                 </h2>
+                {/* Platform Display */}
+                {video.platform && video.platform !== "NONE" && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontSize: 14, color: "#8b5cf6", fontWeight: 600 }}>
+                      Uploaded to {video.platform}
+                    </span>
+                  </div>
+                )}
+                {/* YouTube Stats */}
+                {video.platform === "YOUTUBE" && youtubeStatsQuery.data && (
+                  <div style={{
+                    background: "#f1f5f9",
+                    borderRadius: 12,
+                    padding: 16,
+                    marginTop: 8,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 6,
+                    fontSize: 14,
+                    color: "#334155"
+                  }}>
+                    <div><b>Views:</b> {youtubeStatsQuery.data.views?.toLocaleString() || "0"}</div>
+                    <div><b>Likes:</b> {youtubeStatsQuery.data.likes?.toLocaleString() || "0"}</div>
+                    <div><b>Comments:</b> {youtubeStatsQuery.data.comments?.toLocaleString() || "0"}</div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -598,9 +658,8 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                           e.currentTarget.style.boxShadow = "none";
                         }}
                       >
-                        💾 Save Changes
+                        Save Changes
                       </button>
-
                       {/* Download Button */}
                       {video.filePath && (
                         <button
@@ -635,9 +694,35 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                             e.currentTarget.style.boxShadow = "none";
                           }}
                         >
-                          📥 Download Video
+                          Download Video
                         </button>
                       )}
+                      {/* Delete Button */}
+                      <button
+                        onClick={handleDelete}
+                        style={{
+                          background: "linear-gradient(135deg, #ef4444, #f87171)",
+                          color: "white",
+                          padding: "12px 24px",
+                          borderRadius: "12px",
+                          border: "none",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                          fontFamily: "'Inter', sans-serif",
+                          transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = "translateY(-2px)";
+                          e.currentTarget.style.boxShadow = "0 8px 25px rgba(239, 68, 68, 0.3)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = "translateY(0)";
+                          e.currentTarget.style.boxShadow = "none";
+                        }}
+                      >
+                        Delete Video
+                      </button>
                     </div>
                   </div>
                 )}
@@ -659,7 +744,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                         Choose Platform
                       </label>
                       <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                        {["YOUTUBE", "TIKTOK", "FACEBOOK"].map((platform) => (
+                        {["YOUTUBE"].map((platform) => (
                           <button
                             key={platform}
                             onClick={() => setSelectedPlatform(platform)}
@@ -679,12 +764,6 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                               transition: "all 0.2s ease",
                             }}
                           >
-                            <Image
-                              src={getPlatformIcon(platform)}
-                              alt={platform}
-                              width={20}
-                              height={20}
-                            />
                             {platform}
                           </button>
                         ))}
@@ -704,12 +783,6 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                           gap: "12px",
                         }}
                       >
-                        <Image
-                          src={getPlatformIcon(video.platform)}
-                          alt={video.platform}
-                          width={24}
-                          height={24}
-                        />
                         <div>
                           <p
                             style={{
@@ -768,8 +841,8 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                       }}
                     >
                       {(uploadToYouTube.isPending || uploadToTikTok.isPending)
-                        ? `⏳ Uploading to ${selectedPlatform}...` 
-                        : `🚀 Share to ${selectedPlatform}`}
+                        ? `Uploading to ${selectedPlatform}...`
+                        : `Share to ${selectedPlatform}`}
                     </button>
                   </div>
                 )}
