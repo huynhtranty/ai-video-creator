@@ -88,6 +88,14 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
       {
         onSuccess: () => {
           alert("Video updated successfully!");
+          // Update local video object so modal reflects new title/description
+          if (video) {
+            video.title = title;
+            video.description = description;
+          }
+          // Optionally, force a re-render by updating state
+          setTitle(title);
+          setDescription(description);
         },
         onError: (error) => {
           alert("Failed to update video: " + error.message);
