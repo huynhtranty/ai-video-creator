@@ -40,7 +40,7 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
 
   // Audio settings
   const [audioGender, setAudioGender] = useState("Nam");
-  const [audioLanguage, setAudioLanguage] = useState("Detect");
+  const [audioLanguage, setAudioLanguage] = useState("Tự động");
   const [audioSpeedRate, setAudioSpeedRate] = useState([1.0]);
   const [audioModel, setAudioModel] = useState("GoogleTTS");
 
@@ -51,9 +51,9 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
   const scriptStyles = ["Chuyên nghiệp", "Thân thiện", "Hài hước", "Nghiêm túc", "Sáng tạo"];
   const scriptModels = ["Gemini", "Cloudflare"];
   const audioGenders = ["Nam", "Nữ"];
-  const audioLanguages = ["Phát hiện ngôn ngữ", "English", "Tiếng Việt"];
+  const audioLanguages = ["Tự động", "English", "Tiếng Việt"];
   const audioModels = ["AzureTTS", "GoogleTTS"];
-  const imageStyles = ["Thực tế", "Hoạt hình", "Nghệ thuật", "Tối giản", "Cổ điển"];
+  const imageStyles = ["Thực tế", "Hoạt hình", "Nghệ thuật", "Tối giản", "Cổ điển", "Anime", "Ghibli"];
 
   // Data mappings
   const scriptModelMap: Record<string, string> = {
@@ -67,7 +67,7 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
   };
 
   const audioLanguageMap: Record<string, string> = {
-    "Phát hiện ngôn ngữ": "",
+    "Tự động": "",
     "English": "en",
     "Tiếng Việt": "vi"
   };
@@ -90,7 +90,9 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
     "Hoạt hình": "cartoon",
     "Nghệ thuật": "artistic",
     "Tối giản": "minimalist",
-    "Cổ điển": "classic"
+    "Cổ điển": "classic",
+    "Anime": "anime",
+    "Ghibli": "ghibli",
   };
 
   const handleGenerateResources = async () => {
@@ -116,7 +118,7 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
     setScriptStyle("Chuyên nghiệp");
     setScriptModel("Gemini");
     setAudioGender("Nam");
-    setAudioLanguage("Phát hiện ngôn ngữ");
+    setAudioLanguage("Tự động");
     setAudioSpeedRate([1.0]);
     setAudioModel("GoogleTTS");
     setImageStyle("Thực tế");

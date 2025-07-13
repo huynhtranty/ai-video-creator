@@ -81,7 +81,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             - Be vivid, clear, concise, and scene-focused.
             - Avoid mentioning visuals do not describe the art style, camera moves, colors, or characters' physical details.
              The narrative should flow logically: include an introduction, key points, and a meaningful conclusion.
-                
+            
             Topic:
             """ + prompt;
 
@@ -106,7 +106,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
     }
 
     @Override
-    public String regenerateScript(String content) {
+    public String regenerateScript(String content, String style) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         GenerateContentConfig config = GenerateContentConfig.builder()
@@ -118,7 +118,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             Rewrite the paragraph in another way but still have the same meaning.
             Only response the rewritten version of the paragraph.
             The written version should be concise, clear, and vivid and shouldn't be much longer than the original one.
-            
+            """ + getStylePrompt(style) + """
             Paragraph:
             """
             + content

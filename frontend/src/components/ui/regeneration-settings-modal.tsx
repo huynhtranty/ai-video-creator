@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Settings, FileText, Image, Volume2 } from "lucide-react";
+import { ChevronDown, Settings, FileText, Image as ImageIcon, Volume2 } from "lucide-react";
 
 interface RegenerationSettings {
   script: {
@@ -34,13 +34,15 @@ interface RegenerationSettingsModalProps {
   children: React.ReactNode;
   type: 'script' | 'audio' | 'image';
   isLoading: boolean;
+  onModalOpen?: () => void;
 }
 
 export default function RegenerationSettingsModal({
   onRegenerate,
   children,
   type,
-  isLoading
+  isLoading,
+  onModalOpen
 }: RegenerationSettingsModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   
@@ -50,7 +52,7 @@ export default function RegenerationSettingsModal({
 
   // Audio settings
   const [audioGender, setAudioGender] = useState("Nam");
-  const [audioLanguage, setAudioLanguage] = useState("Detect");
+  const [audioLanguage, setAudioLanguage] = useState("Tự động");
   const [audioSpeedRate, setAudioSpeedRate] = useState([1.0]);
   const [audioModel, setAudioModel] = useState("GoogleTTS");
 
@@ -61,24 +63,64 @@ export default function RegenerationSettingsModal({
   const scriptStyles = ["Chuyên nghiệp", "Thân thiện", "Hài hước", "Nghiêm túc", "Sáng tạo"];
   const scriptModels = ["Gemini", "Cloudflare"];
   const audioGenders = ["Nam", "Nữ"];
-  const audioLanguages = ["Detect", "English", "Vietnamese"];
+  const audioLanguages = ["Tự động", "English", "Tiếng Việt"];
   const audioModels = ["AzureTTS", "GoogleTTS"];
-  const imageStyles = ["Thực tế", "Hoạt hình", "Nghệ thuật", "Tối giản", "Cổ điển"];
+  const imageStyles = ["Thực tế", "Hoạt hình", "Nghệ thuật", "Tối giản", "Cổ điển", "Anime", "Ghibli"];
+
+  // Data mappings
+  const scriptModelMap: Record<string, string> = {
+    "Gemini": "gemini-script",
+    "Cloudflare": "llama-script"
+  };
+
+  const audioGenderMap: Record<string, string> = {
+    "Nam": "MALE",
+    "Nữ": "FEMALE"
+  };
+
+  const audioLanguageMap: Record<string, string> = {
+    "Tự động": "",
+    "English": "en",
+    "Tiếng Việt": "vi"
+  };
+
+  const audioModelMap: Record<string, string> = {
+    "AzureTTS": "azure",
+    "GoogleTTS": "google"
+  };
+
+  const scriptStyleMap: Record<string, string> = {
+    "Chuyên nghiệp": "professional",
+    "Thân thiện": "friendly",
+    "Hài hước": "humorous",
+    "Nghiêm túc": "serious",
+    "Sáng tạo": "creative"
+  };
+
+  const imageStyleMap: Record<string, string> = {
+    "Thực tế": "realistic",
+    "Hoạt hình": "cartoon",
+    "Nghệ thuật": "artistic",
+    "Tối giản": "minimalist",
+    "Cổ điển": "classic",
+    "Anime": "anime",
+    "Ghibli": "ghibli",
+  };
 
   const handleRegenerate = async () => {
     const settings = {
       script: {
-        style: scriptStyle,
-        model: scriptModel,
+        style: scriptStyleMap[scriptStyle] || scriptStyle,
+        model: scriptModelMap[scriptModel] || scriptModel,
       },
       audio: {
-        gender: audioGender,
-        language: audioLanguage,
+        gender: audioGenderMap[audioGender] || audioGender,
+        language: audioLanguageMap[audioLanguage],
         speedRate: audioSpeedRate[0],
-        model: audioModel,
+        model: audioModelMap[audioModel] || audioModel,
       },
       image: {
-        style: imageStyle,
+        style: imageStyleMap[imageStyle] || imageStyle,
       },
     };
 
@@ -278,7 +320,7 @@ export default function RegenerationSettingsModal({
         return (
           <div className="space-y-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100">
             <div className="flex items-center gap-2 mb-3">
-              <Image className="w-4 h-4 text-purple-600" />
+              <ImageIcon className="w-4 h-4 text-purple-600" />
               <h3 className="font-medium text-gray-800">Hình ảnh</h3>
             </div>
             
@@ -316,7 +358,12 @@ export default function RegenerationSettingsModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      setIsOpen(open);
+      if (open && onModalOpen) {
+        onModalOpen();
+      }
+    }}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>

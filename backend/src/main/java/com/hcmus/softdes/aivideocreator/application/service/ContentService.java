@@ -94,7 +94,7 @@ public class ContentService {
     }
 
     @Transactional
-    public Script regenerateScript(String scriptId, String providerName) {
+    public Script regenerateScript(String scriptId, String model, String style) {
         UUID scriptUuid;
         try {
             scriptUuid = UUID.fromString(scriptId);
@@ -107,12 +107,12 @@ public class ContentService {
             throw new RuntimeException("Script not found with id: " + scriptId);
         }
 
-        ScriptGenerationService provider = scriptProviders.get(providerName.toLowerCase());
+        ScriptGenerationService provider = scriptProviders.get(model.toLowerCase());
         if (provider == null) {
-            throw new RuntimeException("Script generation provider not supported: " + providerName);
+            throw new RuntimeException("Script generation provider not supported: " + model);
         }
 
-        String regeneratedContent = provider.regenerateScript(existingScript.getContent());
+        String regeneratedContent = provider.regenerateScript(existingScript.getContent(), style);
         existingScript.update(regeneratedContent);
         scriptRepository.saveScript(existingScript);
 
@@ -161,7 +161,7 @@ public class ContentService {
             throw new RuntimeException("Media already exists for scriptId: " + request.scriptId());
         }
 
-        byte[] imageBytes = provider.generateImage(request.context(), request.prompt());
+        byte[] imageBytes = provider.generateImage(request.context(), request.prompt(), request.style());
         String filename = "image-" + System.currentTimeMillis() + ".jpg";
         String url = r2StorageService.uploadFile(filename, imageBytes, "image/jpeg");
 
@@ -178,7 +178,7 @@ public class ContentService {
         return mediaAsset;
     }
 
-    public MediaAsset regenerateImage(String scriptId, String providerName) {
+    public MediaAsset regenerateImage(String scriptId, String providerName, String imageStyle) {
         UUID scriptUuid;
         try {
             scriptUuid = UUID.fromString(scriptId);
@@ -201,7 +201,8 @@ public class ContentService {
 
         byte[] imageBytes = provider.generateImage(
             project.getImageContext(),
-            existingMedia.getText()
+            existingMedia.getText(),
+            imageStyle
         );
         String filename = "image-" + System.currentTimeMillis() + ".jpg";
         String url = r2StorageService.uploadFile(filename, imageBytes, "image/jpeg");

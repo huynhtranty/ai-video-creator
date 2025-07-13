@@ -6,5 +6,5 @@ public record ImageRequest(
     String provider,
     String projectId,
     String scriptId,
-    String imageStyle
+    String style
 ) {}
