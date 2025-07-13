@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Upload, Edit3, Sparkles, RotateCcw } from "lucide-react";
+import { Upload, Edit3, Sparkles, RotateCcw, X } from "lucide-react";
 import { uploadImageFile, regenerateScriptImage } from "@/features/projects/api/image";
 import { uploadVoiceFile, regenerateScriptVoice } from "@/features/projects/api/tts";
 import { updateScriptContent, regenerateScriptContent } from "@/features/projects/api/script";
@@ -23,6 +23,102 @@ interface ResourceItemProps {
   isImageError?: boolean;
   isAudioLoading?: boolean;
   isAudioError?: boolean;
+}
+
+// Preview Modal Component
+interface PreviewModalProps {
+  file: File;
+  fileType: 'image' | 'audio';
+  onClose: () => void;
+  onConfirm: () => void;
+  isUploading: boolean;
+}
+
+function PreviewModal({ file, fileType, onClose, onConfirm, isUploading }: PreviewModalProps) {
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+
+  useEffect(() => {
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
+  }, [file]);
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">
+            Preview {fileType === 'image' ? 'Image' : 'Audio'} File
+          </h3>
+          <button
+            onClick={onClose}
+            disabled={isUploading}
+            className="p-1 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        
+        <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+          <p className="text-sm text-gray-600 mb-2">
+            <strong>File name:</strong> {file.name}
+          </p>
+          <p className="text-sm text-gray-600 mb-2">
+            <strong>File size:</strong> {(file.size / 1024 / 1024).toFixed(2)} MB
+          </p>
+          <p className="text-sm text-gray-600">
+            <strong>File type:</strong> {file.type}
+          </p>
+        </div>
+
+        <div className="mb-6">
+          {fileType === 'image' ? (
+            <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
+              {previewUrl && (
+                <Image
+                  src={previewUrl}
+                  alt="Preview"
+                  fill
+                  className="object-contain"
+                />
+              )}
+            </div>
+          ) : (
+            <div className="bg-gray-100 rounded-lg p-4">
+              {previewUrl && (
+                <CustomAudioPlayer 
+                  src={previewUrl}
+                  className="w-full"
+                />
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-3 justify-end">
+          <button
+            onClick={onClose}
+            disabled={isUploading}
+            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isUploading}
+            className="px-4 py-2 bg-[#8362E5] text-white rounded-lg hover:bg-[#6F4EC8] transition-colors disabled:opacity-50 flex items-center gap-2"
+          >
+            {isUploading && (
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            )}
+            {isUploading ? 'Uploading...' : 'Upload File'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function ResourceItem({ 
@@ -55,6 +151,12 @@ export default function ResourceItem({
   const [showContentOverlay, setShowContentOverlay] = useState(false);
   const [isEditingText, setIsEditingText] = useState(false);
   const [editedText, setEditedText] = useState(typeof textContent === 'string' ? textContent : '');
+  
+  // Preview modal state
+  const [previewModal, setPreviewModal] = useState<{
+    file: File;
+    type: 'image' | 'audio';
+  } | null>(null);
   const imageFileInputRef = useRef<HTMLInputElement>(null);
   const audioFileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -76,7 +178,7 @@ export default function ResourceItem({
     }
   }, [isEditingText]);
 
-  const handleRegenerateWithSettings = async (type: 'script' | 'audio' | 'image', settings: any) => {
+  const handleRegenerateWithSettings = async (type: 'script' | 'audio' | 'image', settings: Record<string, unknown>) => {
     if (!projectId) {
       alert("Không thể tạo lại cho mục này!");
       return;
@@ -86,9 +188,9 @@ export default function ResourceItem({
       switch (type) {
         case 'script':
           setIsRegeneratingContent(true);
-          const scriptResponse = await regenerateScriptContent(id, settings.model?.toLowerCase() || "gemini-script", {
-            style: settings.style,
-            model: settings.model,
+          const scriptResponse = await regenerateScriptContent(id, (settings.model as string)?.toLowerCase() || "gemini-script", {
+            style: settings.style as string,
+            model: settings.model as string,
           });
           if (onScriptUpdate) {
             onScriptUpdate(id, scriptResponse.content);
@@ -101,7 +203,7 @@ export default function ResourceItem({
             onLoadingStateChange(id, { isImageLoading: true });
           }
           const imageResponse = await regenerateScriptImage(id, "gemini-image", {
-            style: settings.style,
+            style: settings.style as string,
           });
           setCurrentImageSrc(imageResponse.url);
           if (onImageUpdate) {
@@ -117,11 +219,11 @@ export default function ResourceItem({
           if (onLoadingStateChange) {
             onLoadingStateChange(id, { isAudioLoading: true });
           }
-          const audioResponse = await regenerateScriptVoice(id, settings.model?.toLowerCase() || "google", {
-            gender: settings.gender === "Nam" ? "MALE" : "FEMALE",
-            language: settings.language === "Detect" ? "" : settings.language.toLowerCase(),
-            speedRate: settings.speedRate,
-            model: settings.model,
+          const audioResponse = await regenerateScriptVoice(id, (settings.model as string)?.toLowerCase() || "google", {
+            gender: (settings.gender as string) === "Nam" ? "MALE" : "FEMALE",
+            language: (settings.language as string) === "Detect" ? "" : (settings.language as string)?.toLowerCase(),
+            speedRate: settings.speedRate as number,
+            model: settings.model as string,
           });
           setCurrentAudioSrc(audioResponse.audioUrl);
           if (onAudioUpdate) {
@@ -158,26 +260,34 @@ export default function ResourceItem({
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && projectId) {
-      setIsUploadingImage(true);
-      try {
-        const response = await uploadImageFile(file, projectId, id);
-        const newImageSrc = response.url;
-        setCurrentImageSrc(newImageSrc);
-        if (onImageUpdate) {
-          onImageUpdate(id, newImageSrc);
-        }
-      } catch (error) {
-        console.error('Error uploading image file:', error);
-        alert("Không thể tải lên ảnh. Vui lòng thử lại sau!");
-      } finally {
-        setIsUploadingImage(false);
-        // Clear the input to allow uploading the same file again
-        if (imageFileInputRef.current) {
-          imageFileInputRef.current.value = '';
-        }
-      }
+      // Show preview modal instead of uploading immediately
+      setPreviewModal({ file, type: 'image' });
     } else if (!projectId) {
       alert("Thiếu thông tin dự án để tải lên ảnh!");
+    }
+  };
+
+  const handleConfirmImageUpload = async () => {
+    if (!previewModal?.file || !projectId) return;
+    
+    setIsUploadingImage(true);
+    try {
+      const response = await uploadImageFile(previewModal.file, projectId, id);
+      const newImageSrc = response.url;
+      setCurrentImageSrc(newImageSrc);
+      if (onImageUpdate) {
+        onImageUpdate(id, newImageSrc);
+      }
+      setPreviewModal(null);
+    } catch (error) {
+      console.error('Error uploading image file:', error);
+      alert("Không thể tải lên ảnh. Vui lòng thử lại sau!");
+    } finally {
+      setIsUploadingImage(false);
+      // Clear the input to allow uploading the same file again
+      if (imageFileInputRef.current) {
+        imageFileInputRef.current.value = '';
+      }
     }
   };
 
@@ -234,26 +344,45 @@ export default function ResourceItem({
   const handleAudioUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && projectId) {
-      setIsUploadingAudio(true);
-      try {
-        const response = await uploadVoiceFile(file, projectId, id);
-        const newAudioSrc = response.audioUrl;
-        setCurrentAudioSrc(newAudioSrc);
-        if (onAudioUpdate) {
-          onAudioUpdate(id, newAudioSrc);
-        }
-      } catch (error) {
-        console.error('Error uploading audio file:', error);
-        alert("Không thể tải lên âm thanh. Vui lòng thử lại sau!");
-      } finally {
-        setIsUploadingAudio(false);
-        // Clear the input to allow uploading the same file again
-        if (audioFileInputRef.current) {
-          audioFileInputRef.current.value = '';
-        }
-      }
+      // Show preview modal instead of uploading immediately
+      setPreviewModal({ file, type: 'audio' });
     } else if (!projectId) {
       alert("Thiếu thông tin dự án để tải lên âm thanh!");
+    }
+  };
+
+  const handleConfirmAudioUpload = async () => {
+    if (!previewModal?.file || !projectId) return;
+    
+    setIsUploadingAudio(true);
+    try {
+      const response = await uploadVoiceFile(previewModal.file, projectId, id);
+      const newAudioSrc = response.audioUrl;
+      setCurrentAudioSrc(newAudioSrc);
+      if (onAudioUpdate) {
+        onAudioUpdate(id, newAudioSrc);
+      }
+      setPreviewModal(null);
+    } catch (error) {
+      console.error('Error uploading audio file:', error);
+      alert("Không thể tải lên âm thanh. Vui lòng thử lại sau!");
+    } finally {
+      setIsUploadingAudio(false);
+      // Clear the input to allow uploading the same file again
+      if (audioFileInputRef.current) {
+        audioFileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleClosePreview = () => {
+    setPreviewModal(null);
+    // Clear the input to allow selecting the same file again
+    if (imageFileInputRef.current) {
+      imageFileInputRef.current.value = '';
+    }
+    if (audioFileInputRef.current) {
+      audioFileInputRef.current.value = '';
     }
   };
 
@@ -484,6 +613,17 @@ export default function ResourceItem({
           </div>
         </div>
       </div>
+
+      {/* Preview Modal */}
+      {previewModal && (
+        <PreviewModal
+          file={previewModal.file}
+          fileType={previewModal.type}
+          onClose={handleClosePreview}
+          onConfirm={previewModal.type === 'image' ? handleConfirmImageUpload : handleConfirmAudioUpload}
+          isUploading={previewModal.type === 'image' ? isUploadingImage : isUploadingAudio}
+        />
+      )}
     </div>
   );
 }

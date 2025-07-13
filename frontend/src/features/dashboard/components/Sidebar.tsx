@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useCreateProject } from "@/features/projects/api/project";
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { CreateProjectRequest } from "@/types/project";
+import { Home, Plus, BarChart3, FolderOpen, Video, User } from "lucide-react";
 
 import "@/styles/menu.css";
 
@@ -63,7 +63,7 @@ export default function Sidebar() {
         <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: "1rem" }}>
           <div className="pt-4 flex flex-col items-center justify-center">
             <Link href="/dashboard" className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
-              <Image className="homeImageType" src="/HomeBtn.svg" alt="Home Button" width={20} height={20} />
+              <Home size={20} className="text-purple-600" />
             </Link>
             <span className="HomeSpan">Home</span>
           </div>
@@ -73,25 +73,25 @@ export default function Sidebar() {
               onClick={handleCreateProject}
               className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors"
             >
-              <Image className="CreateType" src="/NewBtn.svg" alt="Create Button" width={30} height={30} />
+              <Plus size={20} className="text-purple-600" />
             </button>
             <span className="HomeSpan">Tạo</span>
           </div>
           <div className="pt-1 flex flex-col items-center justify-center">
             <Link href="/statistic" className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
-              <Image className="StatisticsType" src="/chart-icon.svg" alt="Statistics Button" width={30} height={30} />
+              <BarChart3 size={20} className="text-purple-600" />
             </Link>
             <span className="HomeSpan">Thống kê</span>
           </div>
           <div className="pt-1 flex flex-col items-center justify-center">
             <Link href="/projects" className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
-              <Image className="ProjectType" src="/ProjectBtn.svg" alt="Project Button" width={20} height={20} />
+              <FolderOpen size={20} className="text-purple-600" />
             </Link>
             <span className="HomeSpan">Dự án</span>
           </div>
           <div className="pt-1 flex flex-col items-center justify-center">
             <Link href="/videos" className="w-10 h-10 flex items-center justify-center rounded-lg border p-1 hover:bg-pink-300 transition-colors">
-              <Image className="VideoType" src="/videoTemp.svg" alt="Videos Button" width={20} height={20} />
+              <Video size={20} className="text-purple-600" />
             </Link>
             <span className="HomeSpan">Video</span>
           </div>
@@ -111,7 +111,7 @@ export default function Sidebar() {
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                   ) : (
-                    <Image className="AvatarType" src="/Avatar.svg" alt="Avatar" width={30} height={30} />
+                    <User size={20} className="text-purple-600" />
                   )}
                 </button>
               </DropdownMenuTrigger>
