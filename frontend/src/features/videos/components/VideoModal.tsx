@@ -650,7 +650,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                           e.currentTarget.style.boxShadow = "none";
                         }}
                       >
-                        💾 Save Changes
+                        Save Changes
                       </button>
                       {/* Download Button */}
                       {video.filePath && (
@@ -686,7 +686,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                             e.currentTarget.style.boxShadow = "none";
                           }}
                         >
-                          📥 Download Video
+                          Download Video
                         </button>
                       )}
                       {/* Delete Button */}
@@ -713,7 +713,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                           e.currentTarget.style.boxShadow = "none";
                         }}
                       >
-                        🗑️ Delete Video
+                        Delete Video
                       </button>
                     </div>
                   </div>
@@ -736,7 +736,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                         Choose Platform
                       </label>
                       <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                        {["YOUTUBE", "TIKTOK", "FACEBOOK"].map((platform) => (
+                        {["YOUTUBE"].map((platform) => (
                           <button
                             key={platform}
                             onClick={() => setSelectedPlatform(platform)}
@@ -833,8 +833,8 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, video, onClose }) => {
                       }}
                     >
                       {(uploadToYouTube.isPending || uploadToTikTok.isPending)
-                        ? `⏳ Uploading to ${selectedPlatform}...` 
-                        : `🚀 Share to ${selectedPlatform}`}
+                        ? `Uploading to ${selectedPlatform}...`
+                        : `Share to ${selectedPlatform}`}
                     </button>
                   </div>
                 )}

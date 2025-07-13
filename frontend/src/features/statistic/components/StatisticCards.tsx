@@ -1,13 +1,56 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { TrendingUpIcon, TrendingDownIcon, EyeIcon, PlayIcon } from "lucide-react";
+import { TrendingUpIcon, TrendingDownIcon, EyeIcon, PlayIcon, HeartIcon, MessageCircleIcon, VideoIcon } from "lucide-react";
+import { getAllVideoStats, VideoOverallStats, calculateOverallStats } from "../api/statistic";
 
 export default function StatisticCards() {
+  const [stats, setStats] = useState<VideoOverallStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const videoStatsArray = await getAllVideoStats();
+        const overallStats = calculateOverallStats(videoStatsArray);
+        setStats(overallStats);
+      } catch (error) {
+        console.error('Failed to fetch video stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Card key={i} className="p-4 bg-gray-100 animate-pulse">
+            <div className="h-20"></div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
   const cards = [
     {
-      title: "Tổng tất cả lượt xem",
-      value: "15",
+      title: "Tổng số video",
+      value: stats?.totalVideos?.toLocaleString() || "0",
+      change: "+12%",
+      trend: "up",
+      icon: VideoIcon,
+      gradient: "from-purple-500 to-purple-600",
+      bgGradient: "from-purple-50 to-purple-100",
+      iconBg: "bg-purple-100",
+      iconColor: "text-purple-600"
+    },
+    {
+      title: "Tổng lượt xem",
+      value: stats?.totalViews?.toLocaleString() || "0",
       change: "+25%",
       trend: "up",
       icon: EyeIcon,
@@ -17,8 +60,8 @@ export default function StatisticCards() {
       iconColor: "text-blue-600"
     },
     {
-      title: "Số lượt xem trên Youtube",
-      value: "15",
+      title: "Lượt xem YouTube",
+      value: stats?.youtubeViews?.toLocaleString() || "0",
       change: "+25%", 
       trend: "up",
       icon: PlayIcon,
@@ -26,6 +69,28 @@ export default function StatisticCards() {
       bgGradient: "from-red-50 to-red-100",
       iconBg: "bg-red-100",
       iconColor: "text-red-600"
+    },
+    {
+      title: "Tổng lượt thích",
+      value: stats?.totalLikes?.toLocaleString() || "0",
+      change: "+18%",
+      trend: "up",
+      icon: HeartIcon,
+      gradient: "from-pink-500 to-pink-600",
+      bgGradient: "from-pink-50 to-pink-100",
+      iconBg: "bg-pink-100",
+      iconColor: "text-pink-600"
+    },
+    {
+      title: "Tổng bình luận",
+      value: stats?.totalComments?.toLocaleString() || "0",
+      change: "+15%",
+      trend: "up",
+      icon: MessageCircleIcon,
+      gradient: "from-green-500 to-green-600",
+      bgGradient: "from-green-50 to-green-100",
+      iconBg: "bg-green-100",
+      iconColor: "text-green-600"
     }
   ];
 

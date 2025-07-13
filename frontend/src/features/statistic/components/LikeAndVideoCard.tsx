@@ -1,56 +1,64 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { HeartIcon, PlayCircleIcon, UsersIcon, TrendingUpIcon } from "lucide-react";
+import { HeartIcon, PlayCircleIcon, TrendingUpIcon } from "lucide-react";
+import { getAllVideoStats, calculateOverallStats } from "@/features/statistic/api/statistic";
 
 export default function LikeAndVideoCard() {
+  const [overallStats, setOverallStats] = useState({
+    totalVideos: 0,
+    totalViews: 0,
+    youtubeViews: 0,
+    totalLikes: 0,
+    totalComments: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const stats = await getAllVideoStats();
+        setOverallStats(calculateOverallStats(stats));
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStats();
+  }, []);
+
   const stats = [
     {
       title: "Tổng số lượt thích",
       subtitle: "YouTube",
-      value: "3",
-      change: "+50%",
+      value: loading ? "..." : overallStats.totalLikes.toLocaleString(),
+      change: "",
       icon: HeartIcon,
       gradient: "from-pink-500 to-rose-500",
       bgGradient: "from-pink-50 to-rose-50",
       iconBg: "bg-pink-100",
       iconColor: "text-pink-600",
       details: [
-        { platform: "YouTube", count: "3", color: "bg-red-500" },
+        { platform: "YouTube", count: loading ? "..." : overallStats.totalLikes.toLocaleString(), color: "bg-red-500" },
       ]
     },
     {
       title: "Tổng số Video",
       subtitle: "YouTube", 
-      value: "1",
-      change: "+100%",
+      value: loading ? "..." : overallStats.totalVideos.toLocaleString(),
+      change: "",
       icon: PlayCircleIcon,
       gradient: "from-blue-500 to-indigo-500",
       bgGradient: "from-blue-50 to-indigo-50",
       iconBg: "bg-blue-100",
       iconColor: "text-blue-600",
       details: [
-        { platform: "YouTube", count: "1", color: "bg-red-500" },
-      ]
-    },
-    {
-      title: "Tổng số người theo dõi",
-      subtitle: "YouTube",
-      value: "28.1K",
-      change: "+25.1%",
-      icon: UsersIcon,
-      gradient: "from-green-500 to-emerald-500",
-      bgGradient: "from-green-50 to-emerald-50",
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
-      details: [
-        { platform: "YouTube", count: "28.1K", color: "bg-red-500" },
+        { platform: "YouTube", count: loading ? "..." : overallStats.totalVideos.toLocaleString(), color: "bg-red-500" },
       ]
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 justify-center">
       {stats.map((stat, index) => (
         <Card key={index} className={`p-6 bg-gradient-to-br ${stat.bgGradient} border-0 shadow-lg hover:shadow-xl transition-all duration-300 group`}>
           <div className="flex items-start justify-between mb-4">
