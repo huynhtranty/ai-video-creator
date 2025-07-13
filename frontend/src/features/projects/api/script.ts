@@ -27,10 +27,18 @@ export const updateScriptContent = async (
 
 export const regenerateScriptContent = async (
   scriptId: string,
-  provider: string = "gemini-script"
+  provider: string = "gemini-script",
+  settings?: {
+    style?: string;
+    model?: string;
+  }
 ): Promise<ScriptItemResponse> => {
   const response = await apiClient.post(`/contents/script/${scriptId}/regenerate`, {
-    provider: provider
+    provider: provider,
+    ...(settings && {
+      scriptStyle: settings.style,
+      scriptModel: settings.model,
+    })
   });
   return response.data;
 };

@@ -2,9 +2,25 @@ import ResourceItem from "./ResourceItem";
 import ResourceSetting from "./ResourceSetting";
 import { GeneratedResource } from "@/types/resource";
 
+interface ResourceSettings {
+  script: {
+    style: string;
+    model: string;
+  };
+  audio: {
+    gender: string;
+    language: string;
+    speedRate: number;
+    model: string;
+  };
+  image: {
+    style: string;
+  };
+}
+
 interface ResourceSectionProps {
   resources: GeneratedResource[];
-  onGenerateResources: (scriptStyle: string, imageStyle: string, voiceStyle: string) => Promise<void>;
+  onGenerateResources: (settings: ResourceSettings) => Promise<void>;
   onUpdateResource?: (resourceId: string, updates: Partial<GeneratedResource>) => void;
   isGenerating: boolean;
   context?: string;
@@ -45,13 +61,13 @@ export default function ResourceSection({
   };
 
   return (
-    <div className="flex gap-8 h-full">
-      {/* ResourceSetting on the left */}
-      <div className="w-80 flex-shrink-0">
+    <div className="flex flex-col">
+      {/* ResourceSetting on top */}
+      <div className="flex-shrink-0 mb-8">
         <ResourceSetting onGenerateResources={onGenerateResources} isGenerating={isGenerating} />
       </div>
       
-      {/* Resource items on the right */}
+      {/* Resource items below */}
       <div className="flex-1 flex flex-col min-h-0">
         <div className="flex items-center justify-between pb-6 flex-shrink-0">
           <h2 className="text-2xl font-bold text-gray-800">
@@ -73,15 +89,7 @@ export default function ResourceSection({
           )}
         </div>
 
-        <div
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            paddingBottom: "2rem",
-            minHeight: 0,
-          }}
-          className="pr-2 scrollbar-thin"
-        >
+        <div className="flex-1 overflow-y-auto">
           <div className="space-y-6 pb-4">
             {resources.length === 0 ? (
               <div className="text-center py-16 text-gray-500 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">

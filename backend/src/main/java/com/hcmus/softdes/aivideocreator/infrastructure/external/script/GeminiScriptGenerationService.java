@@ -17,7 +17,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
     private String apiKey;
 
     @Override
-    public ScriptGeneratedLayout generateScript(String prompt) {
+    public ScriptGeneratedLayout generateScript(String prompt, String scriptStyle) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         Schema contentSchema = Schema.builder()
@@ -57,22 +57,26 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             ###
             
             Detect the language code of the topic.
+            The language code should be in ISO 639-1 format (e.g., "en" for English, "fr" for French).
             
             ###
             
-            Generate a vivid, reusable visual context for a short cinematic sequence. 
-            The setting should include a distinct location, time period, mood, and aesthetic style. 
-            Ensure the scene includes persistent environmental details (e.g., lighting, architecture, weather), 
-            character types, and visual motifs that can remain consistent across multiple frames. 
-            The context should be concise (under 300 words) 
+            Generate a vivid, reusable visual context for a short cinematic sequence.
+            The setting should include a distinct location, time period, mood, and aesthetic style.
+            Ensure the scene includes persistent environmental details (e.g., lighting, architecture, weather),
+            character types, and visual motifs that can remain consistent across multiple frames.
+            The context should be concise (under 300 words)
             and suitable for guiding image generation for a storyboard or animated video.
             The context should include any description of any characters that are relevant to the topic.
+            The context should be descriptive about the art style, camera moves, colors, and characters' physical details.
+            In this context:
             
             ###
             
             Generate 4–10 script paragraphs (more if needed), where each describes **a single scene**.
-            
+            """ + getStylePrompt(scriptStyle) + """
             Each script paragraph should:
+            - Follows the language code detected from the topic.
             - Be written for spoken narration.
             - Be vivid, clear, concise, and scene-focused.
             - Avoid mentioning visuals do not describe the art style, camera moves, colors, or characters' physical details.
@@ -90,8 +94,19 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
         }
     }
 
+    private String getStylePrompt(String style) {
+        return switch (style) {
+            case "professional" -> "The script should be written in a professional style, suitable for business presentations or educational content.";
+            case "friendly" -> "The script should be written in a friendly and approachable style, suitable for casual conversations or social media content.";
+            case "humorous" -> "The script should be written in a humorous style, suitable for comedy sketches or light-hearted content.";
+            case "serious" -> "The script should be written in a serious style, suitable for dramatic or emotional content.";
+            case "creative" -> "The script should be written in a creative style, suitable for storytelling or artistic content.";
+            default -> "The written style of the script should be match with the topic given.";
+        };
+    }
+
     @Override
-    public String regenerateScript(String content) {
+    public String regenerateScript(String content, String style) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         GenerateContentConfig config = GenerateContentConfig.builder()
@@ -103,7 +118,7 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             Rewrite the paragraph in another way but still have the same meaning.
             Only response the rewritten version of the paragraph.
             The written version should be concise, clear, and vivid and shouldn't be much longer than the original one.
-            
+            """ + getStylePrompt(style) + """
             Paragraph:
             """
             + content

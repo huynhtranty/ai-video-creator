@@ -17,6 +17,13 @@ export interface ScriptRequest {
   prompt: string;
   provider: string;
   projectId: string;
+  scriptStyle?: string;
+  scriptModel?: string;
+  audioGender?: string;
+  audioLanguage?: string;
+  audioSpeedRate?: number;
+  audioModel?: string;
+  imageStyle?: string;
 }
 
 export interface ScriptContent {
@@ -30,6 +37,7 @@ export interface ImageRequest {
   provider: string;
   projectId: string;
   scriptId: string;
+  style?: string;
 }
 
 export interface ImageResponse {
@@ -49,6 +57,7 @@ export interface TtsRequest {
   projectId: string;
   scriptId: string;
   provider: string;
+  model?: string;
 }
 
 export interface TtsResponse {
@@ -76,4 +85,20 @@ export interface UploadVoiceRequest {
   file: File;
   projectId: string;
   scriptId: string;
+}
+
+export interface ResourceSettings {
+  script: {
+    style: string;
+    model: string;
+  };
+  audio: {
+    gender: string;
+    language: string;
+    speedRate: number;
+    model: string;
+  };
+  image: {
+    style: string;
+  };
 }

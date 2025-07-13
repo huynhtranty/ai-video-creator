@@ -37,10 +37,22 @@ export const uploadVoiceFile = async (
 
 export const regenerateScriptVoice = async (
   scriptId: string,
-  provider: string = "google"
+  provider: string = "google",
+  settings?: {
+    gender?: string;
+    language?: string;
+    speedRate?: number;
+    model?: string;
+  }
 ): Promise<TtsResponse> => {
   const response = await apiClient.post(`/contents/voice/${scriptId}/regenerate`, {
-    provider: provider
+    provider: provider,
+    ...(settings && {
+      gender: settings.gender,
+      language: settings.language,
+      speedRate: settings.speedRate,
+      model: settings.model,
+    })
   });
   return response.data;
 };

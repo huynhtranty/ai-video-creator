@@ -36,7 +36,7 @@ public class ContentController {
         @PathVariable String scriptId,
         @RequestBody RegenerateScriptRequest request
     ) {
-        var script = contentService.regenerateScript(scriptId, request.provider());
+        var script = contentService.regenerateScript(scriptId, request.scriptModel(), request.scriptStyle());
         var response = ContentMapper.toScriptResponse(script);
         return ResponseEntity.ok(response);
     }
@@ -79,7 +79,7 @@ public class ContentController {
         @PathVariable String scriptId,
         @RequestBody RegenerateImageRequest request
     ) {
-        var media = contentService.regenerateImage(scriptId, request.provider());
+        var media = contentService.regenerateImage(scriptId, request.provider(), request.style());
         var response = MediaMapper.toDto(media);
         return ResponseEntity.ok(response);
     }
@@ -107,7 +107,13 @@ public class ContentController {
         @PathVariable String scriptId,
         @RequestBody RegenerateVoiceRequest request
     ) {
-        TtsResponse response = voiceService.regenerateVoice(scriptId, request.provider());
+        TtsResponse response = voiceService.regenerateVoice(
+            scriptId,
+            request.model(),
+            request.gender(),
+            request.language(),
+            request.speedRate()
+        );
         return ResponseEntity.ok(response);
     }
 }

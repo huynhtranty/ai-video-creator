@@ -18,8 +18,21 @@ public class GeminiImageGenerationService implements ImageGenerationService {
     @Value("${gemini.api.key}")
     private String apiKey;
 
+    private String getImagePromptStyle(String imageStyle) {
+        return switch (imageStyle) {
+            case "anime" -> "The image should be in anime style, with vibrant colors and exaggerated features.";
+            case "realistic" -> "The image should be in realistic style, capturing lifelike details and textures.";
+            case "cartoon" -> "The image should be in cartoon style, with bold outlines and simplified features.";
+            case "artistic" -> "The image should be in an artistic style, focusing on creative expression and unique visual elements.";
+            case "minimalist" -> "The image should be in minimalist style, emphasizing simplicity and clean lines.";
+            case "classic" -> "The image should be in classic style, reminiscent of traditional art forms with a timeless quality.";
+            case "ghibli" -> "The image should be in the style of Studio Ghibli, characterized by whimsical and detailed environments, with a focus on nature and emotion.";
+            default -> "The image should be matching the context and request prompt, ensuring a consistent visual style.";
+        };
+    }
+
     @Override
-    public byte[] generateImage(String context, String requestPrompt) {
+    public byte[] generateImage(String context, String requestPrompt, String imageStyle) {
         Client client = Client.builder().apiKey(apiKey).build();
 
         String prompt = """
@@ -27,6 +40,8 @@ public class GeminiImageGenerationService implements ImageGenerationService {
             """ + context + """
                 Scene Description:
             """ + requestPrompt + """
+            Image Style:
+            """ + getImagePromptStyle(imageStyle) + """
                 Use the context to ensure visual consistency across a series. Focus on the described moment,
                 and align all elements (style, tone, character design, environment) with the visual context.
                 The result should feel like one cinematic frame in a cohesive animated story.

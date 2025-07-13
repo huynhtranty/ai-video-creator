@@ -123,7 +123,7 @@ public class VoiceService {
     }
 
     @Transactional
-    public TtsResponse regenerateVoice(String scriptId, String provider) {
+    public TtsResponse regenerateVoice(String scriptId, String provider, String gender, String language, double speechRate) {
         if (scriptId == null || provider == null) {
             throw new RuntimeException("Script ID and provider cannot be null");
         }
@@ -140,9 +140,9 @@ public class VoiceService {
         TtsRequest request = new TtsRequest(
             existingVoice.getText(),
             provider,
-            existingVoice.getLanguageCode(),
-            existingVoice.getSpeakingRate(),
-            existingVoice.getVoiceGender(),
+            "".equals(language) ? existingVoice.getLanguageCode() : language,
+            speechRate,
+            gender,
             existingVoice.getProjectId().toString(),
             scriptId
         );
