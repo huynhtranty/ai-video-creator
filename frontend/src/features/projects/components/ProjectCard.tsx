@@ -173,10 +173,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         isOpen={showConfirmDialog}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        title="Delete Project"
-        description={`Are you sure you want to delete "${project.name || 'Untitled'}"? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
+        title="Xóa dự án"
+        description={`Bạn có chắc chắn muốn xóa "${project.name || 'Untitled'}"? Hành động này không thể hoàn tác.`}
+        confirmText="Xóa"
+        cancelText="Hủy"
         variant="destructive"
         isLoading={deleteProjectMutation.isPending}
       />

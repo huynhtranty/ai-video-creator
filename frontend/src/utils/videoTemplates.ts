@@ -29,7 +29,7 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     height: 1080,
     aspectRatio: '16:9',
     fps: 30,
-    description: 'Standard YouTube videos, tutorials, vlogs',
+    description: 'Video hướng dẫn, vlog, phỏng vấn, tiêu chuẩn YouTube',
     icon: '📺',
     recommended: true
   },
@@ -41,7 +41,7 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     height: 1920,
     aspectRatio: '9:16',
     fps: 30,
-    description: 'Vertical short-form content',
+    description: 'Nội dung ngắn theo chiều dọc',
     icon: '📱',
     maxDuration: 60
   },
@@ -53,7 +53,7 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     height: 1920,
     aspectRatio: '9:16',
     fps: 30,
-    description: 'Vertical videos for TikTok',
+    description: 'Video theo chiều dọc cho TikTok',
     icon: '🎵',
     maxDuration: 180
   },
@@ -65,7 +65,7 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     height: 1920,
     aspectRatio: '9:16',
     fps: 30,
-    description: 'Stories and Reels',
+    description: 'Stories và Reels',
     icon: '📸',
     maxDuration: 60
   },
@@ -77,7 +77,7 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     height: 1080,
     aspectRatio: '1:1',
     fps: 30,
-    description: 'Square format posts',
+    description: 'Bài đăng định dạng vuông',
     icon: '⬜',
     maxDuration: 60
   },
@@ -89,7 +89,7 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     height: 1080,
     aspectRatio: '16:9',
     fps: 30,
-    description: 'Facebook video posts',
+    description: 'Bài đăng video trên Facebook',
     icon: '👥'
   },
   {
@@ -100,7 +100,7 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     height: 720,
     aspectRatio: '16:9',
     fps: 30,
-    description: 'Twitter/X video posts',
+    description: 'Bài đăng video trên Twitter/X',
     icon: '🐦',
     maxDuration: 140
   },
@@ -112,7 +112,7 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     height: 1080,
     aspectRatio: '16:9',
     fps: 30,
-    description: 'Professional content',
+    description: 'Nội dung chuyên nghiệp cho LinkedIn',
     icon: '💼'
   },
   {
@@ -121,9 +121,9 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
     platform: 'Custom',
     width: 1920,
     height: 1080,
-    aspectRatio: 'Custom',
+    aspectRatio: 'Tùy chỉnh',
     fps: 30,
-    description: 'Set your own dimensions',
+    description: 'Đặt kích thước của riêng bạn',
     icon: '⚙️'
   }
 ];
@@ -131,44 +131,44 @@ export const VIDEO_TEMPLATES: VideoTemplate[] = [
 export const TRANSITION_EFFECTS: TransitionEffect[] = [
   {
     id: 'fade',
-    name: 'Fade',
-    description: 'Smooth fade in/out transition'
+    name: 'Mờ dần',
+    description: 'Hiệu ứng mờ dần vào/ra'
   },
   {
     id: 'slide',
-    name: 'Slide',
-    description: 'Slide from one side to another'
+    name: 'Trượt',
+    description: 'Hiệu ứng trượt từ bên này sang bên kia'
   },
   {
     id: 'zoom',
-    name: 'Zoom',
-    description: 'Zoom in/out effect'
+    name: 'Phóng to',
+    description: 'Hiệu ứng phóng to/thu nhỏ'
   },
   {
     id: 'wipe',
-    name: 'Wipe',
-    description: 'Wipe across the screen'
+    name: 'Lướt',
+    description: 'Lướt qua màn hình'
   },
   {
     id: 'dissolve',
-    name: 'Dissolve',
-    description: 'Gradual dissolve between scenes'
+    name: 'Hòa tan',
+    description: 'Hiệu ứng hòa tan dần giữa các cảnh'
   },
   {
     id: 'none',
-    name: 'No Transition',
-    description: 'Direct cut between scenes'
+    name: 'Không chuyển tiếp',
+    description: 'Cắt trực tiếp giữa các cảnh'
   }
 ];
 
 export const FPS_OPTIONS = [
-  { value: 24, label: '24 FPS', description: 'Cinematic' },
-  { value: 30, label: '30 FPS', description: 'Standard' },
-  { value: 60, label: '60 FPS', description: 'Smooth' }
+  { value: 24, label: '24 FPS', description: 'Điện ảnh' },
+  { value: 30, label: '30 FPS', description: 'Chuẩn' },
+  { value: 60, label: '60 FPS', description: 'Mượt mà' }
 ];
 
 export const FIT_MODES = [
-  { value: 'cover', label: 'Cover', description: 'Fill screen, may crop' },
-  { value: 'contain', label: 'Contain', description: 'Fit entirely, may letterbox' },
-  { value: 'fill', label: 'Fill', description: 'Stretch to exact size' }
+  { value: 'cover', label: 'Cover', description: 'Lấp đầy màn hình, có thể cắt' },
+  { value: 'contain', label: 'Contain', description: 'Vừa vặn hoàn toàn, có thể có viền đen' },
+  { value: 'fill', label: 'Fill', description: 'Kéo dài đến kích thước chính xác' }
 ];
