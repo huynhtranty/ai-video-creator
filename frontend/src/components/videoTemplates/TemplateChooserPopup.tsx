@@ -82,7 +82,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold' }}>🎬 Choose Video Template</h2>
+          <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold' }}>Chọn mẫu video</h2>
           <button
             onClick={onClose}
             style={{
@@ -99,7 +99,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
 
         {/* Platform Templates */}
         <div style={{ marginBottom: '24px' }}>
-          <h3 style={{ marginBottom: '12px', fontSize: '18px' }}>📱 Platform Templates</h3>
+          <h3 style={{ marginBottom: '12px', fontSize: '18px' }}>Mẫu thiết kế </h3>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
@@ -130,7 +130,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
                     fontSize: '10px',
                     fontWeight: 'bold'
                   }}>
-                    RECOMMENDED
+                    ĐỀ XUẤT
                   </div>
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
@@ -155,10 +155,10 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
         {/* Custom Dimensions */}
         {selectedTemplate.id === 'custom' && (
           <div style={{ marginBottom: '24px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
-            <h4 style={{ marginBottom: '12px' }}>📐 Custom Dimensions</h4>
+            <h4 style={{ marginBottom: '12px' }}>Kích thước tùy chỉnh</h4>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>Width (px)</label>
+                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>Chiều rộng (px)</label>
                 <input
                   type="number"
                   value={customWidth}
@@ -172,7 +172,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
                 />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>Height (px)</label>
+                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>Chiều cao (px)</label>
                 <input
                   type="number"
                   value={customHeight}
@@ -193,7 +193,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
           {/* Frame Rate */}
           <div>
-            <h4 style={{ marginBottom: '12px' }}>🎯 Frame Rate</h4>
+            <h4 style={{ marginBottom: '12px' }}>Tốc độ khung hình</h4>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {FPS_OPTIONS.map((option) => (
                 <button
@@ -217,7 +217,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
 
           {/* Image Fit Mode */}
           <div>
-            <h4 style={{ marginBottom: '12px' }}>🖼️ Image Fit</h4>
+            <h4 style={{ marginBottom: '12px' }}>Chế độ vừa vặn hình ảnh</h4>
             <select
               value={fitMode}
               onChange={(e) => setFitMode(e.target.value)}
@@ -248,13 +248,13 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
               onChange={(e) => setEnableTransitions(e.target.checked)}
               style={{ marginRight: '8px' }}
             />
-            <label htmlFor="enableTransitions" style={{ fontWeight: '500' }}>🎭 Enable Transitions</label>
+            <label htmlFor="enableTransitions" style={{ fontWeight: '500' }}>Bật hiệu ứng chuyển cảnh</label>
           </div>
 
           {enableTransitions && (
             <div style={{ paddingLeft: '24px' }}>
               <div style={{ marginBottom: '12px' }}>
-                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>Transition Effect</label>
+                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>Hiệu ứng chuyển cảnh</label>
                 <select
                   value={transitionEffect}
                   onChange={(e) => setTransitionEffect(e.target.value)}
@@ -276,7 +276,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
 
               <div>
                 <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>
-                  Duration: {transitionDuration}ms
+                  Thời gian: {transitionDuration}ms
                 </label>
                 <input
                   type="range"
@@ -299,7 +299,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
           borderRadius: '8px',
           marginBottom: '24px'
         }}>
-          <h4 style={{ marginBottom: '8px' }}>👀 Preview Settings</h4>
+          <h4 style={{ marginBottom: '8px' }}>Xem trước cài đặt</h4>
           <div style={{ fontSize: '14px', color: '#374151' }}>
             <strong>{selectedTemplate.name}</strong> • {
               selectedTemplate.id === 'custom' ? customWidth : selectedTemplate.width
@@ -322,7 +322,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
               fontWeight: '500'
             }}
           >
-            Cancel
+            Hủy
           </button>
           <button
             onClick={handleConfirm}
@@ -336,7 +336,7 @@ const TemplateChooserPopup: React.FC<TemplateChooserProps> = ({ isOpen, onClose,
               fontWeight: '500'
             }}
           >
-            Generate Video
+            Tạo video
           </button>
         </div>
       </div>

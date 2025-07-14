@@ -28,10 +28,10 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   isOpen,
   onConfirm,
   onCancel,
-  title = "Are you sure?",
-  description = "This action cannot be undone.",
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  title = "Bạn chắc chưa?",
+  description = "Hành động này không thể hoàn tác.",
+  confirmText = "Xác nhận",
+  cancelText = "Hủy",
   variant = "default",
   isLoading = false,
 }) => {
@@ -66,7 +66,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             onClick={onConfirm}
             disabled={isLoading}
           >
-            {isLoading ? "Processing..." : confirmText}
+            {isLoading ? "Đang xử lý..." : confirmText}
           </Button>
         </DialogFooter>
       </DialogContent>

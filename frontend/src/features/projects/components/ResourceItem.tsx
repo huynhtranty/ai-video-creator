@@ -50,7 +50,7 @@ function PreviewModal({ file, fileType, onClose, onConfirm, isUploading }: Previ
       <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">
-            Preview {fileType === 'image' ? 'Image' : 'Audio'} File
+            Xem trước {fileType === 'image' ? 'Hình ảnh' : 'Âm thanh'}
           </h3>
           <button
             onClick={onClose}
@@ -63,13 +63,13 @@ function PreviewModal({ file, fileType, onClose, onConfirm, isUploading }: Previ
         
         <div className="mb-4 p-4 bg-gray-50 rounded-lg">
           <p className="text-sm text-gray-600 mb-2">
-            <strong>File name:</strong> {file.name}
+            <strong>Tên tệp:</strong> {file.name}
           </p>
           <p className="text-sm text-gray-600 mb-2">
-            <strong>File size:</strong> {(file.size / 1024 / 1024).toFixed(2)} MB
+            <strong>Kích thước tệp:</strong> {(file.size / 1024 / 1024).toFixed(2)} MB
           </p>
           <p className="text-sm text-gray-600">
-            <strong>File type:</strong> {file.type}
+            <strong>Loại tệp:</strong> {file.type}
           </p>
         </div>
 
@@ -103,7 +103,7 @@ function PreviewModal({ file, fileType, onClose, onConfirm, isUploading }: Previ
             disabled={isUploading}
             className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
-            Cancel
+            Hủy
           </button>
           <button
             onClick={onConfirm}
@@ -113,7 +113,7 @@ function PreviewModal({ file, fileType, onClose, onConfirm, isUploading }: Previ
             {isUploading && (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             )}
-            {isUploading ? 'Uploading...' : 'Upload File'}
+            {isUploading ? 'Đang tải...' : 'Tải lên tệp'}
           </button>
         </div>
       </div>
@@ -188,7 +188,7 @@ export default function ResourceItem({
       switch (type) {
         case 'script':
           setIsRegeneratingContent(true);
-          const scriptResponse = await regenerateScriptContent(id, (settings.model as string)?.toLowerCase() || "gemini-script", {
+          const scriptResponse = await regenerateScriptContent(id, (settings.model as string) || "gemini-script", {
             style: settings.style as string,
             model: settings.model as string,
           });
@@ -219,9 +219,9 @@ export default function ResourceItem({
           if (onLoadingStateChange) {
             onLoadingStateChange(id, { isAudioLoading: true });
           }
-          const audioResponse = await regenerateScriptVoice(id, (settings.model as string)?.toLowerCase() || "google", {
-            gender: (settings.gender as string) === "Nam" ? "MALE" : "FEMALE",
-            language: (settings.language as string) === "Detect" ? "" : (settings.language as string)?.toLowerCase(),
+          const audioResponse = await regenerateScriptVoice(id, (settings.model as string) || "google", {
+            gender: (settings.gender as string),
+            language: (settings.language as string),
             speedRate: settings.speedRate as number,
             model: settings.model as string,
           });

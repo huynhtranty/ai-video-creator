@@ -52,8 +52,12 @@ public class Voice extends Entity {
         this.projectId = projectId;
     }
 
-    public static Voice create(String text, String languageCode, String provider,int duration, String url,String voiceGender, String filename, UUID scriptId,UUID projectId) {
-        return new Voice(
+    public static Voice create(String text, String languageCode, String provider, int duration, String url, String voiceGender, String filename, UUID scriptId, UUID projectId) {
+        return create(text, languageCode, provider, duration, url, voiceGender, filename, scriptId, projectId, 1.0);
+    }
+    
+    public static Voice create(String text, String languageCode, String provider, int duration, String url, String voiceGender, String filename, UUID scriptId, UUID projectId, double speakingRate) {
+        Voice voice = new Voice(
             UUID.randomUUID(),
             LocalDateTime.now(),
             LocalDateTime.now(),
@@ -66,5 +70,7 @@ public class Voice extends Entity {
             filename,
             scriptId,
             projectId);
+        voice.setSpeakingRate(speakingRate);
+        return voice;
     }
 }

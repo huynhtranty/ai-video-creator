@@ -54,7 +54,7 @@ public class ContentService {
 
     @Transactional
     public ScriptLayout generateScript(ScriptLayoutRequest request) {
-        var providerKey = request.provider().toLowerCase();
+        var providerKey = request.provider();
         ScriptGenerationService provider = scriptProviders.get(providerKey);
         if (provider == null) {
             throw new RuntimeException("Script generation provider not supported: " + providerKey);
@@ -107,7 +107,7 @@ public class ContentService {
             throw new RuntimeException("Script not found with id: " + scriptId);
         }
 
-        ScriptGenerationService provider = scriptProviders.get(model.toLowerCase());
+        ScriptGenerationService provider = scriptProviders.get(model);
         if (provider == null) {
             throw new RuntimeException("Script generation provider not supported: " + model);
         }
@@ -139,7 +139,7 @@ public class ContentService {
     }
 
     public MediaAsset generateImage(ImageRequest request) {
-        var providerKey = request.provider().toLowerCase();
+        var providerKey = request.provider();
         ImageGenerationService provider = imageProviders.get(providerKey);
         if (provider == null) {
             throw new RuntimeException("Image generation provider not supported: " + providerKey);
@@ -191,7 +191,7 @@ public class ContentService {
             throw new RuntimeException("Media not found for scriptId: " + scriptId);
         }
 
-        ImageGenerationService provider = imageProviders.get(providerName.toLowerCase());
+        ImageGenerationService provider = imageProviders.get(providerName);
         if (provider == null) {
             throw new RuntimeException("Image generation provider not supported: " + providerName);
         }

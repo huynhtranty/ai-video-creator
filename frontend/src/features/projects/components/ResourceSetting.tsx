@@ -68,8 +68,8 @@ export default function ResourceSetting({ onGenerateResources, isGenerating }: R
 
   const audioLanguageMap: Record<string, string> = {
     "Tự động": "",
-    "English": "en",
-    "Tiếng Việt": "vi"
+    "English": "en-US",
+    "Tiếng Việt": "vi-VN"
   };
 
   const audioModelMap: Record<string, string> = {
