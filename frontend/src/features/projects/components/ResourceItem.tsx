@@ -220,8 +220,8 @@ export default function ResourceItem({
             onLoadingStateChange(id, { isAudioLoading: true });
           }
           const audioResponse = await regenerateScriptVoice(id, (settings.model as string) || "google", {
-            gender: (settings.gender as string) === "Nam" ? "MALE" : "FEMALE",
-            language: (settings.language as string) === "Tự động" ? "" : (settings.language as string),
+            gender: (settings.gender as string),
+            language: (settings.language as string),
             speedRate: settings.speedRate as number,
             model: settings.model as string,
           });
