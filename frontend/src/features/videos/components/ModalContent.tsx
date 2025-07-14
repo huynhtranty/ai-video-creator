@@ -85,9 +85,9 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
         }}
       >
         {[
-          { id: "edit", label: "Edit", icon: "✏️" },
-          { id: "analytics", label: "Analytics", icon: "📊" },
-          { id: "settings", label: "Settings", icon: "⚙️" }
+          { id: "edit", label: "Chỉnh sửa", icon: "✏️" },
+          { id: "analytics", label: "Thống kê", icon: "📊" },
+          { id: "settings", label: "Cài đặt", icon: "⚙️" }
         ].map((tab) => (
           <button
             key={tab.id}
@@ -137,11 +137,11 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                Video Title
+                Tiêu đề video
               </label>
               <input
                 type="text"
-                placeholder="Enter a compelling title..."
+                placeholder="Nhập tiêu đề hấp dẫn..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 style={{
@@ -173,7 +173,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                {title.length}/100 characters
+                {title.length}/100 ký tự
               </p>
             </div>
 
@@ -189,10 +189,10 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                Description
+                Mô tả
               </label>
               <textarea
-                placeholder="Describe your video content..."
+                placeholder="Mô tả nội dung video của bạn..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
@@ -227,7 +227,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                {description.length}/500 characters
+                {description.length}/500 ký tự
               </p>
             </div>
 
@@ -280,10 +280,10 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                         animation: "spin 1s linear infinite",
                       }}
                     />
-                    Saving...
+                    Đang lưu...
                   </>
                 ) : (
-                  <>💾 Save Changes</>
+                  <>💾 Lưu thay đổi</>
                 )}
               </button>
 
@@ -310,7 +310,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                🚀 Quick Share
+                🚀 Chia sẻ nhanh
               </button>
             </div>
           </div>
@@ -327,16 +327,16 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                 fontFamily: "'Inter', sans-serif",
               }}
             >
-              Video Performance
+              Hiệu suất video
             </h3>
 
             {/* Analytics Cards */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
               {[
-                { label: "Views", value: analytics.views.toLocaleString(), icon: "👁️", color: "#3b82f6" },
-                { label: "Likes", value: analytics.likes.toLocaleString(), icon: "❤️", color: "#ef4444" },
-                { label: "Shares", value: analytics.shares.toLocaleString(), icon: "📤", color: "#10b981" },
-                { label: "Comments", value: analytics.comments.toLocaleString(), icon: "💬", color: "#f59e0b" },
+                { label: "Lượt xem", value: analytics.views.toLocaleString(), icon: "👁️", color: "#3b82f6" },
+                { label: "Lượt thích", value: analytics.likes.toLocaleString(), icon: "❤️", color: "#ef4444" },
+                { label: "Lượt chia sẻ", value: analytics.shares.toLocaleString(), icon: "📤", color: "#10b981" },
+                { label: "Bình luận", value: analytics.comments.toLocaleString(), icon: "💬", color: "#f59e0b" },
               ].map((metric) => (
                 <div
                   key={metric.label}
@@ -407,7 +407,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                Performance Trends
+                Xu hướng hiệu suất
               </h4>
               <p
                 style={{
@@ -417,7 +417,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                Detailed analytics charts coming soon
+                Biểu đồ thống kê chi tiết sẽ sớm có
               </p>
             </div>
           </div>
@@ -434,7 +434,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                 fontFamily: "'Inter', sans-serif",
               }}
             >
-              Video Settings
+              Cài đặt video
             </h3>
 
             {/* Privacy Settings */}
@@ -455,12 +455,16 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                🔒 Privacy
+                🔒 Quyền riêng tư
               </h4>
               
-              {["Public", "Unlisted", "Private"].map((option) => (
+              {[
+                { value: "public", label: "Công khai" },
+                { value: "unlisted", label: "Không được liệt kê" },
+                { value: "private", label: "Riêng tư" }
+              ].map((option, index) => (
                 <label
-                  key={option}
+                  key={option.value}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -474,15 +478,15 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   <input
                     type="radio"
                     name="privacy"
-                    value={option.toLowerCase()}
-                    defaultChecked={option === "Public"}
+                    value={option.value}
+                    defaultChecked={index === 0}
                     style={{
                       width: "16px",
                       height: "16px",
                       accentColor: "#8b5cf6",
                     }}
                   />
-                  <span style={{ color: "#374151" }}>{option}</span>
+                  <span style={{ color: "#374151" }}>{option.label}</span>
                 </label>
               ))}
             </div>
@@ -505,7 +509,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                🎥 Quality
+                🎥 Chất lượng
               </h4>
               
               <select
@@ -520,7 +524,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   cursor: "pointer",
                 }}
               >
-                <option value="auto">Auto (Recommended)</option>
+                <option value="auto">Tự động (Khuyến nghị)</option>
                 <option value="1080p">1080p HD</option>
                 <option value="720p">720p HD</option>
                 <option value="480p">480p SD</option>
@@ -545,7 +549,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                ⚠️ Danger Zone
+                ⚠️ Vùng nguy hiểm
               </h4>
               
               <button
@@ -571,7 +575,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ video, onSave, onShare }) =
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                🗑️ Delete Video
+                🗑️ Xóa video
               </button>
             </div>
           </div>

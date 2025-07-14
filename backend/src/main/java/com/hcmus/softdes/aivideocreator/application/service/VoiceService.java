@@ -33,7 +33,7 @@ public class VoiceService {
     }
 
     public TtsResponse handle(TtsRequest request) {
-        var providerKey = request.getProvider().toLowerCase();
+        var providerKey = request.getProvider();
         TtsService provider = ttsProviders.get(providerKey);
         if (provider == null) throw new RuntimeException("TTS provider not supported");
 
@@ -150,7 +150,7 @@ public class VoiceService {
 
         voiceRepository.deleteVoiceByScriptId(scriptUuid);
 
-        TtsService providerService = ttsProviders.get(provider.toLowerCase());
+        TtsService providerService = ttsProviders.get(provider);
         if (providerService == null) {
             throw new RuntimeException("TTS provider not supported");
         }

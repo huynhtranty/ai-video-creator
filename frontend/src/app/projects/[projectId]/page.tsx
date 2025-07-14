@@ -213,7 +213,7 @@ function ProjectPageContent() {
     try {
       const response = await generateScript.mutateAsync({ 
         prompt: inputText,
-        provider: settings.script.model.toLowerCase(),
+        provider: settings.script.model,
         projectId: projectId,
         scriptStyle: settings.script.style,
         scriptModel: settings.script.model,
@@ -260,7 +260,7 @@ function ProjectPageContent() {
             gender: settings.audio.gender,
             projectId: projectId,
             scriptId: resource.id,
-            provider: settings.audio.model.toLowerCase(),
+            provider: settings.audio.model,
             model: settings.audio.model,
           })
           .then(audioResponse => {
