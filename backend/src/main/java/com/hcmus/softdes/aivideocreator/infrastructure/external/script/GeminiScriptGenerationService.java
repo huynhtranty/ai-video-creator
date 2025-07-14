@@ -57,7 +57,11 @@ public class GeminiScriptGenerationService implements ScriptGenerationService {
             ###
             
             Detect the language code of the topic.
-            The language code should be in ISO 639-1 format (e.g., "en" for English, "fr" for French).
+            The language code should be in the format of locale code (e.g., "en-US", "vi-VN").
+            If the topic is in English, the language code should be "en-US".
+            If the topic is in Vietnamese, the language code should be "vi-VN".
+            If the topic is in Japanese, the language code should be "ja-JP".
+            If the topic is in another language, the language code should be in the format of locale code.
             
             ###
             
