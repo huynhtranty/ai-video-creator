@@ -59,7 +59,8 @@ public class VoiceService {
             request.getGender(),
             filename,
             scriptId,
-            projectId);
+            projectId,
+            request.getSpeakingRate());
         voiceRepository.saveVoice(record);
 
         return new TtsResponse(url, "mp3", duration, request.getProjectId());
@@ -118,7 +119,7 @@ public class VoiceService {
         Voice voice = voiceRepository.findVoiceById(UUID.fromString(voiceId))
                 .orElseThrow(() -> new RuntimeException("Voice not found with id: " + voiceId));
 
-        r2StorageService.deleteFile(voice.getUrl());
+        r2StorageService.deleteFile(voice.getFilename());
         voiceRepository.deleteVoiceById(UUID.fromString(voiceId));
     }
 
@@ -140,9 +141,9 @@ public class VoiceService {
         TtsRequest request = new TtsRequest(
             existingVoice.getText(),
             provider,
-            "".equals(language) ? existingVoice.getLanguageCode() : language,
-            speechRate,
-            gender,
+            (language == null || "".equals(language)) ? existingVoice.getLanguageCode() : language,
+            speechRate <= 0 ? existingVoice.getSpeakingRate() : speechRate,
+            (gender == null || "".equals(gender)) ? existingVoice.getVoiceGender() : gender,
             existingVoice.getProjectId().toString(),
             scriptId
         );
@@ -167,7 +168,8 @@ public class VoiceService {
             request.getGender(),
             filename,
             scriptUuid,
-            UUID.fromString(request.getProjectId())
+            UUID.fromString(request.getProjectId()),
+            request.getSpeakingRate()
         );
         voiceRepository.saveVoice(newVoice);
         return new TtsResponse(url, "mp3", duration, request.getProjectId());
